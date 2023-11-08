@@ -23,9 +23,16 @@ class App extends StatelessWidget {
         title: 'HoloPop',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.dark()
+          colorScheme: ColorScheme.dark(),
+          textButtonTheme: TextButtonThemeData(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(HolopopColors.blue),
+              foregroundColor: MaterialStateProperty.all(Colors.white)
+            )
+          )
         ),
         home: NavWidget(),
+        debugShowCheckedModeBanner: false,
       ),
     );
   }
@@ -71,6 +78,7 @@ class HomePage extends State<NavWidget> {
     }
 
     return Scaffold(
+      body: page,
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
@@ -117,32 +125,30 @@ class GeneratorPage extends StatelessWidget {
       icon = Icons.favorite_border;
     }
 
-    return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            BigCard(pair: pair),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () {
-                    appState.toggleFavorite();
-                  },
-                  icon: Icon(icon),
-                  label: Text("Like"),
-                ),
-                SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    appState.getNext();
-                  },
-                  child: Text('Next'),
-                ),
-              ],
-            )
-          ]
-        ),
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          BigCard(pair: pair),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton.icon(
+                onPressed: () {
+                  appState.toggleFavorite();
+                },
+                icon: Icon(icon),
+                label: Text("Like"),
+              ),
+              SizedBox(width: 10),
+              ElevatedButton(
+                onPressed: () {
+                  appState.getNext();
+                },
+                child: Text('Next'),
+              ),
+            ],
+          )
+        ]
       );
   }
 }
