@@ -1,13 +1,13 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
+import 'package:holopop/shared/assets/holopop_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
-import 'assets/holopop_colors.dart';
 import 'dashboard/screens/dashboard_page.dart';
 
 void main() {
-  runApp(App());
+  runApp(const App());
 }
 
 class App extends StatelessWidget {
@@ -23,7 +23,7 @@ class App extends StatelessWidget {
         title: 'HoloPop',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.dark(),
+          colorScheme: const ColorScheme.dark(),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(HolopopColors.blue),
@@ -31,7 +31,7 @@ class App extends StatelessWidget {
             )
           )
         ),
-        home: NavWidget(),
+        home: const NavWidget(),
         debugShowCheckedModeBanner: false,
       ),
     );
@@ -59,6 +59,8 @@ class NavState extends ChangeNotifier {
 }
 
 class NavWidget extends StatefulWidget {
+  const NavWidget({super.key});
+
   @override
   State<NavWidget> createState() => HomePage();
 }
@@ -70,10 +72,10 @@ class HomePage extends State<NavWidget> {
   Widget build(BuildContext context) {
     Widget page;
     switch (selectedIndex) {
-      case 0: page = DashboardPage(); 
-      case 1: page = FavoritesPage(); 
-      case 2: page = Placeholder(); 
-      case 3: page = Placeholder(); 
+      case 0: page = const DashboardPage(); 
+      case 1: page = const FavoritesPage(); 
+      case 2: page = const Placeholder(); 
+      case 3: page = const Placeholder(); 
       default: throw UnimplementedError("no widget for $selectedIndex");
     }
 
@@ -81,19 +83,19 @@ class HomePage extends State<NavWidget> {
       body: page,
       bottomNavigationBar: BottomNavigationBar(
         items: [
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.wallet),
             label: "Dashboard"
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.qr_code_scanner),
             label: "Holopop"
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.add_circle_outline),
             label: "Create Card"
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.store),
             label: "Shop"
           ),
@@ -113,12 +115,14 @@ class HomePage extends State<NavWidget> {
 }
 
 class GeneratorPage extends StatelessWidget {
+  const GeneratorPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<NavState>();
     var pair = appState.current;
 
-    var icon;
+    IconData icon;
     if (appState.favorites.contains(pair)) {
       icon = Icons.favorite;
     } else {
@@ -137,14 +141,14 @@ class GeneratorPage extends StatelessWidget {
                   appState.toggleFavorite();
                 },
                 icon: Icon(icon),
-                label: Text("Like"),
+                label: const Text("Like"),
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               ElevatedButton(
                 onPressed: () {
                   appState.getNext();
                 },
-                child: Text('Next'),
+                child: const Text('Next'),
               ),
             ],
           )
@@ -154,13 +158,15 @@ class GeneratorPage extends StatelessWidget {
 }
 
 class FavoritesPage extends StatelessWidget {
+  const FavoritesPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<NavState>();
     var favorites = appState.favorites;
 
     if (favorites.isEmpty) {
-      return Center(
+      return const Center(
         child: Text('No favorites yet')
       );
     }
@@ -173,7 +179,7 @@ class FavoritesPage extends StatelessWidget {
         ),
         for (var f in favorites)
           ListTile(
-            leading: Icon(Icons.favorite), 
+            leading: const Icon(Icons.favorite), 
             title: Text(f.asLowerCase))
       ]
     );
