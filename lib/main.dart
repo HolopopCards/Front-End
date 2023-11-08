@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
+import 'assets/holopop_colors.dart';
 import 'dashboard/screens/dashboard_page.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(App());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +23,9 @@ class MyApp extends StatelessWidget {
         title: 'HoloPop',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue),
+          colorScheme: ColorScheme.dark()
         ),
-        home: NavPage(),
+        home: NavWidget(),
       ),
     );
   }
@@ -50,12 +51,12 @@ class NavState extends ChangeNotifier {
   }
 }
 
-class NavPage extends StatefulWidget {
+class NavWidget extends StatefulWidget {
   @override
-  State<NavPage> createState() => HomePage();
+  State<NavWidget> createState() => HomePage();
 }
 
-class HomePage extends State<NavPage> {
+class HomePage extends State<NavWidget> {
   var selectedIndex = 0;
 
   @override
@@ -64,45 +65,41 @@ class HomePage extends State<NavPage> {
     switch (selectedIndex) {
       case 0: page = DashboardPage(); 
       case 1: page = FavoritesPage(); 
+      case 2: page = Placeholder(); 
+      case 3: page = Placeholder(); 
       default: throw UnimplementedError("no widget for $selectedIndex");
     }
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Scaffold(
-          body: Row(
-            children: [
-              SafeArea(
-                child: NavigationRail(
-                  extended: constraints.maxWidth >= 600,
-                  destinations: [
-                    NavigationRailDestination(
-                      icon: Icon(Icons.home),
-                      label: Text("Home"),
-                    ),
-                    NavigationRailDestination(
-                      icon: Icon(Icons.favorite),
-                      label: Text("Favorites"),
-                    )
-                  ],
-                  selectedIndex: selectedIndex,
-                  onDestinationSelected: (value) {
-                    setState(() {
-                      selectedIndex = value;
-                    });
-                  },
-                )
-              ),
-              Expanded(
-                child: Container(
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                  child: page
-                )
-              )
-            ]
-          )
-        );
-      }
+    return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.wallet),
+            label: "Dashboard"
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.qr_code_scanner),
+            label: "Holopop"
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add_circle_outline),
+            label: "Create Card"
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.store),
+            label: "Shop"
+          ),
+        ],
+        currentIndex: selectedIndex,
+        selectedItemColor: HolopopColors.blue,
+        unselectedItemColor: HolopopColors.lightgrey,
+        showUnselectedLabels: true,
+        onTap: (i) { 
+          setState(() { 
+            selectedIndex = i; 
+          });
+        },
+      ),
     );
   }
 }

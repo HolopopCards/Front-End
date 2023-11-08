@@ -6,7 +6,7 @@ class DashboardPage extends StatelessWidget {
     return Center(
       child: Column(
         children: [
-          Placeholder()
+          Text("Dashboard")
         ]
       )
     );
