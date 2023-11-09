@@ -4,7 +4,34 @@ import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:intl/intl.dart';
 
 
-/// Core page.
+/// Core sent pages.
+class SentCardPage extends StatefulWidget {
+  const SentCardPage({super.key, required this.card});
+
+  final HolopopCard card;
+
+  @override
+  State<StatefulWidget> createState() => _SentCardPage();
+}
+
+class _SentCardPage extends State<SentCardPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          OccasionForSent(card: widget.card),
+          const Video(),
+          DateAndSwitch(card: widget.card),
+          CardDetails(card: widget.card)
+        ],
+      )
+    );
+  }
+}
+
+
+/// Core received pages.
 class ReceivedCardPage extends StatefulWidget {
   const ReceivedCardPage({super.key, required this.card});
 
@@ -14,14 +41,13 @@ class ReceivedCardPage extends StatefulWidget {
   State<StatefulWidget> createState() => _ReceivedCardPage();
 }
 
-
 class _ReceivedCardPage extends State<ReceivedCardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
-          Occasion(card: widget.card),
+          OccasionForReceived(card: widget.card),
           const Video(),
           DateAndSwitch(card: widget.card),
           CardDetails(card: widget.card)
@@ -33,8 +59,8 @@ class _ReceivedCardPage extends State<ReceivedCardPage> {
 
 
 /// Shows occasion and back button.
-class Occasion extends StatelessWidget {
-  const Occasion({
+class OccasionForReceived extends StatelessWidget {
+  const OccasionForReceived({
     super.key,
     required this.card,
   });
@@ -51,6 +77,34 @@ class Occasion extends StatelessWidget {
           onPressed: () { Navigator.pop(context); },
         ),
         Text(card.occasion)
+      ],
+    );
+  }
+}
+
+/// Shows occasion, back button, and edit button.
+class OccasionForSent extends StatelessWidget {
+  const OccasionForSent({
+    super.key,
+    required this.card,
+  });
+
+  final HolopopCard card;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        IconButton(
+          icon: const Icon(Icons.chevron_left),
+          onPressed: () { Navigator.pop(context); },
+        ),
+        Text(card.occasion),
+        TextButton(
+          onPressed: () { },
+          child: const Text("Edit"),
+        )
       ],
     );
   }
