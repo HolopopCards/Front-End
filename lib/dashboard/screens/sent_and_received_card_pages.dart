@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:holopop/dashboard/card.dart';
+import 'package:holopop/dashboard/screens/edit_sent_card_page.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:intl/intl.dart';
 
@@ -84,10 +85,7 @@ class OccasionForReceived extends StatelessWidget {
 
 /// Shows occasion, back button, and edit button.
 class OccasionForSent extends StatelessWidget {
-  const OccasionForSent({
-    super.key,
-    required this.card,
-  });
+  const OccasionForSent({super.key, required this.card});
 
   final HolopopCard card;
 
@@ -102,7 +100,9 @@ class OccasionForSent extends StatelessWidget {
         ),
         Text(card.occasion),
         TextButton(
-          onPressed: () { },
+          onPressed: () { Navigator.push(context, MaterialPageRoute(
+            builder: (context) => const EditSentCardPage()
+          )); },
           child: const Text("Edit"),
         )
       ],
