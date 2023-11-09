@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:holopop/dashboard/card.dart';
+import 'package:holopop/dashboard/models/card.dart';
 import 'package:holopop/dashboard/screens/sent_and_received_card_pages.dart';
 import 'package:holopop/dashboard/widgets/display_card.dart';
 

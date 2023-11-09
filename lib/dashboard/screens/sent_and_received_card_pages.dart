@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:holopop/dashboard/card.dart';
+import 'package:holopop/dashboard/models/card.dart';
 import 'package:holopop/dashboard/screens/edit_sent_card_page.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:intl/intl.dart';

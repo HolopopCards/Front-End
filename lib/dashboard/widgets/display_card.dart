@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:holopop/dashboard/card.dart';
+import 'package:holopop/dashboard/models/card.dart';
 
 
 class DisplayCard extends StatelessWidget {

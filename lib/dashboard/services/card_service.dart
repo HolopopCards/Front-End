@@ -1,6 +1,6 @@
+import 'package:holopop/dashboard/models/card.dart';
 import 'package:word_generator/word_generator.dart';
 import 'dart:math';
-import 'card.dart';
 
 
 class CardService {

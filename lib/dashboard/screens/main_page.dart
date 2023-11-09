@@ -4,8 +4,8 @@ import 'package:holopop/dashboard/screens/see_all_page.dart';
 import 'package:holopop/dashboard/widgets/display_card.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
 
-import '../card.dart';
-import '../card_service.dart';
+import '../models/card.dart';
+import '../services/card_service.dart';
 
 
 class DashboardPage extends StatefulWidget {
