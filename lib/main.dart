@@ -1,6 +1,6 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
-import 'package:holopop/shared/assets/holopop_colors.dart';
+import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
