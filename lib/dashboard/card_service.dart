@@ -14,6 +14,8 @@ class CardService {
             from: WordGenerator().randomNoun(),
             subject: WordGenerator().randomSentence(),
             sent: DateTime.now(),
-            fromMe: Random().nextBool())));
+            fromMe: Random().nextBool(),
+            occasion: "Happy Birthday",
+            body: WordGenerator().randomSentence(30))));
   }
 }

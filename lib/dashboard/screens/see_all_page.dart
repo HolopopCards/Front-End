@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:holopop/dashboard/card.dart';
+import 'package:holopop/dashboard/screens/received_card_page.dart';
+import 'package:holopop/dashboard/screens/sent_card_page.dart';
 import 'package:holopop/dashboard/widgets/display_card.dart';
 
 
-class DashboardCardsPage extends StatelessWidget {
-  const DashboardCardsPage({super.key, required this.cards, required this.headerLine});
+class SeeAllCardsPage extends StatelessWidget {
+  const SeeAllCardsPage({
+    super.key,
+    required this.cards,
+    required this.headerLine,
+    required this.areReceivedCards
+  });
 
   final List<HolopopCard> cards;
   final String headerLine;
+  final bool areReceivedCards; //TODO: do better
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +43,19 @@ class DashboardCardsPage extends StatelessWidget {
             crossAxisCount: 2,
             children: [
               for (var card in cards)
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: DisplayCard(card: card),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => 
+                        areReceivedCards 
+                          ? ReceivedCardPage(card: card)
+                          : SentCardPage(card: card)
+                    ));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: DisplayCard(card: card),
+                  )
                 )
             ]
           ))

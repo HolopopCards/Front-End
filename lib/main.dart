@@ -4,7 +4,7 @@ import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
-import 'dashboard/screens/dashboard_page.dart';
+import 'dashboard/screens/main_page.dart';
 
 void main() {
   runApp(const App());

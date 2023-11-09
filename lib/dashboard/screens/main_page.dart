@@ -1,6 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:holopop/dashboard/screens/dashboard_cards_page.dart';
+import 'package:holopop/dashboard/screens/see_all_page.dart';
 import 'package:holopop/dashboard/widgets/display_card.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
 
@@ -174,9 +174,15 @@ class DisplayWithCards extends StatelessWidget {
     final sentCards = cards.where((c) => c.fromMe == true).toList();
     return Column(
       children: [
-        CarouselHeader(headerLine: "Received cards", cards: receivedCards),
+        CarouselHeader(
+          headerLine: "Received cards",
+          cards: receivedCards,
+          areReceivedCards: true),
         Carousel(cards: receivedCards),
-        CarouselHeader(headerLine: "Sent cards", cards: sentCards),
+        CarouselHeader(
+          headerLine: "Sent cards",
+          cards: sentCards,
+          areReceivedCards: false),
         Carousel(cards: sentCards)
       ],
     );
@@ -186,10 +192,16 @@ class DisplayWithCards extends StatelessWidget {
 
 /// Header over the carousel.
 class CarouselHeader extends StatelessWidget {
-  const CarouselHeader({super.key, required this.headerLine, required this.cards});
+  const CarouselHeader({
+    super.key,
+    required this.headerLine,
+    required this.cards,
+    required this.areReceivedCards
+  });
 
   final String headerLine;
   final List<HolopopCard> cards;
+  final bool areReceivedCards;
 
   @override
   Widget build(BuildContext context) {
@@ -209,7 +221,11 @@ class CarouselHeader extends StatelessWidget {
         TextButton(
           onPressed: () { 
             Navigator.push(context, MaterialPageRoute(
-              builder: (context) => DashboardCardsPage(cards: cards, headerLine: headerLine,)));
+              builder: (context) => 
+                SeeAllCardsPage(
+                  cards: cards, 
+                  headerLine: headerLine, 
+                  areReceivedCards: areReceivedCards)));
           },
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.transparent),
