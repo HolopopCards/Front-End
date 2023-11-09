@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:holopop/shared/styles/holopop_colors.dart';
 
 import '../card.dart';
 import '../card_service.dart';
@@ -96,7 +97,7 @@ class DashboardBody extends StatelessWidget {
           if (data == null || data.isEmpty) {
             return const DisplayNoCards();
           } else {
-            return Column(children: [DisplayCards(cards: data) ]);
+            return DisplayWithCards(cards: data);
           }
         } else if (snapshot.hasError) {
           return DisplayCardsError(error: snapshot.error!);
@@ -107,6 +108,7 @@ class DashboardBody extends StatelessWidget {
     );
   }
 }
+
 
 /// When user have no cards.
 class DisplayNoCards extends StatelessWidget {
@@ -157,8 +159,8 @@ class DisplayLoadingCards extends StatelessWidget {
 
 
 /// When user has cards.
-class DisplayCards extends StatelessWidget {
-  const DisplayCards({super.key, required this.cards});
+class DisplayWithCards extends StatelessWidget {
+  const DisplayWithCards({super.key, required this.cards});
   
   final List<HolopopCard> cards;
 
@@ -168,30 +170,129 @@ class DisplayCards extends StatelessWidget {
       padding: const EdgeInsets.all(15),
       child: Column(
         children: [
-          CarouselSlider(
-            options: CarouselOptions(
-              height: MediaQuery.of(context).size.height / 3,
-              padEnds: false,
-              autoPlay: false,
-              initialPage: 0,
-              viewportFraction: 0.5,
-              enableInfiniteScroll: false,
-              disableCenter: true,
-            ),
-            items: cards.map((i) {
-              return Builder(
-                builder: (context) {
-                  return Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.symmetric(horizontal: 5),
-                    child: const Image(image: AssetImage('assets/images/confetti.jpg')),
-                  );
-                }
-              );
-            }).toList()
-          )
+          DisplayCarousel(cards: cards)
         ]
       )
+    );
+  }
+}
+
+
+/// Carousel to display cards.
+class DisplayCarousel extends StatelessWidget {
+  const DisplayCarousel({super.key,required this.cards});
+
+  final List<HolopopCard> cards;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const CarouselHeader(headerLine: "Received cards"),
+        Carousel(cards: cards.where((c) => c.fromMe == false).toList()),
+        const CarouselHeader(headerLine: "Sent cards"),
+        Carousel(cards: cards.where((c) => c.fromMe).toList())
+      ],
+    );
+  }
+}
+
+
+/// Header over the carousel.
+class CarouselHeader extends StatelessWidget {
+  const CarouselHeader({super.key, required this.headerLine});
+
+  final String headerLine;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            const Icon(Icons.mail_outlined),
+            const SizedBox(width: 5),
+            Text(
+              headerLine,
+              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)
+            ),
+          ],
+        ),
+        const Text(
+          "See All",
+          style: TextStyle(fontSize: 11, color: HolopopColors.lightgrey)
+        )
+      ]
+    );
+  }
+}
+
+
+/// Carousel for the images.
+class Carousel extends StatelessWidget {
+  const Carousel({super.key,required this.cards});
+
+  final List<HolopopCard> cards;
+
+  @override
+  Widget build(BuildContext context) {
+    return CarouselSlider(
+      options: CarouselOptions(
+        height: MediaQuery.of(context).size.height / 3,
+        padEnds: false,
+        autoPlay: false,
+        viewportFraction: 0.5,
+        enableInfiniteScroll: false,
+      ),
+      items: cards.map((card) {
+        return Builder(
+          builder: (context) {
+            return Container(
+              width: MediaQuery.of(context).size.width,
+              margin: const EdgeInsets.symmetric(horizontal: 5),
+              child: DisplayCard(card: card),
+            );
+          }
+        );
+      }).toList()
+    );
+  }
+}
+
+
+
+/// Card that is displayed.
+class DisplayCard extends StatelessWidget {
+  const DisplayCard({super.key, required this.card});
+
+  final HolopopCard card;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        const Image(
+          image: AssetImage('assets/images/confetti.jpg')
+        ),
+        Padding(
+          padding: const EdgeInsets.all(10),
+          child: Align(
+            alignment: Alignment.topLeft, 
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "From: ${card.from}",
+                  style: const TextStyle(fontSize: 10)),
+                Text(
+                  card.subject, 
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20))
+              ]
+            )
+          )
+        )
+      ],
     );
   }
 }

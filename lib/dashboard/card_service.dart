@@ -1,17 +1,19 @@
+import 'package:word_generator/word_generator.dart';
+import 'dart:math';
 import 'card.dart';
+
 
 class CardService {
   static Future<List<HolopopCard>> getCards() {
-    print("HERE WE GO!");
     return Future.delayed(
       const Duration(seconds: 1), 
       () => List.generate(
-        5,
+        10,
         (i) => 
           HolopopCard(
-            from: "TEST",
-            subject: "Test",
+            from: WordGenerator().randomNoun(),
+            subject: WordGenerator().randomSentence(),
             sent: DateTime.now(),
-            fromMe: false)));
+            fromMe: Random().nextBool())));
   }
 }
