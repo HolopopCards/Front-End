@@ -31,7 +31,7 @@ class App extends StatelessWidget {
             )
           )
         ),
-        home: const NavWidget(),
+        home: const HomePage(),
         debugShowCheckedModeBanner: false,
       ),
     );
@@ -58,14 +58,14 @@ class NavState extends ChangeNotifier {
   }
 }
 
-class NavWidget extends StatefulWidget {
-  const NavWidget({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<NavWidget> createState() => HomePage();
+  State<HomePage> createState() => _HomePage();
 }
 
-class HomePage extends State<NavWidget> {
+class _HomePage extends State<HomePage> {
   var selectedIndex = 0;
 
   @override

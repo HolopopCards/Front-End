@@ -1,5 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:holopop/dashboard/screens/dashboard_cards_page.dart';
+import 'package:holopop/dashboard/widgets/display_card.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
 
 import '../card.dart';
@@ -10,11 +12,12 @@ class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => DashboardPageState();
+  State<StatefulWidget> createState() => _DashboardPage();
 }
 
 
-class DashboardPageState extends State<DashboardPage> {
+/// Core page.
+class _DashboardPage extends State<DashboardPage> {
   final Future<List<HolopopCard>> cards = CardService.getCards();
 
   @override
@@ -33,6 +36,7 @@ class DashboardPageState extends State<DashboardPage> {
     );
   }
 }
+
 
 /// Holopop title + notifications and settings.
 class TitleAndSettings extends StatelessWidget {
@@ -160,27 +164,7 @@ class DisplayLoadingCards extends StatelessWidget {
 
 /// When user has cards.
 class DisplayWithCards extends StatelessWidget {
-  const DisplayWithCards({super.key, required this.cards});
-  
-  final List<HolopopCard> cards;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(15),
-      child: Column(
-        children: [
-          DisplayCarousel(cards: cards)
-        ]
-      )
-    );
-  }
-}
-
-
-/// Carousel to display cards.
-class DisplayCarousel extends StatelessWidget {
-  const DisplayCarousel({super.key,required this.cards});
+  const DisplayWithCards({super.key,required this.cards});
 
   final List<HolopopCard> cards;
 
@@ -188,9 +172,9 @@ class DisplayCarousel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const CarouselHeader(headerLine: "Received cards"),
+        CarouselHeader(headerLine: "Received cards", cards: cards),
         Carousel(cards: cards.where((c) => c.fromMe == false).toList()),
-        const CarouselHeader(headerLine: "Sent cards"),
+        CarouselHeader(headerLine: "Sent cards", cards: cards),
         Carousel(cards: cards.where((c) => c.fromMe).toList())
       ],
     );
@@ -200,9 +184,10 @@ class DisplayCarousel extends StatelessWidget {
 
 /// Header over the carousel.
 class CarouselHeader extends StatelessWidget {
-  const CarouselHeader({super.key, required this.headerLine});
+  const CarouselHeader({super.key, required this.headerLine, required this.cards});
 
   final String headerLine;
+  final List<HolopopCard> cards;
 
   @override
   Widget build(BuildContext context) {
@@ -219,9 +204,17 @@ class CarouselHeader extends StatelessWidget {
             ),
           ],
         ),
-        const Text(
-          "See All",
-          style: TextStyle(fontSize: 11, color: HolopopColors.lightgrey)
+        TextButton(
+          onPressed: () { 
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) => DashboardCardsPage(cards: cards, headerLine: headerLine,)));
+          },
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.transparent),
+            foregroundColor: MaterialStateProperty.all(HolopopColors.lightgrey),
+            textStyle: MaterialStateProperty.all(const TextStyle(fontSize: 11,)),
+          ),
+          child: const Text("See All"),
         )
       ]
     );
@@ -256,43 +249,6 @@ class Carousel extends StatelessWidget {
           }
         );
       }).toList()
-    );
-  }
-}
-
-
-
-/// Card that is displayed.
-class DisplayCard extends StatelessWidget {
-  const DisplayCard({super.key, required this.card});
-
-  final HolopopCard card;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        const Image(
-          image: AssetImage('assets/images/confetti.jpg')
-        ),
-        Padding(
-          padding: const EdgeInsets.all(10),
-          child: Align(
-            alignment: Alignment.topLeft, 
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "From: ${card.from}",
-                  style: const TextStyle(fontSize: 10)),
-                Text(
-                  card.subject, 
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20))
-              ]
-            )
-          )
-        )
-      ],
     );
   }
 }
