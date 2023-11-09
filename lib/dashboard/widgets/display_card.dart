@@ -19,7 +19,7 @@ class DisplayCard extends StatelessWidget {
               fit: BoxFit.fill,
               image: AssetImage('assets/images/confetti.jpg'),
             )
-            )
+          )
         ),
         Padding(
           padding: const EdgeInsets.all(10),
