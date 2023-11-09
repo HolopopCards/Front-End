@@ -18,8 +18,8 @@ class SentCardPage extends StatefulWidget {
 class _SentCardPage extends State<SentCardPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return SingleChildScrollView(child: 
+      Column(
         children: [
           OccasionForSent(card: widget.card),
           const Video(),
@@ -45,8 +45,8 @@ class ReceivedCardPage extends StatefulWidget {
 class _ReceivedCardPage extends State<ReceivedCardPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return SingleChildScrollView(
+      child: Column(
         children: [
           OccasionForReceived(card: widget.card),
           const Video(),

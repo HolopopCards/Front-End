@@ -21,45 +21,43 @@ class SeeAllCardsPage extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final aspect = (size.height / 3) / size.width;
 
-    return Scaffold(
-      body: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.chevron_left),
-                onPressed: () { Navigator.pop(context); },
-              ),
-              Text(headerLine)
-            ],
-          ),
-          Expanded(child: GridView.count(
-            shrinkWrap: true,
-            childAspectRatio: aspect,
-            controller: ScrollController(keepScrollOffset: false),
-            scrollDirection: Axis.vertical,
-            crossAxisCount: 2,
-            children: [
-              for (var card in cards)
-                InkWell(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => 
-                        areReceivedCards 
-                          ? ReceivedCardPage(card: card)
-                          : SentCardPage(card: card)
-                    ));
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: DisplayCard(card: card),
-                  )
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.chevron_left),
+              onPressed: () { Navigator.pop(context); },
+            ),
+            Text(headerLine)
+          ],
+        ),
+        Expanded(child: GridView.count(
+          shrinkWrap: true,
+          childAspectRatio: aspect,
+          controller: ScrollController(keepScrollOffset: false),
+          scrollDirection: Axis.vertical,
+          crossAxisCount: 2,
+          children: [
+            for (var card in cards)
+              InkWell(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => 
+                      areReceivedCards 
+                        ? ReceivedCardPage(card: card)
+                        : SentCardPage(card: card)
+                  ));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: DisplayCard(card: card),
                 )
-            ]
-          ))
-        ],
-      )
+              )
+          ]
+        ))
+      ],
     );
   }
 }

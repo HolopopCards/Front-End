@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:holopop/dashboard/screens/see_all_page.dart';
 import 'package:holopop/dashboard/widgets/display_card.dart';
+import 'package:holopop/main.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
 
 import '../models/card.dart';
@@ -9,7 +10,9 @@ import '../services/card_service.dart';
 
 
 class DashboardPage extends StatefulWidget {
-  const DashboardPage({super.key});
+  const DashboardPage({super.key, required this.destination});
+
+  final Destination destination;
 
   @override
   State<StatefulWidget> createState() => _DashboardPage();

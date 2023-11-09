@@ -14,13 +14,11 @@ class EditSentCardPage extends StatefulWidget {
 class _EditSentCardPage extends State<EditSentCardPage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Column(
-        children: [
-          Header(),
-          Body()
-        ],
-      )
+    return const Column(
+      children: [
+        Header(),
+        Body()
+      ],
     );
   }
 }
