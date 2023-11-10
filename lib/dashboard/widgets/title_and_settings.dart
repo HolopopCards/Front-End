@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:holopop/dashboard/screens/notification_page.dart';
+import 'package:holopop/dashboard/screens/settings_page.dart';
+
 
 /// Holopop title + notifications and settings.
 class TitleAndSettings extends StatelessWidget {
@@ -24,7 +26,12 @@ class TitleAndSettings extends StatelessWidget {
             ),
             IconButton(
               icon: const Icon(Icons.settings_outlined),
-              onPressed: () { },
+              onPressed: () { 
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) =>
+                    const SettingsPage()
+                ));
+              },
             )
           ]
         )

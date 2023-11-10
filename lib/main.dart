@@ -63,10 +63,16 @@ class App extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: const ColorScheme.dark(),
-        textButtonTheme: TextButtonThemeData(
+        textButtonTheme: const TextButtonThemeData(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(HolopopColors.blue),
-            foregroundColor: MaterialStateProperty.all(Colors.white)
+            backgroundColor: MaterialStatePropertyAll(HolopopColors.blue),
+            foregroundColor: MaterialStatePropertyAll(Colors.white)
+          )
+        ),
+        elevatedButtonTheme: const ElevatedButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(HolopopColors.darkgrey),
+            foregroundColor: MaterialStatePropertyAll(Colors.white)
           )
         )
       ),
