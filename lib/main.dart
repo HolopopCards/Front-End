@@ -1,7 +1,5 @@
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
 import 'dashboard/screens/dashboard_page.dart';
@@ -40,7 +38,7 @@ class _DestinationViewState extends State<DestinationView> {
           builder: (BuildContext context) {
             switch(settings.name) {
               default:
-                return DashboardPage(destination: widget.destination);
+                return const DashboardPage();
             }
           },
         );

@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:holopop/dashboard/screens/see_all_page.dart';
 import 'package:holopop/dashboard/widgets/display_card.dart';
-import 'package:holopop/main.dart';
+import 'package:holopop/dashboard/widgets/title_and_settings.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
 
 import '../models/card.dart';
@@ -10,9 +10,7 @@ import '../services/card_service.dart';
 
 
 class DashboardPage extends StatefulWidget {
-  const DashboardPage({super.key, required this.destination});
-
-  final Destination destination;
+  const DashboardPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _DashboardPage();
@@ -36,34 +34,6 @@ class _DashboardPage extends State<DashboardPage> {
           )
         ]
       )
-    );
-  }
-}
-
-
-/// Holopop title + notifications and settings.
-class TitleAndSettings extends StatelessWidget {
-  const TitleAndSettings({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Text("holopop"),
-        Row(
-          children: [
-            IconButton(
-              icon: const Icon(Icons.notifications_none),
-              onPressed: () { },
-            ),
-            IconButton(
-              icon: const Icon(Icons.settings_outlined),
-              onPressed: () { },
-            )
-          ]
-        )
-      ]
     );
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:holopop/dashboard/models/notification.dart';
 import 'package:word_generator/word_generator.dart';
 
@@ -9,9 +11,10 @@ class NotificationService {
         3,
         (_) =>
           HolopopNotification(
-            from: WordGenerator().randomNames(2).join(' '),
+            from: WordGenerator().randomName(),
             date: DateTime.now(),
-            message: WordGenerator().randomSentence(7)
+            message: WordGenerator().randomSentence(7),
+            read: Random().nextBool()
           )
       )
     );
