@@ -1,51 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:holopop/shared/nav/destination_view.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:flutter/services.dart';
-
-import 'dashboard/screens/dashboard_page.dart';
-
-
-class Destination {
-  const Destination(this.title, this.icon);
-  final String title;
-  final IconData icon;
-}
-
-const List<Destination> allDestinations = <Destination>[
-  Destination('Dashboard',   Icons.wallet),
-  Destination('Holopop',     Icons.qr_code_scanner),
-  Destination('Create Card', Icons.add_circle_outlined),
-  Destination('Shop',        Icons.shop)
-];
-
-
-class DestinationView extends StatefulWidget {
-  const DestinationView({super.key, required this.destination });
-
-  final Destination destination;
-
-  @override
-  State<StatefulWidget> createState() => _DestinationViewState();
-}
-
-class _DestinationViewState extends State<DestinationView> {
-  @override
-  Widget build(BuildContext context) {
-    return Navigator(
-      onGenerateRoute: (RouteSettings settings) {
-        return MaterialPageRoute(
-          settings: settings,
-          builder: (BuildContext context) {
-            switch(settings.name) {
-              default:
-                return const DashboardPage();
-            }
-          },
-        );
-      },
-    );
-  }
-}
 
 
 void main() {
