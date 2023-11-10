@@ -51,8 +51,10 @@ class Setting {
   Setting(this.name, this.func);
 
   final String name;
-  final Function() func;
+  final Function()? func;
+  final String type = "button";
 }
+
 
 /// Settings
 class SettingsBody extends StatelessWidget {
@@ -60,6 +62,25 @@ class SettingsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // return SettingsList(
+    //   shrinkWrap: true,
+    //   applicationType: ApplicationType.material,
+    //   darkTheme: const SettingsThemeData(
+    //     settingsSectionBackground: HolopopColors.darkgrey,
+
+    //   ),
+    //   sections: [
+    //     SettingsSection(
+    //       title: const Text('Account'),
+    //       tiles: [
+    //         SettingsTile.navigation(
+    //           title: const Text("Edit Profile"),
+    //           value: const Text('editprofile'),
+    //         )
+    //       ]
+    //     )
+    //   ],
+    // );
     return Column(
       children: [
         SettingsGroup(
@@ -90,6 +111,8 @@ class SettingsBody extends StatelessWidget {
   }
 }
 
+
+/// Widget for a group of settings.
 class SettingsGroup extends StatelessWidget {
   const SettingsGroup({super.key, required this.settings, required this.title});
 
@@ -112,19 +135,23 @@ class SettingsGroup extends StatelessWidget {
               ),),
           ),
           for (var setting in settings)
-            ElevatedButton(
-              onPressed: () { setting.func(); },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(setting.name),
-                  const Icon(Icons.chevron_right)
-                ],
+            if (setting.type == "button")
+              ElevatedButton(
+                onPressed: () { 
+                  if (setting.func != null) {
+                    setting.func!(); 
+                  }
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(setting.name),
+                    const Icon(Icons.chevron_right)
+                  ],
+                )
               )
-            )
         ]
       )
     );
   }
-
 }
