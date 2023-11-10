@@ -18,7 +18,8 @@ class _SettingsPage extends State<SettingsPage> {
       child: Column(
         children: [
           Header(),
-          SettingsBody()
+          SettingsBody(),
+          SocialMediaIcons()
         ]
       )
     );
@@ -154,4 +155,32 @@ class SettingsGroup extends StatelessWidget {
       )
     );
   }
+}
+
+
+/// Social media icons
+class SocialMediaIcons extends StatelessWidget {
+  const SocialMediaIcons({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      children: [
+        Text("Join The Community"),
+        SizedBox(
+          height: 70,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(padding: EdgeInsets.all(10), child: Image(image: AssetImage("assets/icons/instagram.png"), fit: BoxFit.fill)),
+              Padding(padding: EdgeInsets.all(10), child: Image(image: AssetImage("assets/icons/facebook.png"),  fit: BoxFit.fill)),
+              Padding(padding: EdgeInsets.all(10), child: Image(image: AssetImage("assets/icons/youtube.png"),   fit: BoxFit.fill)),
+              Padding(padding: EdgeInsets.all(10), child: Image(image: AssetImage("assets/icons/tiktok.png"),    fit: BoxFit.fill)),
+            ],
+          )
+        )
+      ],
+    );
+  }
+
 }
