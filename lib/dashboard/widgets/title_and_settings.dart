@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:holopop/dashboard/screens/notification_page.dart';
-import 'package:holopop/dashboard/screens/settings_page.dart';
+import 'package:holopop/dashboard/screens/settings/settings_page.dart';
 
 
 /// Holopop title + notifications and settings.
