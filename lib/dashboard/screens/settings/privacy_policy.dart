@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:holopop/dashboard/widgets/standard_header.dart';
 
 
 class PrivacyPolicy extends StatelessWidget {
@@ -6,19 +7,11 @@ class PrivacyPolicy extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            IconButton(
-              icon: const Icon(Icons.chevron_left),
-              onPressed: () { Navigator.pop(context); },
-            ),
-            const Text("Privacy Policy")
-          ],
-        ),
-        const Expanded(
+        StandardHeader(headerTitle: "Privacy Policy"),
+        Expanded(
           child: SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.all(10),

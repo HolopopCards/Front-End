@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:holopop/dashboard/screens/settings/edit_profile_page.dart';
 import 'package:holopop/dashboard/screens/settings/privacy_policy.dart';
 import 'package:holopop/dashboard/screens/settings/terms_of_use.dart';
+import 'package:holopop/dashboard/widgets/standard_header.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
 
 
@@ -19,31 +21,11 @@ class _SettingsPage extends State<SettingsPage> {
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: [
-          Header(),
+          StandardHeader(headerTitle: "Settings",),
           SettingsBody(),
           SocialMediaIcons()
         ]
       )
-    );
-  }
-}
-
-
-/// Header
-class Header extends StatelessWidget {
-  const Header({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        IconButton(
-          icon: const Icon(Icons.chevron_left),
-          onPressed: () { Navigator.pop(context); },
-        ),
-        const Text("Settings")
-      ],
     );
   }
 }
@@ -70,7 +52,7 @@ class SettingsBody extends StatelessWidget {
         SettingsGroup(
           title: "Account",
           settings: [
-            Setting("Edit Profile",  () { }),
+            Setting("Edit Profile",  () { Navigator.push(context, MaterialPageRoute(builder: (ctx) => const EditProfilePage())); }),
             Setting("Notifications", () { })
           ],
         ),

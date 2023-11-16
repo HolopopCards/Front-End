@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:holopop/dashboard/widgets/standard_header.dart';
 
 
 class TermsOfUse extends StatelessWidget {
@@ -6,19 +7,11 @@ class TermsOfUse extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            IconButton(
-              icon: const Icon(Icons.chevron_left),
-              onPressed: () { Navigator.pop(context); },
-            ),
-            const Text("Terms Of Use")
-          ],
-        ),
-        const Expanded(
+        StandardHeader(headerTitle: "Terms Of Use"),
+        Expanded(
           child: SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.all(10),
