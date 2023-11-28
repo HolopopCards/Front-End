@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:holopop/forgot/forgot_page.dart';
 import 'package:holopop/register/register_page.dart';
 import 'package:holopop/shared/nav/destination_view.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
@@ -54,7 +55,7 @@ class _HomePage extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: RegisterPage()
+      body: ForgotPage()
     ); 
     //   body: SafeArea(
     //     top: true,
