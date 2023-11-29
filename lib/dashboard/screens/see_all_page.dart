@@ -4,17 +4,26 @@ import 'package:holopop/dashboard/screens/sent_and_received_card_pages.dart';
 import 'package:holopop/dashboard/widgets/display_card.dart';
 
 
-class SeeAllCardsPage extends StatelessWidget {
-  const SeeAllCardsPage({
-    super.key,
-    required this.cards,
-    required this.headerLine,
+class SeeAllCardsArgs {
+  SeeAllCardsArgs({
+    required this.cards, 
+    required this.headerLine, 
     required this.areReceivedCards
   });
 
   final List<HolopopCard> cards;
   final String headerLine;
-  final bool areReceivedCards; //TODO: do better
+  final bool areReceivedCards;
+}
+
+
+class SeeAllCardsPage extends StatelessWidget {
+  const SeeAllCardsPage({
+    super.key,
+    required this.args
+  });
+
+  final SeeAllCardsArgs args;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +39,7 @@ class SeeAllCardsPage extends StatelessWidget {
               icon: const Icon(Icons.chevron_left),
               onPressed: () { Navigator.pop(context); },
             ),
-            Text(headerLine)
+            Text(args.headerLine)
           ],
         ),
         Expanded(child: GridView.count(
@@ -40,19 +49,18 @@ class SeeAllCardsPage extends StatelessWidget {
           scrollDirection: Axis.vertical,
           crossAxisCount: 2,
           children: [
-            for (var card in cards)
+            for (var card in args.cards)
               InkWell(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => 
-                      areReceivedCards 
-                        ? ReceivedCardPage(card: card)
-                        : SentCardPage(card: card)
-                  ));
+                  Navigator.pushNamed(
+                    context,
+                    args.areReceivedCards ? "/received-card" : "/sent-card",
+                    arguments: SentAndReceivedCardArgs(card: card)
+                  );
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: DisplayCard(card: card),
+                  child: DisplayCard(args: DisplayCardsArgs(card: card, areReceivedCards: args.areReceivedCards)),
                 )
               )
           ]

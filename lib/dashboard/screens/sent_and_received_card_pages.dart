@@ -5,11 +5,18 @@ import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:intl/intl.dart';
 
 
+class SentAndReceivedCardArgs {
+  final HolopopCard card;
+
+  SentAndReceivedCardArgs({required this.card});
+}
+
+
 /// Core sent pages.
 class SentCardPage extends StatefulWidget {
-  const SentCardPage({super.key, required this.card});
+  const SentCardPage({super.key, required this.args});
 
-  final HolopopCard card;
+  final SentAndReceivedCardArgs args;
 
   @override
   State<StatefulWidget> createState() => _SentCardPage();
@@ -21,10 +28,10 @@ class _SentCardPage extends State<SentCardPage> {
     return SingleChildScrollView(child: 
       Column(
         children: [
-          OccasionForSent(card: widget.card),
+          OccasionForSent(card: widget.args.card),
           const Video(),
-          DateAndSwitch(card: widget.card),
-          CardDetails(card: widget.card)
+          DateAndSwitch(card: widget.args.card),
+          CardDetails(card: widget.args.card)
         ],
       )
     );
@@ -34,9 +41,9 @@ class _SentCardPage extends State<SentCardPage> {
 
 /// Core received pages.
 class ReceivedCardPage extends StatefulWidget {
-  const ReceivedCardPage({super.key, required this.card});
+  const ReceivedCardPage({super.key, required this.args});
 
-  final HolopopCard card;
+  final SentAndReceivedCardArgs args;
 
   @override
   State<StatefulWidget> createState() => _ReceivedCardPage();
@@ -48,10 +55,10 @@ class _ReceivedCardPage extends State<ReceivedCardPage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          OccasionForReceived(card: widget.card),
+          OccasionForReceived(card: widget.args.card),
           const Video(),
-          DateAndSwitch(card: widget.card),
-          CardDetails(card: widget.card)
+          DateAndSwitch(card: widget.args.card),
+          CardDetails(card: widget.args.card)
         ],
       )
     );
@@ -100,9 +107,9 @@ class OccasionForSent extends StatelessWidget {
         ),
         Text(card.occasion),
         TextButton(
-          onPressed: () { Navigator.push(context, MaterialPageRoute(
-            builder: (context) => const EditSentCardPage()
-          )); },
+          onPressed: () { 
+            Navigator.pushNamed(context, "/edit-sent-card");
+          },
           child: const Text("Edit"),
         )
       ],

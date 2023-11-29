@@ -151,12 +151,12 @@ class DisplayWithCards extends StatelessWidget {
           headerLine: "Received cards",
           cards: receivedCards,
           areReceivedCards: true),
-        Carousel(cards: receivedCards),
+        Carousel(cards: receivedCards, areReceivedCards: true,),
         CarouselHeader(
           headerLine: "Sent cards",
           cards: sentCards,
           areReceivedCards: false),
-        Carousel(cards: sentCards)
+        Carousel(cards: sentCards, areReceivedCards: false,)
       ],
     );
   }
@@ -192,13 +192,16 @@ class CarouselHeader extends StatelessWidget {
           ],
         ),
         TextButton(
-          onPressed: () { 
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) => 
-                SeeAllCardsPage(
-                  cards: cards, 
-                  headerLine: headerLine, 
-                  areReceivedCards: areReceivedCards)));
+          onPressed: () {
+            Navigator.pushNamed(
+              context, 
+              "/all-received-cards", 
+              arguments: SeeAllCardsArgs(
+                cards: cards,
+                headerLine: headerLine,
+                areReceivedCards: areReceivedCards
+              )
+            );
           },
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.transparent),
@@ -215,9 +218,10 @@ class CarouselHeader extends StatelessWidget {
 
 /// Carousel for the images.
 class Carousel extends StatelessWidget {
-  const Carousel({super.key,required this.cards});
+  const Carousel({super.key, required this.cards, required this.areReceivedCards});
 
   final List<HolopopCard> cards;
+  final bool areReceivedCards;
 
   @override
   Widget build(BuildContext context) {
@@ -235,7 +239,12 @@ class Carousel extends StatelessWidget {
             return Container(
               width: MediaQuery.of(context).size.width,
               margin: const EdgeInsets.symmetric(horizontal: 5),
-              child: DisplayCard(card: card),
+              child: DisplayCard(
+                args: DisplayCardsArgs(
+                  card: card, 
+                  areReceivedCards: areReceivedCards
+                )
+              ),
             );
           }
         );

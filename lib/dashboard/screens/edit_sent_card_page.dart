@@ -8,7 +8,6 @@ class EditSentCardPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => _EditSentCardPage();
-
 }
 
 class _EditSentCardPage extends State<EditSentCardPage> {
