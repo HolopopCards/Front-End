@@ -61,6 +61,37 @@ AgMBAAE=
   }
 
 
+  Future<Result<User>> register(String name, String phone, DateTime dob, String email, String password) async {
+    final encPass = encryptAndEncode(password);
+
+    final response = await post(
+      Uri.parse("http://10.0.2.2:5000/register"),
+      body: json.encode({
+        'name': name,
+        'phone': phone,
+        'dob': dob.toIso8601String(),
+        'email': email,
+        'password': encPass
+      }),
+      headers: { 'Content-Type': 'application/json'}
+    );
+
+    final data = json.decode(response.body);
+    if (response.statusCode == 200) {
+      final token = data['token'];
+      final user = User(username: email, token: token);
+
+      await UserPreferences().saveUserAsync(user);
+      _loggedInStatus = LoginStatus.loggedIn;
+      notifyListeners();
+      return Result.fromSuccess(user);
+    } else {
+      final error = data['error'];
+      return Result.fromFailure(error);
+    }
+  }
+
+
   // TODO: Put somewhere better.
   String encryptAndEncode(String password) {
     final parser    = RSAKeyParser();

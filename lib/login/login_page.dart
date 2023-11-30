@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:holopop/register/register_page.dart';
 import 'package:holopop/shared/providers/auth_provider.dart';
 import 'package:holopop/shared/providers/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -51,6 +52,7 @@ class _LoginPage extends State<LoginPage> {
                       form.save();
                       login(username!, password!); 
                     }
+                    //TODO: VALIDATE
                   }, 
                 ), 
               ), 
@@ -157,7 +159,11 @@ class Register extends StatelessWidget {
         Padding( 
           padding: const EdgeInsets.only(left:1.0), 
           child: InkWell(
-            onTap: () { }, 
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) => const Scaffold(body: RegisterPage())
+              ));
+            }, 
             child: const Text('Register', style: TextStyle(fontSize: 14, color: Colors.blue))
           )
         )
