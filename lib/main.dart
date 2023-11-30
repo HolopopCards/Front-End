@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:holopop/shared/providers/auth_provider.dart';
 import 'package:holopop/home_page.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:flutter/services.dart';
+import 'package:holopop/shared/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 
 void main() {
@@ -14,26 +17,32 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack); //Fullscreen
-    return MaterialApp(
-      title: 'HoloPop',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: const ColorScheme.dark(),
-        textButtonTheme: const TextButtonThemeData(
-          style: ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(HolopopColors.blue),
-            foregroundColor: MaterialStatePropertyAll(Colors.white)
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider())
+      ],
+      child: MaterialApp(
+        title: 'HoloPop',
+        theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: const ColorScheme.dark(),
+          textButtonTheme: const TextButtonThemeData(
+            style: ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(HolopopColors.blue),
+              foregroundColor: MaterialStatePropertyAll(Colors.white)
+            )
+          ),
+          elevatedButtonTheme: const ElevatedButtonThemeData(
+            style: ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(HolopopColors.darkgrey),
+              foregroundColor: MaterialStatePropertyAll(Colors.white)
+            )
           )
         ),
-        elevatedButtonTheme: const ElevatedButtonThemeData(
-          style: ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(HolopopColors.darkgrey),
-            foregroundColor: MaterialStatePropertyAll(Colors.white)
-          )
-        )
-      ),
-      home: const HomePage(),
-      debugShowCheckedModeBanner: false,
+        home: const HomePage(),
+        debugShowCheckedModeBanner: false,
+      )
     );
   }
 }

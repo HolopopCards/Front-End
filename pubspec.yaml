@@ -43,6 +43,9 @@ dependencies:
   intl: ^0.18.1
   settings_ui: ^2.0.2
   flutter_secure_storage: ^9.0.0
+  shared_preferences: ^2.2.2
+  encrypt: ^5.0.3
+  pointycastle: ^3.7.3
 
 dev_dependencies:
   flutter_test:
