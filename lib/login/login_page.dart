@@ -72,6 +72,7 @@ class _LoginPage extends State<LoginPage> {
           Provider.of<UserProvider>(context, listen: false).setUser(user);
           Navigator.pushNamed(context, "/");
         } else {
+          print(res.error);
           print("form is invalid");
         }
       });

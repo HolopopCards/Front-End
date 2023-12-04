@@ -16,7 +16,7 @@ class APIResponseData extends APIResponse {
       expiration: data["expiration"],
       id: data["id"],
       timestamp: data["timestamp"],
-      data: data["data"]
+      data: data
     );
   }
 }

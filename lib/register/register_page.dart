@@ -13,8 +13,8 @@ class RegisterFormModel {
   DateTime? dateTime;
   String? password;
   String? confirmPassword;
-  bool? agreePrivacy;
-  bool? agreeTerms;
+  bool agreePrivacy = false;
+  bool agreeTerms = false;
 }
 
 
@@ -50,8 +50,8 @@ class _RegisterPage extends State<RegisterPage> {
             // RegisterTextField(labelText: "Date Of Birth", onSaved: (x) => registerForm.dateTime = x),
             RegisterTextField(labelText: "Password", obscureText: true, onSaved: (x) => registerForm.password = x),
             RegisterTextField(labelText: "Confirm Password", obscureText: true, onSaved: (x) => registerForm.confirmPassword = x),
-            RegisterCheckbox(labelText: "Agree with Privacy Policy", onChanged: (x) => registerForm.agreePrivacy = x),
-            RegisterCheckbox(labelText: "Agree with Terms and Conditions", onChanged: (x) => registerForm.agreeTerms = x),
+            RegisterCheckbox(labelText: "Agree with Privacy Policy", value: registerForm.agreePrivacy, onChanged: (x) => registerForm.agreePrivacy = x ?? false),
+            RegisterCheckbox(labelText: "Agree with Terms and Conditions", value: registerForm.agreeTerms, onChanged: (x) => registerForm.agreeTerms = x ?? false),
             const RegisterSentence(),
             SizedBox( 
               height: 65, 
@@ -131,25 +131,38 @@ class RegisterTextField extends StatelessWidget {
 
 
 /// Checkboxes
-class RegisterCheckbox extends StatelessWidget {
+class RegisterCheckbox extends StatefulWidget {
   const RegisterCheckbox({
     super.key,
     required this.labelText,
+    required this.value,
     required this.onChanged
   });
 
   final String labelText;
+  final bool value;
   final Function(bool?) onChanged;
 
+  @override
+  State<StatefulWidget> createState() => _RegisterCheckbox();
+
+}
+class _RegisterCheckbox extends State<RegisterCheckbox> {
+  late bool isChecked = widget.value;
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Checkbox(
-          value: false,
-          onChanged: onChanged,
+          value: isChecked,
+          onChanged: (x) {
+            setState(() {
+              widget.onChanged(x);
+              isChecked = !isChecked;
+            });
+          },
         ),
-        Text(labelText)
+        Text(widget.labelText)
       ],
     );
   }
