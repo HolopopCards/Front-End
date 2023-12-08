@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:holopop/dashboard/models/card.dart';
 import 'package:holopop/dashboard/services/card_service.dart';
-import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
 
