@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
 class StandardHeader extends StatelessWidget {
-  const StandardHeader({super.key, required this.headerTitle});
+  const StandardHeader({
+    super.key,
+    required this.headerTitle,
+    this.onBackPressed
+  });
 
   final String headerTitle;
+  final Function? onBackPressed;
 
   @override
   Widget build(BuildContext context) => 
@@ -12,7 +17,7 @@ class StandardHeader extends StatelessWidget {
       children: [
         IconButton(
           icon: const Icon(Icons.chevron_left),
-          onPressed: () { Navigator.pop(context); },
+          onPressed: () { onBackPressed == null ? Navigator.pop(context) : onBackPressed!(); },
         ),
         Text(headerTitle),
         const SizedBox()

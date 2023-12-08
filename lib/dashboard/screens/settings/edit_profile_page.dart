@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:holopop/dashboard/widgets/standard_header.dart';
+import 'package:holopop/shared/widgets/standard_header.dart';
 
 
 /// Core page.

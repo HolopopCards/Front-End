@@ -1,11 +1,13 @@
 // ignore_for_file: unused_import
 
 import 'package:flutter/material.dart';
+import 'package:holopop/create_card/screens/media_type.dart';
 import 'package:holopop/dashboard/screens/dashboard_page.dart';
 import 'package:holopop/dashboard/screens/edit_sent_card_page.dart';
 import 'package:holopop/dashboard/screens/see_all_page.dart';
 import 'package:holopop/dashboard/screens/sent_and_received_card_pages.dart';
 import 'package:holopop/main.dart';
+import 'package:holopop/shared/widgets/holopop_placeholder.dart';
 
 
 /// Represents destination.
@@ -60,8 +62,10 @@ class _DestinationViewState extends State<DestinationView> {
             switch(title) {
               case "Dashboard":
                 return const DashboardPage();
+              case "Create Card":
+                return const MediaTypePage();
               default:
-                return const Placeholder();
+                return const HolopopPlaceholder();
             }
           },
         );

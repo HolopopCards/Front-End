@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:holopop/dashboard/models/card.dart';
+import 'package:holopop/dashboard/services/card_service.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:intl/intl.dart';
+import 'package:video_player/video_player.dart';
 
 
 class SentAndReceivedCardArgs {
@@ -118,18 +122,70 @@ class OccasionForSent extends StatelessWidget {
 
 
 /// Shows video.
-class Video extends StatelessWidget {
-  const Video({
-    super.key,
-  });
+class Video extends StatefulWidget {
+  const Video({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _Video();
+
+}
+class _Video extends State<Video> {
+  Timer? t;
+  VideoPlayerController? _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    CardService.getOriginalVideo('fasasfgasgas')
+      .then((controller) {
+        _controller = controller;
+        setState(() { });
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(
-          child: Placeholder())
+          child: _controller?.value.isInitialized == true
+            ? GestureDetector(
+                onTap: () {
+                  setState(() {
+                    t?.cancel();
+                    t = Timer(const Duration(seconds: 2), () => setState(() => t = null));
+                  });
+                },
+                child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      AspectRatio(
+                        aspectRatio: 4.0/3.0,
+                        child: VideoPlayer(_controller!),
+                      ),
+                      Center(
+                        child: AnimatedOpacity(
+                          opacity: t != null ? 1 : 0,
+                          duration: const Duration(milliseconds: 200),
+                          child: FloatingActionButton(
+                            onPressed: () { setState(() { _controller!.value.isPlaying ? _controller!.pause() : _controller!.play(); }); },
+                            child: Icon(_controller!.value.isPlaying ? Icons.pause : Icons.play_arrow)
+                          )
+                        )
+                      )
+                  ],
+                )
+            )
+            : SizedBox(
+              height: MediaQuery.of(context).size.height * 0.4,
+              child: const FractionallySizedBox(
+                heightFactor: 0.3,
+                widthFactor: 0.3,
+                child: CircularProgressIndicator()
+              ),
+            )
+        ),
       ],
     );
   }
@@ -154,16 +210,16 @@ class _DateAndSwitch extends State<DateAndSwitch>  {
   Widget build(BuildContext context) {
     final formattedSent = DateFormat('MM/dd/yyyy').format(widget.card.sent);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.all(16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text("Created: $formattedSent"),
-          Switch(
-            value: originalSwitch,
-            activeColor: HolopopColors.blue,
-            onChanged: (value) { setState(() { originalSwitch = value; }); },
-          )
+          // Switch(
+          //   value: originalSwitch,
+          //   activeColor: HolopopColors.blue,
+          //   onChanged: (value) { setState(() { originalSwitch = value; }); },
+          // )
         ],
       )
     );
@@ -182,6 +238,8 @@ class CardDetails extends StatefulWidget {
 }
 
 class _CardDetails extends State<CardDetails> {
+  bool favorited = false;
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -208,8 +266,8 @@ class _CardDetails extends State<CardDetails> {
                   ButtonBar(
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.favorite_outline),
-                        onPressed: () { },
+                        icon: favorited ? const Icon(Icons.favorite) : const Icon(Icons.favorite_outline),
+                        onPressed: () { setState(() { favorited = !favorited; }); }
                       )
                     ],
                   )

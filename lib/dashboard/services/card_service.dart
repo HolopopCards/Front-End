@@ -1,21 +1,37 @@
+import 'dart:convert';
 import 'package:holopop/dashboard/models/card.dart';
-import 'package:word_generator/word_generator.dart';
-import 'dart:math';
+import 'package:holopop/shared/storage/user_preferences.dart';
+import 'package:http/http.dart';
+import 'package:video_player/video_player.dart';
 
 
 class CardService {
-  static Future<List<HolopopCard>> getCards() {
-    return Future.delayed(
-      const Duration(seconds: 1), 
-      () => List.generate(
-        10,
-        (i) => 
-          HolopopCard(
-            from: WordGenerator().randomNoun(),
-            subject: WordGenerator().randomSentence(),
-            sent: DateTime.now(),
-            fromMe: Random().nextBool(),
-            occasion: "Happy Birthday",
-            body: WordGenerator().randomSentence(30))));
+  static Future<List<HolopopCard>> getCards() async {
+    final token = await UserPreferences().getTokenAsync();
+    final response = await get(
+      Uri.parse('http://10.0.2.2:5000/user/cards'),
+      headers: { 
+        'Content-Type': 'application/json', 
+        'Authorization': 'Bearer $token'
+      }
+    );
+
+    return List<HolopopCard>.from(
+      json.decode(response.body)
+          .map((y) => HolopopCard.fromJson(y))
+    );
+  }
+
+  static Future<VideoPlayerController> getOriginalVideo(String serialNumber) async {
+    final token = await UserPreferences().getTokenAsync();
+    final controller = VideoPlayerController.networkUrl(
+      Uri.parse('http://10.0.2.2:5000/user/video/original?serialNumber=$serialNumber'),
+      httpHeaders: {
+        'Authorization': 'Bearer $token'
+      }
+    );
+
+    await controller.initialize();
+    return controller;
   }
 }

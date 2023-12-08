@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:holopop/dashboard/screens/settings/edit_profile_page.dart';
 import 'package:holopop/dashboard/screens/settings/privacy_policy.dart';
 import 'package:holopop/dashboard/screens/settings/terms_of_use.dart';
-import 'package:holopop/dashboard/widgets/standard_header.dart';
+import 'package:holopop/shared/widgets/standard_header.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
 
 

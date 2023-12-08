@@ -36,6 +36,10 @@ class _HomePage extends State<HomePage> {
                 } else if (snapshot.data?.token == null) {
                   return const LoginPage();
                 } else {
+                  //TODO: THIS IS A HACK
+                  if (_showNavBar == false) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() => _showNavBar = true));
+                  }
                   return IndexedStack(
                     index: _currentIndex,
                     children: allDestinations.map((dest) => DestinationView(destination: dest))

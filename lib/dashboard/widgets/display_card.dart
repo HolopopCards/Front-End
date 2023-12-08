@@ -50,7 +50,7 @@ class DisplayCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "From: ${args.card.from}",
+                  "From: ${args.card.to}",
                   style: const TextStyle(fontSize: 10)),
                 Text(
                   args.card.subject, 

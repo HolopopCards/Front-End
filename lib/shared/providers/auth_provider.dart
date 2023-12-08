@@ -39,6 +39,7 @@ AgMBAAE=
     notifyListeners();
 
     final encryptedAndEncodedPassword = encryptAndEncode(password);
+    print(encryptedAndEncodedPassword);
 
     final response = await post(
       Uri.parse("http://10.0.2.2:5000/login"),
