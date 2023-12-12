@@ -12,7 +12,7 @@ class SimplePostRequest {
 
 class ApiService {
   /// TODO: put somewhere better
-  final String host = "http://10.0.2.2:5000/";
+  final String host = "http://ec2-54-211-29-157.compute-1.amazonaws.com:5000/";
 
   Future<APIResponse> post(SimplePostRequest request) async {
     final res = await http.post(

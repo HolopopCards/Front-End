@@ -42,7 +42,7 @@ AgMBAAE=
     print(encryptedAndEncodedPassword);
 
     final response = await post(
-      Uri.parse("http://10.0.2.2:5000/login"),
+      Uri.parse("http://ec2-54-211-29-157.compute-1.amazonaws.com:5000/login"),
       body: json.encode({ 'username': email, 'password': encryptedAndEncodedPassword }),
       headers: {'Content-Type': 'application/json' });
 
@@ -66,7 +66,7 @@ AgMBAAE=
     final encPass = encryptAndEncode(password);
 
     final response = await post(
-      Uri.parse("http://10.0.2.2:5000/register"),
+      Uri.parse("http://ec2-54-211-29-157.compute-1.amazonaws.com:5000/register"),
       body: json.encode({
         'name': name,
         'phone': phone,
