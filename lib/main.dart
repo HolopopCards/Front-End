@@ -5,9 +5,11 @@ import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:flutter/services.dart';
 import 'package:holopop/shared/providers/user_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:global_configuration/global_configuration.dart';
 
 
-void main() {
+void main() async {
+  //await GlobalConfiguration().loadFromAsset("appsettings");
   runApp(const App());
 }
 
