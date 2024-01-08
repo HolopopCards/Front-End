@@ -30,6 +30,14 @@ class App extends StatelessWidget {
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: const ColorScheme.dark(),
+          inputDecorationTheme: const InputDecorationTheme(
+            filled: true,
+            fillColor: HolopopColors.darkgrey,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+              borderSide: BorderSide.none
+            ),
+          ),
           textButtonTheme: const TextButtonThemeData(
             style: ButtonStyle(
               backgroundColor: MaterialStatePropertyAll(HolopopColors.blue),
@@ -41,7 +49,7 @@ class App extends StatelessWidget {
               backgroundColor: MaterialStatePropertyAll(HolopopColors.darkgrey),
               foregroundColor: MaterialStatePropertyAll(Colors.white)
             )
-          )
+          ),
         ),
         home: const HomePage(),
         debugShowCheckedModeBanner: false,
