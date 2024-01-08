@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:holopop/shared/api/api_response.dart';
+import 'package:holopop/shared/config/appsettings.dart';
 import 'package:http/http.dart' as http;
 
 class SimplePostRequest {
@@ -12,7 +13,7 @@ class SimplePostRequest {
 
 class ApiService {
   /// TODO: put somewhere better
-  final String host = "http://ec2-35-175-193-242.compute-1.amazonaws.com:5000/";
+  final String host = "${AppSettings().getApiHost()}/";
 
   Future<APIResponse> post(SimplePostRequest request) async {
     final res = await http.post(

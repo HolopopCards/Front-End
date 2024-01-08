@@ -9,7 +9,8 @@ import 'package:global_configuration/global_configuration.dart';
 
 
 void main() async {
-  //await GlobalConfiguration().loadFromAsset("appsettings");
+  WidgetsFlutterBinding.ensureInitialized();
+  await GlobalConfiguration().loadFromPath("configs/appsettings.json");
   runApp(const App());
 }
 
