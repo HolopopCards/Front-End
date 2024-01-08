@@ -41,8 +41,13 @@ class App extends StatelessWidget {
           textButtonTheme: const TextButtonThemeData(
             style: ButtonStyle(
               backgroundColor: MaterialStatePropertyAll(HolopopColors.blue),
-              foregroundColor: MaterialStatePropertyAll(Colors.white)
-            )
+              foregroundColor: MaterialStatePropertyAll(Colors.white),
+              overlayColor: MaterialStatePropertyAll(Colors.blueGrey),
+              shape: MaterialStatePropertyAll(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15)))
+              )
+            ),
           ),
           elevatedButtonTheme: const ElevatedButtonThemeData(
             style: ButtonStyle(

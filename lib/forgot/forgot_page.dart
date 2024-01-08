@@ -44,8 +44,7 @@ class ForgotPage extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 30), 
           child: TextField( 
             decoration: InputDecoration( 
-                border: OutlineInputBorder(), 
-                labelText: 'Email, username, or mobile phone'
+              labelText: 'Email, username, or mobile phone'
             )
           ), 
         ), 

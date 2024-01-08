@@ -26,8 +26,8 @@ class _LoginPage extends State<LoginPage> {
   Widget build(BuildContext context) {
     const double leftRightPadding = 20;
 
-    return SingleChildScrollView( 
-      child: Padding(
+    return 
+      Padding(
         padding: const EdgeInsets.fromLTRB(leftRightPadding, 30, leftRightPadding, 0),
         child: Form(
           key: formKey,
@@ -53,9 +53,10 @@ class _LoginPage extends State<LoginPage> {
                 )
               ),
               const Register(), 
-              SizedBox( 
+              Expanded(child: Align(alignment: Alignment.bottomCenter, child: FractionallySizedBox( 
+                widthFactor: 0.9,
                 child: Padding( 
-                  padding: const EdgeInsets.only(top: 20.0), 
+                  padding: const EdgeInsets.only(bottom: 20.0), 
                   child: TextButton( 
                     child: const Text( 'Sign In ', style: TextStyle(color: Colors.white, fontSize: 20)), 
                     onPressed: () {
@@ -68,11 +69,10 @@ class _LoginPage extends State<LoginPage> {
                     }, 
                   ), 
                 ), 
-              )
+              )))
             ], 
           ),
         )
-      )
     );
   }
 
@@ -168,6 +168,7 @@ class Register extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Row( 
       mainAxisAlignment: MainAxisAlignment.center,
       children: [ 
