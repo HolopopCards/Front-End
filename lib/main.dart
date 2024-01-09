@@ -33,6 +33,9 @@ class App extends StatelessWidget {
           inputDecorationTheme: const InputDecorationTheme(
             filled: true,
             fillColor: HolopopColors.darkgrey,
+            labelStyle: TextStyle(
+              color: HolopopColors.lightgrey
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(15)),
               borderSide: BorderSide.none

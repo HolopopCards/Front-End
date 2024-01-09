@@ -53,23 +53,28 @@ class _LoginPage extends State<LoginPage> {
                 )
               ),
               const Register(), 
-              Expanded(child: Align(alignment: Alignment.bottomCenter, child: FractionallySizedBox( 
-                widthFactor: 0.9,
-                child: Padding( 
-                  padding: const EdgeInsets.only(bottom: 20.0), 
-                  child: TextButton( 
-                    child: const Text( 'Sign In ', style: TextStyle(color: Colors.white, fontSize: 20)), 
-                    onPressed: () {
-                      final form = formKey.currentState;
-                      if (form!.validate()) {
-                        form.save();
-                        login(username!, password!); 
-                      }
-                      //TODO: VALIDATE
-                    }, 
-                  ), 
-                ), 
-              )))
+              Expanded(
+                child: Align(
+                  alignment: Alignment.bottomCenter, 
+                  child: FractionallySizedBox( 
+                    widthFactor: 0.9,
+                    child: Padding( 
+                      padding: const EdgeInsets.only(bottom: 20.0), 
+                      child: TextButton( 
+                        child: const Text( 'Sign In ', style: TextStyle(color: Colors.white, fontSize: 20)), 
+                        onPressed: () {
+                          final form = formKey.currentState;
+                          if (form!.validate()) {
+                            form.save();
+                            login(username!, password!); 
+                          }
+                          //TODO: VALIDATE
+                        }, 
+                      ), 
+                    ), 
+                  )
+                )
+              )
             ], 
           ),
         )
