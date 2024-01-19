@@ -4,6 +4,7 @@ import 'package:holopop/forgot/forgot_page.dart';
 import 'package:holopop/register/register_page.dart';
 import 'package:holopop/shared/providers/auth_provider.dart';
 import 'package:holopop/shared/providers/user_provider.dart';
+import 'package:holopop/shared/validation/login_validator.dart';
 import 'package:provider/provider.dart';
 
 
@@ -35,11 +36,13 @@ class _LoginPage extends State<LoginPage> {
             children: [ 
               const Header(), 
               LoginField(
+                validator: LoginValidator().validateUsername,
                 onSaved: (value) => username = value,
                 labelText: 'Email, username, or mobile phone', 
                 hintText: 'Enter valid email id as abc@gmail.com'
               ),
               LoginField(
+                validator: LoginValidator().validatePassword,
                 onSaved: (value) => password = value,
                 obscureText: true,
                 labelText: "Password",
@@ -138,10 +141,12 @@ class LoginField extends StatelessWidget {
     this.hintText = "",
     this.autoFocus = false,
     this.obscureText  = false,
-    this.suffixIcon
+    this.suffixIcon,
+    this.validator
   });
 
   final Function(String?) onSaved;
+  final String? Function(String?)? validator;
   final String labelText;
   final String hintText;
   final bool obscureText;
@@ -154,6 +159,7 @@ class LoginField extends StatelessWidget {
       padding: const EdgeInsets.all(15),
       child: TextFormField(
         onSaved: onSaved,
+        validator: validator,
         autofocus: autoFocus,
         obscureText: obscureText,
         decoration: InputDecoration(
