@@ -8,7 +8,8 @@ import 'package:provider/provider.dart';
 
 
 void main() async {
-  //await GlobalConfiguration().loadFromAsset("appsettings");
+  WidgetsFlutterBinding.ensureInitialized();
+  await GlobalConfiguration().loadFromPath("configs/appsettings.json");
   runApp(const App());
 }
 
@@ -28,18 +29,34 @@ class App extends StatelessWidget {
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: const ColorScheme.dark(),
+          inputDecorationTheme: const InputDecorationTheme(
+            filled: true,
+            fillColor: HolopopColors.darkgrey,
+            labelStyle: TextStyle(
+              color: HolopopColors.lightgrey
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+              borderSide: BorderSide.none
+            ),
+          ),
           textButtonTheme: const TextButtonThemeData(
             style: ButtonStyle(
               backgroundColor: MaterialStatePropertyAll(HolopopColors.blue),
-              foregroundColor: MaterialStatePropertyAll(Colors.white)
-            )
+              foregroundColor: MaterialStatePropertyAll(Colors.white),
+              overlayColor: MaterialStatePropertyAll(Colors.blueGrey),
+              shape: MaterialStatePropertyAll(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15)))
+              )
+            ),
           ),
           elevatedButtonTheme: const ElevatedButtonThemeData(
             style: ButtonStyle(
               backgroundColor: MaterialStatePropertyAll(HolopopColors.darkgrey),
               foregroundColor: MaterialStatePropertyAll(Colors.white)
             )
-          )
+          ),
         ),
         home: const HomePage(),
         debugShowCheckedModeBanner: false,

@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 
 class ForgotPage extends StatelessWidget {
@@ -13,8 +14,12 @@ class ForgotPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             IconButton(
-              icon: const Icon(Icons.arrow_back), 
-              iconSize: 48,
+              //icon: const Icon(Icons.arrow_back), 
+               icon: SvgPicture.asset(
+                "assets/icons/arrow back - white.svg",
+                height: 25,
+                width: 25,
+              ),
               onPressed: () { Navigator.pop(context); }
             ),
           ],
@@ -44,8 +49,7 @@ class ForgotPage extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 30), 
           child: TextField( 
             decoration: InputDecoration( 
-                border: OutlineInputBorder(), 
-                labelText: 'Email, username, or mobile phone'
+              labelText: 'Email, username, or mobile phone'
             )
           ), 
         ), 

@@ -1,8 +1,11 @@
 
 import 'package:flutter/material.dart';
+import 'package:holopop/dashboard/screens/settings/privacy_policy.dart';
+import 'package:holopop/dashboard/screens/settings/terms_of_use.dart';
 import 'package:holopop/login/login_page.dart';
 import 'package:holopop/shared/providers/auth_provider.dart';
 import 'package:holopop/shared/providers/user_provider.dart';
+import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:provider/provider.dart';
 
 
@@ -50,29 +53,60 @@ class _RegisterPage extends State<RegisterPage> {
             // RegisterTextField(labelText: "Date Of Birth", onSaved: (x) => registerForm.dateTime = x),
             RegisterTextField(labelText: "Password", obscureText: true, onSaved: (x) => registerForm.password = x),
             RegisterTextField(labelText: "Confirm Password", obscureText: true, onSaved: (x) => registerForm.confirmPassword = x),
-            RegisterCheckbox(labelText: "Agree with Privacy Policy", value: registerForm.agreePrivacy, onChanged: (x) => registerForm.agreePrivacy = x ?? false),
-            RegisterCheckbox(labelText: "Agree with Terms and Conditions", value: registerForm.agreeTerms, onChanged: (x) => registerForm.agreeTerms = x ?? false),
-            const RegisterSentence(),
-            SizedBox( 
-              height: 65, 
-              width: 360, 
-              child: Padding( 
-                padding: const EdgeInsets.only(top: 20.0), 
-                child: TextButton( 
-                  child: const Text( 'Create Account', style: TextStyle(color: Colors.white, fontSize: 20)), 
-                  onPressed: () {
-                    final form = formKey.currentState;
-                    print(form);
-                    if (form!.validate()) {
-                      form.save();
-                      register(registerForm);
-                    }
-                    //TODO: VALIDATE
-                  }, 
-                ), 
-              ), 
+            RegisterCheckbox(
+              value: registerForm.agreePrivacy,
+              onChanged: (x) => registerForm.agreePrivacy = x ?? false,
+              textSpan: TextSpan(
+                children: [
+                  const TextSpan(text: "Agree with "),
+                  TextSpan(
+                    text: "Privacy Policy", 
+                    style: const TextStyle(color: HolopopColors.blue), 
+                    recognizer: TapAndPanGestureRecognizer()..onTapDown = (_) { Navigator.push(context, MaterialPageRoute(builder: (ctx) => const Scaffold(body: TermsOfUse()))) ;}
+                  )
+                ]
+              )
+            ),
+            RegisterCheckbox(
+              value: registerForm.agreeTerms,
+              onChanged: (x) => registerForm.agreeTerms = x ?? false,
+              textSpan: TextSpan(
+                children: [
+                  const TextSpan(text: "Agree with "),
+                  TextSpan(
+                    text: "Terms and Conditions",
+                    style: const TextStyle(color: HolopopColors.blue),
+                    recognizer: TapAndPanGestureRecognizer()..onTapDown = (_) { Navigator.push(context, MaterialPageRoute(builder: (ctx) => const Scaffold(body: PrivacyPolicy()))) ;}
+                  )
+                ]
+              ),
+            ),
+            Expanded( 
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  const RegisterSentence(),
+                  FractionallySizedBox(
+                    widthFactor: 0.9,
+                    child: Padding( 
+                      padding: const EdgeInsets.only(top: 20.0), 
+                      child: TextButton( 
+                        child: const Text( 'Create Account', style: TextStyle(color: Colors.white, fontSize: 20)), 
+                        onPressed: () {
+                          final form = formKey.currentState;
+                          print(form);
+                          if (form!.validate()) {
+                            form.save();
+                            register(registerForm);
+                          }
+                          //TODO: VALIDATE
+                        }, 
+                      ), 
+                    ), 
+                  )
+                ]
+              )
             )
-            // const CreateAccountButton(), 
           ],
         ),
       )
@@ -121,7 +155,6 @@ class RegisterTextField extends StatelessWidget {
         onSaved: onSaved,
         obscureText: obscureText,
         decoration: InputDecoration( 
-          border: const OutlineInputBorder(), 
           labelText: labelText,
         ),
       )
@@ -134,19 +167,19 @@ class RegisterTextField extends StatelessWidget {
 class RegisterCheckbox extends StatefulWidget {
   const RegisterCheckbox({
     super.key,
-    required this.labelText,
     required this.value,
-    required this.onChanged
+    required this.onChanged, 
+    required this.textSpan,
   });
 
-  final String labelText;
   final bool value;
   final Function(bool?) onChanged;
+  final TextSpan textSpan;
 
   @override
   State<StatefulWidget> createState() => _RegisterCheckbox();
-
 }
+
 class _RegisterCheckbox extends State<RegisterCheckbox> {
   late bool isChecked = widget.value;
   @override
@@ -162,7 +195,7 @@ class _RegisterCheckbox extends State<RegisterCheckbox> {
             });
           },
         ),
-        Text(widget.labelText)
+        RichText(text: widget.textSpan)
       ],
     );
   }

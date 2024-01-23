@@ -1,8 +1,10 @@
 
 import 'package:flutter/material.dart';
+import 'package:holopop/forgot/forgot_page.dart';
 import 'package:holopop/register/register_page.dart';
 import 'package:holopop/shared/providers/auth_provider.dart';
 import 'package:holopop/shared/providers/user_provider.dart';
+import 'package:holopop/shared/validation/login_validator.dart';
 import 'package:provider/provider.dart';
 
 
@@ -20,46 +22,65 @@ class _LoginPage extends State<LoginPage> {
   String? username;
   String? password;
 
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView( 
-      child: Form(
-        key: formKey,
-        child: Column( 
-          children: [ 
-            const Header(), 
-            LoginField(
-              onSaved: (value) => username = value,
-              labelText: 'Email, username, or mobile phone', 
-              hintText: 'Enter valid email id as abc@gmail.com'
-            ),
-            LoginField(
-              onSaved: (value) => password = value,
-              obscureText: true,
-              labelText: "Password",
-            ),
-            const Register(), 
-            SizedBox( 
-              height: 65, 
-              width: 360, 
-              child: Padding( 
-                padding: const EdgeInsets.only(top: 20.0), 
-                child: TextButton( 
-                  child: const Text( 'Sign In ', style: TextStyle(color: Colors.white, fontSize: 20)), 
+    const double leftRightPadding = 20;
+
+    return 
+      Padding(
+        padding: const EdgeInsets.fromLTRB(leftRightPadding, 30, leftRightPadding, 0),
+        child: Form(
+          key: formKey,
+          child: Column( 
+            children: [ 
+              const Header(), 
+              LoginField(
+                validator: LoginValidator().validateUsername,
+                onSaved: (value) => username = value,
+                labelText: 'Email, username, or mobile phone', 
+                hintText: 'Enter valid email id as abc@gmail.com'
+              ),
+              LoginField(
+                validator: LoginValidator().validatePassword,
+                onSaved: (value) => password = value,
+                obscureText: true,
+                labelText: "Password",
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.help_outline),
                   onPressed: () {
-                    final form = formKey.currentState;
-                    if (form!.validate()) {
-                      form.save();
-                      login(username!, password!); 
-                    }
-                    //TODO: VALIDATE
-                  }, 
-                ), 
-              ), 
-            )
-          ], 
-        ),
-      )
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => const Scaffold(body: ForgotPage())
+                    ));
+                   },
+                )
+              ),
+              const Register(), 
+              Expanded(
+                child: Align(
+                  alignment: Alignment.bottomCenter, 
+                  child: FractionallySizedBox( 
+                    widthFactor: 0.9,
+                    child: Padding( 
+                      padding: const EdgeInsets.only(bottom: 20.0), 
+                      child: TextButton( 
+                        child: const Text( 'Sign In ', style: TextStyle(color: Colors.white, fontSize: 20)), 
+                        onPressed: () {
+                          final form = formKey.currentState;
+                          if (form!.validate()) {
+                            form.save();
+                            login(username!, password!); 
+                          }
+                          //TODO: VALIDATE
+                        }, 
+                      ), 
+                    ), 
+                  )
+                )
+              )
+            ], 
+          ),
+        )
     );
   }
 
@@ -119,14 +140,18 @@ class LoginField extends StatelessWidget {
     required this.onSaved,
     this.hintText = "",
     this.autoFocus = false,
-    this.obscureText  = false
+    this.obscureText  = false,
+    this.suffixIcon,
+    this.validator
   });
 
   final Function(String?) onSaved;
+  final String? Function(String?)? validator;
   final String labelText;
   final String hintText;
   final bool obscureText;
   final bool autoFocus;
+  final Widget? suffixIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -134,12 +159,13 @@ class LoginField extends StatelessWidget {
       padding: const EdgeInsets.all(15),
       child: TextFormField(
         onSaved: onSaved,
+        validator: validator,
         autofocus: autoFocus,
         obscureText: obscureText,
         decoration: InputDecoration(
-          border: const OutlineInputBorder(),
           labelText: labelText,
           hintText: hintText,
+          suffixIcon: suffixIcon
         ),
       )
     );
@@ -153,6 +179,7 @@ class Register extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Row( 
       mainAxisAlignment: MainAxisAlignment.center,
       children: [ 

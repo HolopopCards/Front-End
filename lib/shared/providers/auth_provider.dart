@@ -6,6 +6,7 @@ import 'package:holopop/shared/storage/user.dart';
 import 'package:holopop/shared/storage/user_preferences.dart';
 import 'package:http/http.dart';
 import 'package:pointycastle/asymmetric/api.dart';
+import 'package:holopop/shared/config/appsettings.dart';
 
 
 enum LoginStatus { 
@@ -39,10 +40,10 @@ AgMBAAE=
     notifyListeners();
 
     final encryptedAndEncodedPassword = encryptAndEncode(password);
-    print(encryptedAndEncodedPassword);
+    print(AppSettings().getApiHost());
 
     final response = await post(
-      Uri.parse("http://ec2-35-175-193-242.compute-1.amazonaws.com:5000/login"),
+      Uri.parse("${AppSettings().getApiHost()}/login"),
       body: json.encode({ 'username': email, 'password': encryptedAndEncodedPassword }),
       headers: {'Content-Type': 'application/json' });
 
@@ -66,7 +67,7 @@ AgMBAAE=
     final encPass = encryptAndEncode(password);
 
     final response = await post(
-      Uri.parse("http://ec2-35-175-193-242.compute-1.amazonaws.com:5000/register"),
+      Uri.parse("${AppSettings().getApiHost()}/register"),
       body: json.encode({
         'name': name,
         'phone': phone,

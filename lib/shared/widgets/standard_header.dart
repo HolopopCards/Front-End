@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class StandardHeader extends StatelessWidget {
   const StandardHeader({
@@ -16,7 +17,11 @@ class StandardHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(
-          icon: const Icon(Icons.chevron_left),
+            icon: SvgPicture.asset(
+            "assets/icons/arrow back - white.svg",
+            height: 25,
+            width: 25,
+          ),
           onPressed: () { onBackPressed == null ? Navigator.pop(context) : onBackPressed!(); },
         ),
         Text(headerTitle),
