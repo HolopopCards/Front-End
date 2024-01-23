@@ -164,22 +164,7 @@ class _HomePage extends State<HomePage> {
                 if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else if (snapshot.data?.token == null) {
-                  return MaterialButton(
-                    color: Colors.blue,
-                    textColor: Colors.white,
-                    disabledColor: Colors.grey,
-                    disabledTextColor: Colors.black,
-                    padding: const EdgeInsets.all(12.0),
-                    splashColor: Colors.blueAccent,
-                    minWidth: 240,
-                    onPressed: () => _startVideoEditorDefault(),
-                    child: const Text(
-                      'Open Video Editor - Default',
-                      style: TextStyle(
-                        fontSize: 14.0,
-                      ),
-                    ),
-                  );
+                  return const LoginPage();
                 } else {
                   return MaterialButton(
                     color: Colors.blue,
