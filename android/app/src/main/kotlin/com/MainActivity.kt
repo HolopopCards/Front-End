@@ -1,5 +1,4 @@
-package com.banuba.flutter.flutter_ve_sdk
-
+package com.example.holopop
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri

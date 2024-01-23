@@ -1,4 +1,4 @@
-package com.banuba.flutter.flutter_ve_sdk
+package com.example.holopop
 
 import android.app.Application
 import android.graphics.Bitmap
