@@ -1,12 +1,15 @@
 
 import 'package:flutter/material.dart';
-import 'package:holopop/dashboard/screens/settings/privacy_policy.dart';
-import 'package:holopop/dashboard/screens/settings/terms_of_use.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:holopop/login/login_page.dart';
+import 'package:holopop/register/widgets/privacy_checkbox.dart';
+import 'package:holopop/register/widgets/terms_of_service_checkbox.dart';
 import 'package:holopop/shared/providers/auth_provider.dart';
 import 'package:holopop/shared/providers/user_provider.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
+import 'package:holopop/shared/validation/register_validator.dart';
 import 'package:provider/provider.dart';
+import 'package:toastification/toastification.dart';
 
 
 class RegisterFormModel {
@@ -18,6 +21,11 @@ class RegisterFormModel {
   String? confirmPassword;
   bool agreePrivacy = false;
   bool agreeTerms = false;
+
+  @override
+  String toString() {
+    return '''$name|$phone|$email|$dateTime|$password|$confirmPassword|$agreePrivacy|$agreeTerms''';
+  }
 }
 
 
@@ -36,53 +44,27 @@ class _RegisterPage extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(30),
-      child: Form(
-        key: formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-              child: Text("Let's get started", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
-            ),
-            RegisterTextField(labelText: "Name", onSaved: (x) => registerForm.name = x),
-            RegisterTextField(labelText: "Mobile Phone", onSaved: (x) => registerForm.phone = x),
-            RegisterTextField(labelText: "Email Address", onSaved: (x) => registerForm.email = x),
-            // RegisterTextField(labelText: "Date Of Birth", onSaved: (x) => registerForm.dateTime = x),
-            RegisterTextField(labelText: "Password", obscureText: true, onSaved: (x) => registerForm.password = x),
-            RegisterTextField(labelText: "Confirm Password", obscureText: true, onSaved: (x) => registerForm.confirmPassword = x),
-            RegisterCheckbox(
-              value: registerForm.agreePrivacy,
-              onChanged: (x) => registerForm.agreePrivacy = x ?? false,
-              textSpan: TextSpan(
-                children: [
-                  const TextSpan(text: "Agree with "),
-                  TextSpan(
-                    text: "Privacy Policy", 
-                    style: const TextStyle(color: HolopopColors.blue), 
-                    recognizer: TapAndPanGestureRecognizer()..onTapDown = (_) { Navigator.push(context, MaterialPageRoute(builder: (ctx) => const Scaffold(body: TermsOfUse()))) ;}
-                  )
-                ]
-              )
-            ),
-            RegisterCheckbox(
-              value: registerForm.agreeTerms,
-              onChanged: (x) => registerForm.agreeTerms = x ?? false,
-              textSpan: TextSpan(
-                children: [
-                  const TextSpan(text: "Agree with "),
-                  TextSpan(
-                    text: "Terms and Conditions",
-                    style: const TextStyle(color: HolopopColors.blue),
-                    recognizer: TapAndPanGestureRecognizer()..onTapDown = (_) { Navigator.push(context, MaterialPageRoute(builder: (ctx) => const Scaffold(body: PrivacyPolicy()))) ;}
-                  )
-                ]
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(30),
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                child: Text("Let's get started", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
               ),
-            ),
-            Expanded( 
-              child: Column(
+              RegisterTextField(labelText: "Name", onChanged: (x) => registerForm.name = x, validator: RegisterValidator().validateName),
+              RegisterTextField(labelText: "Mobile Phone", onChanged: (x) => registerForm.phone = x, validator: RegisterValidator().validatePhone),
+              RegisterTextField(labelText: "Email Address", onChanged: (x) => registerForm.email = x, validator: RegisterValidator().validateEmail),
+              DateTimeField(labelText: "Date Of Birth", onChanged: (x) => registerForm.dateTime = x),
+              RegisterTextField(labelText: "Password", obscureText: true, onChanged: (x) => registerForm.password = x, validator: RegisterValidator().validatePassword),
+              RegisterTextField(labelText: "Confirm Password", obscureText: true, onChanged: (x) => registerForm.confirmPassword = x, validator: (v) { return RegisterValidator().validateConfirmPassword(v, registerForm.password);}),
+              PrivacyCheckbox(value: registerForm.agreePrivacy, onChanged: (x) => registerForm.agreePrivacy = x ?? false),
+              TermsCheckbox(value: registerForm.agreeTerms, onChanged: (x) => registerForm.agreeTerms = x ?? false),
+              Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   const RegisterSentence(),
@@ -94,21 +76,31 @@ class _RegisterPage extends State<RegisterPage> {
                         child: const Text( 'Create Account', style: TextStyle(color: Colors.white, fontSize: 20)), 
                         onPressed: () {
                           final form = formKey.currentState;
-                          print(form);
+                          // Validate form
                           if (form!.validate()) {
+                            // Toast if checkboxes aren't checked.
+                            if (registerForm.agreePrivacy == false || registerForm.agreeTerms == false) {
+                              toastification.show(
+                                context: context,
+                                title: const Text("Please agree to the privacy policy and terms and conditions."), 
+                                type: ToastificationType.error,
+                              );
+                              return;
+                            } 
+
+                            toastification.dismissAll();
                             form.save();
                             register(registerForm);
                           }
-                          //TODO: VALIDATE
                         }, 
                       ), 
                     ), 
                   )
                 ]
               )
-            )
-          ],
-        ),
+            ],
+          ),
+        )
       )
     );
   }
@@ -139,12 +131,14 @@ class RegisterTextField extends StatelessWidget {
   const RegisterTextField({
     super.key,
     required this.labelText,
-    required this.onSaved,
+    required this.onChanged,
+    this.validator,
     this.obscureText = false
   });
 
   final String labelText;
-  final Function(String?) onSaved;
+  final Function(String?) onChanged;
+  final String? Function(String?)? validator;
   final bool obscureText;
 
   @override
@@ -152,7 +146,8 @@ class RegisterTextField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 7.5), 
       child: TextFormField( 
-        onSaved: onSaved,
+        onChanged: onChanged,
+        validator: validator,
         obscureText: obscureText,
         decoration: InputDecoration( 
           labelText: labelText,
@@ -162,45 +157,36 @@ class RegisterTextField extends StatelessWidget {
   }
 }
 
-
-/// Checkboxes
-class RegisterCheckbox extends StatefulWidget {
-  const RegisterCheckbox({
+class DateTimeField extends StatelessWidget {
+  const DateTimeField ({
     super.key,
-    required this.value,
-    required this.onChanged, 
-    required this.textSpan,
+    required this.labelText,
+    required this.onChanged,
+    this.validator,
+    this.obscureText = false
   });
 
-  final bool value;
-  final Function(bool?) onChanged;
-  final TextSpan textSpan;
+  final String labelText;
+  final Function(DateTime?) onChanged;
+  final String? Function(String?)? validator;
+  final bool obscureText;
 
-  @override
-  State<StatefulWidget> createState() => _RegisterCheckbox();
-}
-
-class _RegisterCheckbox extends State<RegisterCheckbox> {
-  late bool isChecked = widget.value;
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Checkbox(
-          value: isChecked,
-          onChanged: (x) {
-            setState(() {
-              widget.onChanged(x);
-              isChecked = !isChecked;
-            });
-          },
-        ),
-        RichText(text: widget.textSpan)
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 7.5), 
+      child: InputDatePickerFormField(
+        firstDate: DateTime(1900),
+        lastDate: DateTime(2024),
+        fieldLabelText: "Date of Birth",
+        keyboardType: TextInputType.datetime,
+        errorInvalidText: "Invalid format (MM/DD/YYYY)",
+        onDateSaved: onChanged,
+        acceptEmptyDate: false,
+      )
     );
   }
 }
-
 
 /// Register portion
 class RegisterSentence extends StatelessWidget {
