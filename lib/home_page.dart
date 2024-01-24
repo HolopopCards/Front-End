@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:holopop/firebase/firebase_provider.dart';
 import 'package:holopop/login/login_page.dart';
+import 'package:holopop/shared/firebase/firebase_provider.dart';
 import 'package:holopop/shared/nav/destination_view.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:holopop/shared/storage/user_preferences.dart';
