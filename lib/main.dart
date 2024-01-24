@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:global_configuration/global_configuration.dart';
 import 'package:holopop/shared/providers/auth_provider.dart';
 import 'package:holopop/home_page.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';

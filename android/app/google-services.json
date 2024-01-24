@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "137420022148",
+    "project_id": "my-project-1601043731797",
+    "storage_bucket": "my-project-1601043731797.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:137420022148:android:a28ded66fd31cb33f8fdd1",
+        "android_client_info": {
+          "package_name": "com.example.holopop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDijoTkHW5Cw3_ZOlDWUS9HzF6ndPZmQu0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

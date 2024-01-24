@@ -1,12 +1,10 @@
 
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:holopop/login/login_page.dart';
 import 'package:holopop/register/widgets/privacy_checkbox.dart';
 import 'package:holopop/register/widgets/terms_of_service_checkbox.dart';
 import 'package:holopop/shared/providers/auth_provider.dart';
 import 'package:holopop/shared/providers/user_provider.dart';
-import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:holopop/shared/validation/register_validator.dart';
 import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
