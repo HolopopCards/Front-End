@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.7.10'
+    ext.kotlin_version = '1.9.0'
     repositories {
         google()
         mavenCentral()
@@ -13,6 +13,10 @@ buildscript {
 
 allprojects {
     repositories {
+        google()
+        jcenter()
+        mavenCentral()
+
         maven {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/Banuba/banuba-ve-sdk")
@@ -32,9 +36,6 @@ allprojects {
         maven {
             url 'https://storage.googleapis.com/download.flutter.io'
         }
-        google()
-        jcenter()
-        mavenCentral()
     }
 }
 

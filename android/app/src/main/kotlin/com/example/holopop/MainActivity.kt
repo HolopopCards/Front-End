@@ -1,4 +1,4 @@
-package com.example.holopop
+package com.holopop
 
 import android.app.Activity
 import android.content.Intent

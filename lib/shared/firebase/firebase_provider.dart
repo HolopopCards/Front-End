@@ -1,9 +1,12 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:holopop/shared/notifications/holopop_notifications.dart';
+import 'package:logging/logging.dart';
 
 class FirebaseProvider with ChangeNotifier {
   Future startFirebaseListening() async {
-    print("Starting Firebase listening...");
+    Logger('Firebase').info('Starting Firebase listening...');
+    Logger('Firebase').info('Token: ${await FirebaseMessaging.instance.getToken()}'); // TODO: Remove before prod.
 
     // If a message came in and the app was not already open, handle it.
     final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
@@ -15,12 +18,20 @@ class FirebaseProvider with ChangeNotifier {
     FirebaseMessaging.onMessage.listen(handleMessage);
   }
 
+
   void handleMessage(RemoteMessage message) {
-    print("Got message");
-    print("from: $message.from");
-    print("category: $message.category");
-    print("data: $message.data");
-    print("message title: ${message.notification?.title}");
-    print("message: ${message.notification?.body}");
+    Logger('Firebase').info('Received message: from ${message.from}, category ${message.category}, title: ${message.notification?.title}, message: ${message.notification?.body}');
+
+    displayNotification(message);
+  }
+
+
+  void displayNotification(RemoteMessage message) {
+    if (message.notification?.title != null && message.notification?.body != null) {
+      String title = message.notification!.title!,
+             body  = message.notification!.body!;
+
+      HolopopNotifications().notify(title, body);
+    }
   }
 }
