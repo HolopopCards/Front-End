@@ -1,0 +1,19 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\android",
+    "\\android\\app",
+    "\\android\\app\\src",
+    "\\android\\app\\src\\main",
+    "\\assets",
+    "\\ios",
+    "\\ios\\Flutter",
+    "\\ios\\Runner",
+    "\\lib",
+    "\\lib\\dashboard",
+    "\\lib\\dashboard\\screens",
+    "\\lib\\dashboard\\screens\\settings"
+  ],
+  "SelectedNode": "\\android\\app\\src\\main\\AndroidManifest.xml",
+  "PreviewInSolutionExplorer": false
+}
