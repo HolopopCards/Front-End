@@ -4,6 +4,7 @@ import 'package:holopop/forgot/forgot_page.dart';
 import 'package:holopop/register/register_page.dart';
 import 'package:holopop/shared/providers/auth_provider.dart';
 import 'package:holopop/shared/providers/user_provider.dart';
+import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:holopop/shared/validation/login_validator.dart';
 import 'package:provider/provider.dart';
 
@@ -55,27 +56,46 @@ class _LoginPage extends State<LoginPage> {
                    },
                 )
               ),
-              const Register(), 
+              const Padding(
+                padding: EdgeInsets.fromLTRB(15, 0, 15, 10),
+                child: Row(
+                  children: [
+                    Expanded(child: Divider(color: HolopopColors.darkgrey)),
+                    Text("  OR  ", style: TextStyle(color: HolopopColors.darkgrey)),
+                    Expanded(child: Divider(color: HolopopColors.darkgrey))
+                  ],
+                )
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SsoButton(iconData: Icons.circle, onPressed: () { }),
+                  SsoButton(iconData: Icons.circle, onPressed: () { }),
+                  SsoButton(iconData: Icons.circle, onPressed: () { }),
+                ],
+              ),
               Expanded(
-                child: Align(
-                  alignment: Alignment.bottomCenter, 
-                  child: FractionallySizedBox( 
-                    widthFactor: 0.9,
-                    child: Padding( 
-                      padding: const EdgeInsets.only(bottom: 20.0), 
-                      child: TextButton( 
-                        child: const Text( 'Sign In ', style: TextStyle(color: Colors.white, fontSize: 20)), 
-                        onPressed: () {
-                          final form = formKey.currentState;
-                          if (form!.validate()) {
-                            form.save();
-                            login(username!, password!); 
-                          }
-                          //TODO: VALIDATE
-                        }, 
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end, 
+                  children: [
+                    const Register(), 
+                    FractionallySizedBox( 
+                      widthFactor: 0.9,
+                      child: Padding( 
+                        padding: const EdgeInsets.only(bottom: 40.0), 
+                        child: TextButton( 
+                          child: const Text( 'Sign In ', style: TextStyle(color: Colors.white, fontSize: 20)), 
+                          onPressed: () {
+                            final form = formKey.currentState;
+                            if (form!.validate()) {
+                              form.save();
+                              login(username!, password!); 
+                            }
+                          }, 
+                        ), 
                       ), 
-                    ), 
-                  )
+                    )
+                  ]
                 )
               )
             ], 
@@ -173,6 +193,24 @@ class LoginField extends StatelessWidget {
 }
 
 
+class SsoButton extends StatelessWidget {
+  const SsoButton({super.key, required this.onPressed, required this.iconData});
+
+  final IconData iconData;
+  final Function() onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: IconButton(
+        icon: Icon(iconData), 
+        onPressed: onPressed),
+    );
+  }
+}
+
+
 /// Little register reminder bit.
 class Register extends StatelessWidget {
   const Register({super.key});
@@ -185,7 +223,7 @@ class Register extends StatelessWidget {
       children: [ 
         const Text("Don't have an account? "),
         Padding( 
-          padding: const EdgeInsets.only(left:1.0), 
+          padding: const EdgeInsets.symmetric(vertical: 20), 
           child: InkWell(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(

@@ -1,32 +1,13 @@
 {
   "project_info": {
-    "project_number": "137420022148",
-    "project_id": "my-project-1601043731797",
-    "storage_bucket": "my-project-1601043731797.appspot.com"
+    "project_number": "314163482556",
+    "project_id": "holopop",
+    "storage_bucket": "holopop.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:137420022148:android:a28ded66fd31cb33f8fdd1",
-        "android_client_info": {
-          "package_name": "com.example.holopop"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDijoTkHW5Cw3_ZOlDWUS9HzF6ndPZmQu0"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:137420022148:android:3fc4b301e1bef98bf8fdd1",
+        "mobilesdk_app_id": "1:314163482556:android:ffdee560be641a33fd65b9",
         "android_client_info": {
           "package_name": "com.holopop"
         }
@@ -34,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDijoTkHW5Cw3_ZOlDWUS9HzF6ndPZmQu0"
+          "current_key": "AIzaSyD1VlvEbwazBnI1NoQoaaOxWVoTmMUfTv0"
         }
       ],
       "services": {

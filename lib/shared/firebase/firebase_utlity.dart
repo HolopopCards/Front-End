@@ -1,9 +1,8 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:holopop/shared/notifications/holopop_notifications.dart';
 import 'package:logging/logging.dart';
 
-class FirebaseProvider with ChangeNotifier {
+class FirebaseUtility {
   Future startFirebaseListening() async {
     Logger('Firebase').info('Starting Firebase listening...');
     Logger('Firebase').info('Token: ${await FirebaseMessaging.instance.getToken()}'); // TODO: Remove before prod.
@@ -33,5 +32,13 @@ class FirebaseProvider with ChangeNotifier {
 
       HolopopNotifications().notify(title, body);
     }
+  }
+
+
+  Future<String?> getFcmToken() async {
+    var token = await FirebaseMessaging.instance.getToken();
+    Logger('Firebase').info('Retrieving token: $token');
+
+    return token;
   }
 }

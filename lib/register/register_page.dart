@@ -6,6 +6,7 @@ import 'package:holopop/register/widgets/terms_of_service_checkbox.dart';
 import 'package:holopop/shared/providers/auth_provider.dart';
 import 'package:holopop/shared/providers/user_provider.dart';
 import 'package:holopop/shared/validation/register_validator.dart';
+import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
 
@@ -117,8 +118,19 @@ class _RegisterPage extends State<RegisterPage> {
           Provider.of<UserProvider>(context, listen: false).setUser(user);
           Navigator.pushNamed(context, "/");
         } else {
-          print("form is invalid");
+          Logger('Register').severe("Failed to register: ${res.error}}");
+          toastification.show(
+            context: context,
+            title: Text("Failed to register: ${res.error}"),
+            type: ToastificationType.error);
         }
+      })
+      .onError((e, x) {
+        Logger('Register').severe("Failed to register: $e");
+        toastification.show(
+          context: context,
+          title: Text("Failed to register: $e"),
+          type: ToastificationType.error);
       });
   }
 }

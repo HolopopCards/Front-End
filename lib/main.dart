@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:holopop/home_page.dart';
 import 'package:holopop/shared/firebase/firebase_options.dart';
-import 'package:holopop/shared/firebase/firebase_provider.dart';
 import 'package:holopop/shared/providers/auth_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:holopop/shared/providers/user_provider.dart';
@@ -71,8 +70,7 @@ class App extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (_) => UserProvider()),
-        ChangeNotifierProvider(create: (_) => FirebaseProvider())
+        ChangeNotifierProvider(create: (_) => UserProvider())
       ],
       child: MaterialApp(
         title: 'HoloPop',

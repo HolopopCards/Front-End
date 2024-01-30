@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter/material.dart';
+import 'package:holopop/shared/firebase/firebase_utlity.dart';
 import 'package:holopop/shared/monads/result.dart';
 import 'package:holopop/shared/storage/user.dart';
 import 'package:holopop/shared/storage/user_preferences.dart';
 import 'package:http/http.dart';
+import 'package:logging/logging.dart';
 import 'package:pointycastle/asymmetric/api.dart';
 import 'package:holopop/shared/config/appsettings.dart';
 
@@ -40,12 +42,21 @@ AgMBAAE=
     notifyListeners();
 
     final encryptedAndEncodedPassword = encryptAndEncode(password);
-    print(AppSettings().getApiHost());
+    final token = await FirebaseUtility().getFcmToken();
 
     final response = await post(
       Uri.parse("${AppSettings().getApiHost()}/login"),
-      body: json.encode({ 'username': email, 'password': encryptedAndEncodedPassword }),
-      headers: {'Content-Type': 'application/json' });
+      body: json.encode({
+        'username': email,
+        'password': encryptedAndEncodedPassword,
+        'fcmtoken': token
+        }),
+      headers: {'Content-Type': 'application/json' }
+    ).timeout(const Duration(seconds: 5), onTimeout: () { return Response('Timeout', 408); });
+
+    if (response.statusCode == 408) {
+      return Result.fromFailure("Timeout");
+    }
 
     final data = json.decode(response.body);
     if (response.statusCode == 200) {
@@ -65,31 +76,42 @@ AgMBAAE=
 
   Future<Result<User>> register(String name, String phone, DateTime dob, String email, String password) async {
     final encPass = encryptAndEncode(password);
+    final token = await FirebaseUtility().getFcmToken();
 
-    final response = await post(
-      Uri.parse("${AppSettings().getApiHost()}/register"),
-      body: json.encode({
-        'name': name,
-        'phone': phone,
-        'dob': dob.toIso8601String(),
-        'email': email,
-        'password': encPass
-      }),
-      headers: { 'Content-Type': 'application/json'}
-    );
+    try {
+      Logger('Auth Provider').info("Registering...");
+      final response = await post(
+        Uri.parse("${AppSettings().getApiHost()}/register"),
+        body: json.encode({
+          'name': name,
+          'phone': phone,
+          'dob': dob.toIso8601String(),
+          'email': email,
+          'password': encPass,
+          'fcmtoken': token
+        }),
+        headers: { 'Content-Type': 'application/json'},
+      ).timeout(const Duration(seconds: 5), onTimeout: () { return Response('Timeout', 408); });
 
-    final data = json.decode(response.body);
-    if (response.statusCode == 200) {
-      final token = data['token'];
-      final user = User(username: email, token: token);
+      if (response.statusCode == 408) {
+        return Result.fromFailure("Timeout");
+      }
 
-      await UserPreferences().saveUserAsync(user);
-      _loggedInStatus = LoginStatus.loggedIn;
-      notifyListeners();
-      return Result.fromSuccess(user);
-    } else {
-      final error = data['error'];
-      return Result.fromFailure(error);
+      final data = json.decode(response.body);
+      if (response.statusCode == 200) {
+        final token = data['token'];
+        final user = User(username: email, token: token);
+
+        await UserPreferences().saveUserAsync(user);
+        _loggedInStatus = LoginStatus.loggedIn;
+        notifyListeners();
+        return Result.fromSuccess(user);
+      } else {
+        final error = data['error'];
+        return Result.fromFailure(error);
+      }
+    } catch (e) {
+      return Result.fromFailure(e.toString());
     }
   }
 
