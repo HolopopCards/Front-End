@@ -75,7 +75,6 @@ class _RegisterPage extends State<RegisterPage> {
                         child: const Text( 'Create Account', style: TextStyle(color: Colors.white, fontSize: 20)), 
                         onPressed: () {
                           final form = formKey.currentState;
-                          // Validate form
                           if (form!.validate()) {
                             // Toast if checkboxes aren't checked.
                             if (registerForm.agreePrivacy == false || registerForm.agreeTerms == false) {

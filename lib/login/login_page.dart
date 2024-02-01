@@ -1,12 +1,16 @@
 
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:holopop/forgot/forgot_page.dart';
 import 'package:holopop/register/register_page.dart';
 import 'package:holopop/shared/providers/auth_provider.dart';
 import 'package:holopop/shared/providers/user_provider.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:holopop/shared/validation/login_validator.dart';
+import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:toastification/toastification.dart';
 
 
 /// Core widget
@@ -69,9 +73,23 @@ class _LoginPage extends State<LoginPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SsoButton(iconData: Icons.circle, onPressed: () { }),
-                  SsoButton(iconData: Icons.circle, onPressed: () { }),
-                  SsoButton(iconData: Icons.circle, onPressed: () { }),
+                  SsoButton(iconPath: "assets/icons/login - google.svg", 
+                    onPressed: () { 
+                      try {
+                        Logger('Login').info("Logging in through Google...");
+                        GoogleSignIn(clientId: "314163482556-vb6fa4pbk1iku60rmsqkikjrteju3h9s.apps.googleusercontent.com").signIn()
+                          .then(loginWithGoogle);
+                      } catch (e) {
+                        Logger('Login').severe("Issue logging in: ${e.toString()}");
+                        toastification.show(
+                          context: context,
+                          title: Text("Error logging in through Google: ${e.toString()}"), 
+                          type: ToastificationType.error,
+                        );
+                      }
+                    }),
+                  SsoButton(iconPath: "assets/icons/login - facebook.svg", onPressed: () async { }),
+                  SsoButton(iconPath: "assets/icons/login - apple.svg", onPressed: () async { }),
                 ],
               ),
               Expanded(
@@ -106,7 +124,7 @@ class _LoginPage extends State<LoginPage> {
 
   void login(String username, String password) {
     final auth = Provider.of<AuthProvider>(context, listen: false);
-    auth.login(username, password)
+    auth.loginWithEmail(username, password)
       .then((res) {
         if (res.success) {
           final user = res.value!;
@@ -118,6 +136,32 @@ class _LoginPage extends State<LoginPage> {
         }
       });
   }
+
+  void loginWithGoogle(GoogleSignInAccount? googleSignInAccount) {
+    if (googleSignInAccount == null) {
+      Logger('Login').severe("Failed to login via google because sign in account was unavailable.");
+      return;
+    }
+
+    Logger('Login').info("Authenticating API with google token...");
+    final auth = Provider.of<AuthProvider>(context, listen: false);
+    Logger('Login').info("CHECK: ${googleSignInAccount.id}");
+    googleSignInAccount.authentication.then((googleAuth) {
+      Logger('Login').info("Google access token received: ${googleAuth.accessToken}");
+      Logger('Login').info("Google id token received: ${googleAuth.idToken}");
+      return auth.loginWithGoogle(googleSignInAccount.email, googleAuth.idToken!)
+        .then((res) {
+          if (res.success) {
+            final user = res.value!;
+            Provider.of<UserProvider>(context, listen: false).setUser(user);
+            Navigator.pushNamed(context, "/");
+          } else {
+            print(res.error);
+            print("form is invalid");
+          }
+        });
+    });
+   }
 }
 
 
@@ -194,17 +238,18 @@ class LoginField extends StatelessWidget {
 
 
 class SsoButton extends StatelessWidget {
-  const SsoButton({super.key, required this.onPressed, required this.iconData});
+  const SsoButton({super.key, required this.onPressed, required this.iconPath});
 
-  final IconData iconData;
+  final String iconPath;
   final Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 2.5),
       child: IconButton(
-        icon: Icon(iconData), 
+        // icon: Icon(iconData), 
+        icon: SvgPicture.asset(iconPath), 
         onPressed: onPressed),
     );
   }

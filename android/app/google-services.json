@@ -12,7 +12,20 @@
           "package_name": "com.holopop"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "314163482556-b4nrmo5rn42c5pfmrtt5vpquvplu4fc1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.holopop",
+            "certificate_hash": "646f0c0ec4f2ad9cba4aa347d955ed30d2acf043"
+          }
+        },
+        {
+          "client_id": "314163482556-vb6fa4pbk1iku60rmsqkikjrteju3h9s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyD1VlvEbwazBnI1NoQoaaOxWVoTmMUfTv0"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "314163482556-vb6fa4pbk1iku60rmsqkikjrteju3h9s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

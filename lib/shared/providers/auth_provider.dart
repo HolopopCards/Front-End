@@ -19,6 +19,28 @@ enum LoginStatus {
 }
 
 
+enum LoginType {
+  email,
+  google,
+  facebook,
+  apple
+}
+
+
+class LoginRequest {
+  final String user;
+  final String? password;
+  final String? ssoToken;
+  final LoginType loginType;
+
+  LoginRequest({
+    required this.user,
+    required this.password,
+    required this.ssoToken,
+    required this.loginType});
+}
+
+
 class AuthProvider with ChangeNotifier {
   LoginStatus _loggedInStatus = LoginStatus.notLoggedIn;
 
@@ -37,39 +59,72 @@ AgMBAAE=
 -----END PUBLIC KEY-----""";
 
 
-  Future<Result<User>> login(String email, String password) async { 
+  Future<Result<User>> loginWithEmail(String email, String password) async { 
+    return login(LoginRequest(
+      user: email,
+      password: password,
+      ssoToken: null,
+      loginType: LoginType.email
+    ));
+  }
+
+
+  Future<Result<User>> loginWithGoogle(String user, String googleToken) async {
+    return login(LoginRequest(
+      user: user,
+      password: null,
+      ssoToken: googleToken,
+      loginType: LoginType.google
+    ));
+  }
+
+
+  Future<Result<User>> login(LoginRequest loginRequest) async { 
     _loggedInStatus = LoginStatus.authenticating;
     notifyListeners();
 
-    final encryptedAndEncodedPassword = encryptAndEncode(password);
-    final token = await FirebaseUtility().getFcmToken();
-
-    final response = await post(
-      Uri.parse("${AppSettings().getApiHost()}/login"),
-      body: json.encode({
-        'username': email,
-        'password': encryptedAndEncodedPassword,
-        'fcmtoken': token
-        }),
-      headers: {'Content-Type': 'application/json' }
-    ).timeout(const Duration(seconds: 5), onTimeout: () { return Response('Timeout', 408); });
-
-    if (response.statusCode == 408) {
-      return Result.fromFailure("Timeout");
+    var encryptedAndEncodedPassword = "";
+    if (loginRequest.password != null) {
+      encryptedAndEncodedPassword = encryptAndEncode(loginRequest.password!);
     }
 
-    final data = json.decode(response.body);
-    if (response.statusCode == 200) {
-      final token = data['token'];
-      final user = User(username: email, token: token);
+    final token = await FirebaseUtility().getFcmToken();
 
-      await UserPreferences().saveUserAsync(user);
-      _loggedInStatus = LoginStatus.loggedIn;
-      notifyListeners();
-      return Result.fromSuccess(user);
-    } else {
-      final error = data['error'];
-      return Result.fromFailure(error);
+    try {
+      final response = await post(
+        Uri.parse("${AppSettings().getApiHost()}/login"),
+        body: json.encode({
+          'user': loginRequest.user,
+          'password': encryptedAndEncodedPassword,
+          'ssotoken': loginRequest.ssoToken,
+          'type': loginRequest.loginType.name,
+          'fcmtoken': token
+          }),
+        headers: {'Content-Type': 'application/json' }
+      );
+
+      if (response.statusCode == 408) {
+        return Result.fromFailure("Timeout");
+      }
+
+      final data = json.decode(response.body);
+      if (response.statusCode == 200) {
+        final token = data['token'];
+        final username = data['username'];
+        final user = User(username: username, token: token);
+
+        await UserPreferences().saveUserAsync(user);
+        _loggedInStatus = LoginStatus.loggedIn;
+        notifyListeners();
+        return Result.fromSuccess(user);
+      } else {
+        final error = data['error'];
+      Logger('Auth Provider').severe("Auth login failed because: $error");
+        return Result.fromFailure(error);
+      }
+    } catch (e) {
+      Logger('Auth Provider').severe("Auth login failed because: ${e.toString()}");
+      return Result.fromFailure(e.toString());
     }
   }
 
@@ -114,7 +169,6 @@ AgMBAAE=
       return Result.fromFailure(e.toString());
     }
   }
-
 
   // TODO: Put somewhere better.
   String encryptAndEncode(String password) {
