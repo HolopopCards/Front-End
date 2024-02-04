@@ -131,8 +131,7 @@ class _LoginPage extends State<LoginPage> {
           Provider.of<UserProvider>(context, listen: false).setUser(user);
           Navigator.pushNamed(context, "/");
         } else {
-          print(res.error);
-          print("form is invalid");
+          Logger('Login').severe("Login through password failed: ${res.error}");
         }
       });
   }
@@ -145,10 +144,7 @@ class _LoginPage extends State<LoginPage> {
 
     Logger('Login').info("Authenticating API with google token...");
     final auth = Provider.of<AuthProvider>(context, listen: false);
-    Logger('Login').info("CHECK: ${googleSignInAccount.id}");
     googleSignInAccount.authentication.then((googleAuth) {
-      Logger('Login').info("Google access token received: ${googleAuth.accessToken}");
-      Logger('Login').info("Google id token received: ${googleAuth.idToken}");
       return auth.loginWithGoogle(googleSignInAccount.email, googleAuth.idToken!)
         .then((res) {
           if (res.success) {
@@ -156,8 +152,7 @@ class _LoginPage extends State<LoginPage> {
             Provider.of<UserProvider>(context, listen: false).setUser(user);
             Navigator.pushNamed(context, "/");
           } else {
-            print(res.error);
-            print("form is invalid");
+            Logger('Login').severe("Login through google failed: ${res.error}");
           }
         });
     });
