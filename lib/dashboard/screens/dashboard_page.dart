@@ -205,7 +205,7 @@ class CarouselHeader extends StatelessWidget {
           },
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.transparent),
-            foregroundColor: MaterialStateProperty.all(HolopopColors.lightgrey),
+            foregroundColor: MaterialStateProperty.all(HolopopColors.lightGrey),
             textStyle: MaterialStateProperty.all(const TextStyle(fontSize: 11,)),
           ),
           child: const Text("See All"),

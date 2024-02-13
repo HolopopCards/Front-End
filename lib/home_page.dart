@@ -193,7 +193,7 @@ class _HomePage extends State<HomePage> {
             currentIndex: _currentIndex,
             onTap: (i) { setState(() { _currentIndex = i; }); },
             selectedItemColor: HolopopColors.blue,
-            unselectedItemColor: HolopopColors.lightgrey,
+            unselectedItemColor: HolopopColors.lightGrey,
             showUnselectedLabels: true,
             items: allDestinations.map((dest) =>
               BottomNavigationBarItem(

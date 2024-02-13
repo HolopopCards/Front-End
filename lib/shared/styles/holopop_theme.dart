@@ -9,8 +9,8 @@ class HolopopTheme {
       // INPUT DECORATION
       inputDecorationTheme: const InputDecorationTheme(
         filled: true,
-        fillColor: HolopopColors.darkgrey,
-        labelStyle: TextStyle(color: HolopopColors.lightgrey),
+        fillColor: HolopopColors.darkGrey,
+        labelStyle: TextStyle(color: HolopopColors.lightGrey),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(15)),
           borderSide: BorderSide.none
@@ -28,7 +28,7 @@ class HolopopTheme {
       // ELEVATED BUTTON
       elevatedButtonTheme: const ElevatedButtonThemeData(
         style: ButtonStyle(
-          backgroundColor: MaterialStatePropertyAll(HolopopColors.darkgrey),
+          backgroundColor: MaterialStatePropertyAll(HolopopColors.darkGrey),
           foregroundColor: MaterialStatePropertyAll(Colors.white)
         )
       ),

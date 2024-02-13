@@ -25,9 +25,7 @@ class _EditSentCardPage extends State<EditSentCardPage> {
 
 /// Header
 class Header extends StatelessWidget {
-  const Header({
-    super.key,
-  });
+  const Header({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +129,7 @@ class EditTextField extends StatelessWidget {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      iconColor: HolopopColors.darkgrey
+                      iconColor: HolopopColors.darkGrey
                     ),
                   ),
                 )
@@ -189,9 +187,9 @@ class EditDropdownField extends StatelessWidget {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      iconColor: HolopopColors.darkgrey,
+                      iconColor: HolopopColors.darkGrey,
                     ),
-                    style: const TextStyle(color: HolopopColors.lightgrey)
+                    style: const TextStyle(color: HolopopColors.lightGrey)
                   ),
                 ),
               )

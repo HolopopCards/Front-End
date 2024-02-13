@@ -97,7 +97,7 @@ class SettingsGroup extends StatelessWidget {
             child: Text(
               title,
               style: const TextStyle(
-                color: HolopopColors.lightgrey
+                color: HolopopColors.lightGrey
               ),),
           ),
           for (var setting in settings)

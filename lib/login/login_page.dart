@@ -64,9 +64,9 @@ class _LoginPage extends State<LoginPage> {
                 padding: EdgeInsets.fromLTRB(15, 0, 15, 10),
                 child: Row(
                   children: [
-                    Expanded(child: Divider(color: HolopopColors.darkgrey)),
-                    Text("  OR  ", style: TextStyle(color: HolopopColors.darkgrey)),
-                    Expanded(child: Divider(color: HolopopColors.darkgrey))
+                    Expanded(child: Divider(color: HolopopColors.darkGrey)),
+                    Text("  OR  ", style: TextStyle(color: HolopopColors.darkGrey)),
+                    Expanded(child: Divider(color: HolopopColors.darkGrey))
                   ],
                 )
               ),
