@@ -77,7 +77,7 @@ class _DestinationViewState extends State<DestinationView> {
               case "Dashboard":
                 return const DashboardPage();
               case "Create Card":
-                return const CreateSuccess(); //TODO: DEVEVEVEVEVE
+                return const CreateRecordVideo(); //TODO: DEVEVEVEVEVE
               default:
                 return const HolopopPlaceholder();
             }
