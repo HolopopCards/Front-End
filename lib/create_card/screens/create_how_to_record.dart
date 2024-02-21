@@ -4,14 +4,14 @@ import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:lottie/lottie.dart';
 
 
-class RecordVideoPage extends StatefulWidget {
-  const RecordVideoPage({super.key});
+class CreateHowToRecord extends StatefulWidget {
+  const CreateHowToRecord({super.key});
 
   @override
-  State<StatefulWidget> createState() => _RecordVideoPage();
+  State<StatefulWidget> createState() => _CreateHowToRecord();
 }
 
-class _RecordVideoPage extends State<RecordVideoPage> {
+class _CreateHowToRecord extends State<CreateHowToRecord> {
   final _pageController = PageController(initialPage: 0);
   int position = 0;
 
@@ -27,7 +27,7 @@ class _RecordVideoPage extends State<RecordVideoPage> {
             const Text("Quick Guide"),
             IconButton(
               icon: const Icon(Icons.close),
-              onPressed: () { },
+              onPressed: () => Navigator.pushNamed(context, "/create/record-video"),
             )
           ],
         ),

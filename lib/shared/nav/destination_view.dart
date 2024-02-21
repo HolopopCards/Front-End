@@ -3,10 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:holopop/create_card/screens/create_details.dart';
 import 'package:holopop/create_card/screens/create_qr.dart';
+import 'package:holopop/create_card/screens/create_record_video.dart';
 import 'package:holopop/create_card/screens/create_success.dart';
 import 'package:holopop/create_card/screens/create_type.dart';
 import 'package:holopop/create_card/screens/create_unlink.dart';
-import 'package:holopop/create_card/screens/media_type.dart';
+import 'package:holopop/create_card/screens/create_media_type.dart';
 import 'package:holopop/dashboard/screens/dashboard_page.dart';
 import 'package:holopop/dashboard/screens/edit_sent_card_page.dart';
 import 'package:holopop/dashboard/screens/see_all_page.dart';
@@ -54,17 +55,18 @@ class _DestinationViewState extends State<DestinationView> {
             // First check if this is a named push. TODO: make better.
             if (settings.name != "/" && settings.name != null) {
               switch (settings.name) {
-                case "/all-received-cards": return SeeAllCardsPage(args: settings.arguments as SeeAllCardsArgs);
-                case "/received-card":      return ReceivedCardPage(args: settings.arguments as SentAndReceivedCardArgs);
-                case "/all-sent-cards":     return SeeAllCardsPage(args: settings.arguments as SeeAllCardsArgs);
-                case "/sent-card":          return SentCardPage(args: settings.arguments as SentAndReceivedCardArgs);
-                case "/edit-sent-card":     return const EditSentCardPage();
-                case "/create":             return const CreateType();
-                case "/create/qr":          return const CreateQr();
-                case "/create/details":     return const CreateDetails();
-                case "/create/success":     return const CreateSuccess();
-                case "/create/unlink":      return CreateUnlink(card: settings.arguments as CreateApplicationCard);
-                case "/create/media-type":  return const CreateMediaType();
+                case "/all-received-cards":  return SeeAllCardsPage(args: settings.arguments as SeeAllCardsArgs);
+                case "/received-card":       return ReceivedCardPage(args: settings.arguments as SentAndReceivedCardArgs);
+                case "/all-sent-cards":      return SeeAllCardsPage(args: settings.arguments as SeeAllCardsArgs);
+                case "/sent-card":           return SentCardPage(args: settings.arguments as SentAndReceivedCardArgs);
+                case "/edit-sent-card":      return const EditSentCardPage();
+                case "/create":              return const CreateType();
+                case "/create/qr":           return const CreateQr();
+                case "/create/details":      return const CreateDetails();
+                case "/create/success":      return const CreateSuccess();
+                case "/create/unlink":       return CreateUnlink(card: settings.arguments as CreateApplicationCard);
+                case "/create/media-type":   return const CreateMediaType();
+                case "/create/record-video": return const CreateRecordVideo();
               }
             }
 
