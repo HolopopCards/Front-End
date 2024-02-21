@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:holopop/shared/storage/create_application.dart';
+import 'package:holopop/shared/storage/create_application_storage.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -57,7 +58,11 @@ class _CreateUnlink extends State<CreateUnlink> {
                   child: TextButton(
                     child: const Text("Unlink"),
                     onPressed: () {
-                      
+                      CreateApplicationStorage()
+                        .unlinkCardAsync(widget.card.serialNumber)
+                        .then((res) {
+                          Navigator.pushNamed(context, "/create/success");
+                        }); 
                     }))
               ])),
         ]

@@ -1,7 +1,7 @@
 
 class CreateApplication {
   final String? type;
-  final List<CreateApplicationCard> cards; 
+  List<CreateApplicationCard> cards; 
 
   CreateApplication({
     this.type,

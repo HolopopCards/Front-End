@@ -81,16 +81,20 @@ class CreateApplicationStorage {
     return updateCardAsync(lastCard.serialNumber, func);
   }
 
-  // /// Unlink the card from storage.
-  // Future<Result> unlinkCardAsync(String serialNumber) {
-  //   return getAppAsync()
-  //     .then((appRes) { 
-  //       if (appRes.success) {
-  //         var cards = appRes.value!.cards;
-  //         if 
-  //       }
-  //     })
-  // }
+  /// Unlink the card from storage.
+  Future<Result> unlinkCardAsync(String serialNumber) {
+    return getAppAsync()
+      .then((appRes) { 
+        if (appRes.success) {
+          var app = appRes.value!;
+          var cards = app.cards;
+          var cardsWithoutUnlinkedCard = cards.where((c) => c.serialNumber != serialNumber)
+                                              .toList();
+          return updateAppAsync((a) => a.cards = cardsWithoutUnlinkedCard);
+        }
+        return appRes;
+      });
+  }
 
   /// Delete the app in storage.
   Future<Result> deleteAppAsync() async {
