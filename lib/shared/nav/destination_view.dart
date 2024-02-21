@@ -2,14 +2,17 @@
 
 import 'package:flutter/material.dart';
 import 'package:holopop/create_card/screens/create_details.dart';
-import 'package:holopop/create_card/screens/create_start.dart';
+import 'package:holopop/create_card/screens/create_qr.dart';
+import 'package:holopop/create_card/screens/create_success.dart';
 import 'package:holopop/create_card/screens/create_type.dart';
+import 'package:holopop/create_card/screens/create_unlink.dart';
 import 'package:holopop/create_card/screens/media_type.dart';
 import 'package:holopop/dashboard/screens/dashboard_page.dart';
 import 'package:holopop/dashboard/screens/edit_sent_card_page.dart';
 import 'package:holopop/dashboard/screens/see_all_page.dart';
 import 'package:holopop/dashboard/screens/sent_and_received_card_pages.dart';
 import 'package:holopop/main.dart';
+import 'package:holopop/shared/storage/create_application.dart';
 import 'package:holopop/shared/widgets/holopop_placeholder.dart';
 
 
@@ -56,10 +59,12 @@ class _DestinationViewState extends State<DestinationView> {
                 case "/all-sent-cards":     return SeeAllCardsPage(args: settings.arguments as SeeAllCardsArgs);
                 case "/sent-card":          return SentCardPage(args: settings.arguments as SentAndReceivedCardArgs);
                 case "/edit-sent-card":     return const EditSentCardPage();
-                case "/create":             return const CreateStart();
-                case "/create/type":        return const CreateType();
-                case "/create/gift":        return const HolopopPlaceholder(customMessage: "GIFT");
-                case "/create/success":     return const HolopopPlaceholder(customMessage: "SUCCESS");
+                case "/create":             return const CreateType();
+                case "/create/qr":          return const CreateQr();
+                case "/create/details":     return const CreateDetails();
+                case "/create/success":     return const CreateSuccess();
+                case "/create/unlink":      return CreateUnlink(card: settings.arguments as CreateApplicationCard);
+                case "/create/media-type":  return const CreateMediaType();
               }
             }
 
@@ -70,7 +75,7 @@ class _DestinationViewState extends State<DestinationView> {
               case "Dashboard":
                 return const DashboardPage();
               case "Create Card":
-                return const CreateDetails(); //TODO: DEVEVEVEVEVE
+                return const CreateSuccess(); //TODO: DEVEVEVEVEVE
               default:
                 return const HolopopPlaceholder();
             }

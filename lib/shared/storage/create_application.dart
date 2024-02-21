@@ -8,9 +8,12 @@ class CreateApplication {
     required this.cards
   });
 
+  @override
+  String toString() => "Create App => $type|{${cards.map((c) => "$c").toList()}}";
+
   Map toJson() => {
     'type': type,
-    'cards': cards.map((c) => c.toJson())
+    'cards': cards.map((c) => c.toJson()).toList()
   };
 
   factory CreateApplication.fromJson(Map<String, dynamic> json) => 
@@ -24,18 +27,20 @@ class CreateApplication {
 
 
 class CreateApplicationCard {
-  final int number;
-  final String barcode;
+  int order;
+  final String serialNumber;
+  String barcode;
 
-  final String? subject;
-  final String? occasion;
-  final String? recipient;
-  final String? message;
+  String? subject;
+  String? occasion;
+  String? recipient;
+  String? message;
 
   final CreateApplicationCardGift? gift;
 
   CreateApplicationCard({
-    required this.number, 
+    required this.order,
+    required this.serialNumber, 
     required this.barcode, 
     this.subject, 
     this.occasion, 
@@ -44,8 +49,12 @@ class CreateApplicationCard {
     this.gift
   });
 
+  @override
+  String toString() => "App Card => $order|$serialNumber|$barcode|$subject|$occasion|$recipient|$message|{$gift}";
+
   Map toJson() => {
-    'number': number, 
+    'order': order,
+    'serialNumber': serialNumber, 
     'barcode': barcode, 
     'subject': subject, 
     'occasion': occasion, 
@@ -56,13 +65,14 @@ class CreateApplicationCard {
 
   factory CreateApplicationCard.fromJson(Map<String, dynamic> json) =>
     CreateApplicationCard(
-      number: json['number'],
+      order: json['order'],
+      serialNumber: json['serialNumber'],
       barcode: json['barcode'],
       subject: json['subject'],
       occasion: json['occasion'],
       recipient: json['recipient'],
       message: json['message'],
-      gift: CreateApplicationCardGift.fromJson(json['gift']),
+      gift: json['gift'] == null ? null : CreateApplicationCardGift.fromJson(json['gift']),
     );
 }
 
@@ -79,6 +89,9 @@ class CreateApplicationCardGift {
     required this.sku, 
     required this.asset
   });
+
+  @override
+  String toString() => "App Gift Card => $name|$description|$sku|$asset";
 
   Map toJson() => {
     'name': name,

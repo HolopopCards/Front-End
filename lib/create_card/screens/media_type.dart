@@ -4,8 +4,8 @@ import 'package:holopop/shared/widgets/holopop_placeholder.dart';
 import 'package:holopop/shared/widgets/standard_header.dart';
 import 'package:lottie/lottie.dart';
 
-class MediaTypePage extends StatelessWidget {
-  const MediaTypePage({super.key});
+class CreateMediaType extends StatelessWidget {
+  const CreateMediaType({super.key});
 
   @override
   Widget build(BuildContext context) {

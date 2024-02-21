@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:holopop/create_card/screens/how_it_works.dart';
+import 'package:holopop/shared/storage/create_application_storage.dart';
 import 'package:lottie/lottie.dart';
 
 
@@ -15,24 +17,37 @@ class _CreateType extends State<CreateType> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.only(top: 15),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Choose Card Type", style: TextStyle(fontWeight: FontWeight.bold)),
+              SizedBox(width: MediaQuery.of(context).size.width / 9),
+              const Text("Choose Card Type", style: TextStyle(fontWeight: FontWeight.bold)),
+              IconButton(
+                icon: const Icon(Icons.info_outline),
+                onPressed: () { },
+              )
             ],
           )),
         Padding(
           padding: const EdgeInsets.all(5),
           child: InkWell(
-              onTap: () { Navigator.pushNamed(context, "/create/greeting"); },
+              onTap: () {
+                CreateApplicationStorage()
+                  .startApplicationAsync("greeting")
+                  .then((_) => Navigator.pushNamed(context, "/create/qr"));
+              },
               child: Lottie.asset("assets/lotties/Greeting Card.json"),
             )),
         Padding(
           padding: const EdgeInsets.all(5),
           child: InkWell(
-              onTap: () { Navigator.pushNamed(context, "/create/invitation"); },
+              onTap: () {
+                CreateApplicationStorage()
+                  .startApplicationAsync("invitation")
+                  .then((_) => Navigator.pushNamed(context, "/create/qr"));
+              },
               child: Lottie.asset("assets/lotties/Invitation.json"),
             )),
         const Padding(
@@ -48,7 +63,8 @@ class _CreateType extends State<CreateType> {
             child: FractionallySizedBox(
               widthFactor: 0.5,
               child: TextButton(
-                onPressed: () { },
+                onPressed: () => Navigator.push(context, 
+                  MaterialPageRoute(builder: (ctx) => const HowItWorks())),
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

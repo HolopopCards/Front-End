@@ -22,7 +22,7 @@ class HolopopTheme {
           backgroundColor: MaterialStatePropertyAll(HolopopColors.blue),
           foregroundColor: MaterialStatePropertyAll(Colors.white),
           overlayColor: MaterialStatePropertyAll(Colors.blueGrey),
-          shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))))
+          shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))))
         ),
       ),
       // ELEVATED BUTTON

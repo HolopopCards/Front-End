@@ -4,6 +4,18 @@ import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:intl/intl.dart';
 
 
+// Result returned from each dialog box.
+class GiftDialogResult {
+  final String value;
+  final GiftCard? giftCard;
+
+  GiftDialogResult({
+    required this.value, 
+    this.giftCard
+  });
+}
+
+
 class GiftCard {
   final String sku;
   final String name;
@@ -58,15 +70,15 @@ class GiftQuestionDialog extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: TextButton(
-                onPressed: () => Navigator.push(
-                  context, 
-                  MaterialPageRoute(builder: (ctx) => const GiftCardsDialog())),
+                onPressed: () {
+                  Navigator.pop(context, GiftDialogResult(value: "show-cards"));
+                },
                 child: const Text("Yes, please"),
               )),
             SizedBox(
               width: double.infinity,
               child: TextButton(
-                onPressed: () => Navigator.pop(context, "success"),
+                onPressed: () => Navigator.pop(context, GiftDialogResult(value: "success")),
                 style: const ButtonStyle(
                   backgroundColor: MaterialStatePropertyAll(Colors.white),
                   foregroundColor: MaterialStatePropertyAll(Colors.black)),
@@ -101,7 +113,7 @@ class GiftCardsDialog extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.close),
             color: Colors.black,
-            onPressed: () => Navigator.pop(context))
+            onPressed: () => Navigator.pop(context, null))
         ]
       ),
       titlePadding: const EdgeInsets.all(2.5),
@@ -142,7 +154,7 @@ class GiftCardsDialog extends StatelessWidget {
                 return IconButton(
                   icon: Image(
                     image: AssetImage(giftCard.assetPath)),
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (ctx) => GiftCardDialog(giftCard: giftCard))));
+                  onPressed: () => Navigator.pop(context, GiftDialogResult(value: "show-card", giftCard: giftCard)));
               })
             )
           ],
@@ -171,7 +183,7 @@ class GiftCardDialog extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.chevron_left),
             color: Colors.black,
-            onPressed: () => Navigator.pop(context)),
+            onPressed: () => Navigator.pop(context, GiftDialogResult(value: "show-cards"))),
           Text(giftCard.name,
             style: const TextStyle(
               fontSize: 20,
@@ -179,7 +191,7 @@ class GiftCardDialog extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.close),
             color: Colors.black,
-            onPressed: () { Navigator.pop(context); Navigator.pop(context); }),
+            onPressed: () { Navigator.pop(context, GiftDialogResult(value: "")); }),
         ],
       ),
       titlePadding: const EdgeInsets.all(2.5),
@@ -218,7 +230,73 @@ class GiftCardDialog extends StatelessWidget {
                 widthFactor: 0.95,
                 child: TextButton(
                   child: const Text("Purchase"),
-                  onPressed: () { })))
+                  onPressed: () => Navigator.pop(context, GiftDialogResult(value: "purchased", giftCard: giftCard)))))
+          ],
+        ),
+      )
+    );
+  }
+}
+
+
+class GiftCardPurchasedDialog extends StatelessWidget {
+  final GiftCard giftCard;
+
+  const GiftCardPurchasedDialog({super.key, required this.giftCard});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Colors.white,
+      titleTextStyle: const TextStyle(
+        color: Colors.black,
+        fontWeight: FontWeight.bold),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text("Success",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600)),
+        ],
+      ),
+      titlePadding: const EdgeInsets.all(2.5),
+      insetPadding: EdgeInsets.zero,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+      content: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.85,
+        height: MediaQuery.of(context).size.height * 0.55,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(25, 20, 25, 5),
+              child: Image(image: AssetImage(giftCard.assetPath))),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(25, 25, 25, 0),
+              child: Text(NumberFormat.simpleCurrency().format(giftCard.cost),
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24))),
+            Text(giftCard.feeSubtitle,
+              style: const TextStyle(
+                color: HolopopColors.lightGrey,
+                fontSize: 10)),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(25, 25, 25, 25),
+              child: Text(giftCard.description, 
+                style: const TextStyle(
+                  color: HolopopColors.lightGrey,
+                  fontSize: 8,
+                  height: 1),
+                textAlign: TextAlign.justify)),
+            Flexible(
+              child: FractionallySizedBox(
+                heightFactor: 0.75,
+                widthFactor: 0.95,
+                child: TextButton(
+                  child: const Text("Purchase"),
+                  onPressed: () => Navigator.pop(context, GiftDialogResult(value: "success")))))
           ],
         ),
       )
