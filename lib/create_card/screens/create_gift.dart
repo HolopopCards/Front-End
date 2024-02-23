@@ -251,10 +251,10 @@ class GiftCardPurchasedDialog extends StatelessWidget {
       titleTextStyle: const TextStyle(
         color: Colors.black,
         fontWeight: FontWeight.bold),
-      title: Row(
+      title: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text("Success",
+          Text("Success",
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600)),
