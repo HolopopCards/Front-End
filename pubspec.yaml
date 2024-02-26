@@ -45,6 +45,8 @@ dependencies:
   qr_flutter: ^4.1.0
   linkify: ^5.0.0
   mailto: ^2.0.0
+  flutter_sms: ^2.3.3
+  flutter_native_contact_picker: ^0.0.6
 
 dev_dependencies:
   flutter_test:

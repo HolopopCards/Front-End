@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:holopop/dashboard/screens/settings/contact_picker.dart';
 import 'package:holopop/dashboard/screens/settings/edit_profile_page.dart';
 import 'package:holopop/dashboard/screens/settings/privacy_policy.dart';
 import 'package:holopop/dashboard/screens/settings/terms_of_use.dart';
@@ -57,7 +58,6 @@ class SettingsBody extends StatelessWidget {
           title: "Account",
           settings: [
             Setting("Edit Profile",  () { Navigator.push(context, MaterialPageRoute(builder: (ctx) => const EditProfilePage())); }),
-            Setting("Notifications", () { })
           ],
         ),
         SettingsGroup(
@@ -72,7 +72,7 @@ class SettingsBody extends StatelessWidget {
             Setting("About Holopop", () { }),
             Setting("Terms of Use", () {Navigator.push(context, MaterialPageRoute(builder: (ctx) => const TermsOfUse())); }),
             Setting("Privacy Policy", () { Navigator.push(context, MaterialPageRoute(builder: (ctx) => const PrivacyPolicy())); }),
-            Setting("Share with Friends", () { }),
+            Setting("Share with Friends", () {Navigator.push(context, MaterialPageRoute(builder:(ctx)=> const ContactPicker())); }),
           ],
         )
       ]
@@ -134,16 +134,36 @@ class SocialMediaIcons extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Column(
       children: [
-        Text("Join The Community"),
+        const Text("Join The Community"),
         SizedBox(
           height: 70,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SocialButton(iconPath: "assets/icons/facebook.png", onPressed: () async {const url = 'https://www.facebook.com/holopopcards'; if (await canLaunch(url)) {await launch(url);} else {throw 'Could not launch $url';};}),
-              SocialButton(iconPath: "assets/icons/instagram.png", onPressed: () async {const url = 'https://www.instagram.com/holopop.cards/'; if (await canLaunch(url)) {await launch(url);} else {throw 'Could not launch $url';};}),
-              SocialButton(iconPath: "assets/icons/tiktok.png", onPressed: () async {const url = 'https://www.tiktok.com/@holopopcards?lang=en'; if (await canLaunch(url)) {await launch(url);} else {throw 'Could not launch $url';};}),
-              SocialButton(iconPath: "assets/icons/youtube.png", onPressed: () async {const url = 'https://www.youtube.com/channel/UC9z'; if (await canLaunch(url)) {await launch(url);} else {throw 'Could not launch $url';};})
+              SocialButton(iconPath: "assets/icons/facebook.png", 
+                           onPressed: () async {
+                                                const url = 'https://www.facebook.com/holopopcards'; 
+                                                if (await canLaunchUrl(url as Uri)) {
+                                                  await launchUrl(url as Uri);} 
+                                                else {throw 'Could not launch $url';}}),
+              SocialButton(iconPath: "assets/icons/instagram.png", 
+                           onPressed: () async {
+                                                const url = 'https://www.instagram.com/holopop.cards/'; 
+                                                if (await canLaunchUrl(url as Uri)) {
+                                                  await launchUrl(url as Uri);} 
+                                                else {throw 'Could not launch $url';}}),
+              SocialButton(iconPath: "assets/icons/tiktok.png", 
+                           onPressed: () async {
+                                                const url = 'https://www.tiktok.com/@holopopcards?lang=en'; 
+                                                if (await canLaunchUrl(url as Uri)) {
+                                                  await launchUrl(url as Uri);} 
+                                                else {throw 'Could not launch $url';}}),
+              SocialButton(iconPath: "assets/icons/youtube.png", 
+                           onPressed: () async {
+                                                const url = 'https://www.youtube.com/channel/UC9z'; 
+                                                if (await canLaunchUrl(url as Uri)) {
+                                                  await launchUrl(url as Uri);} 
+                                                else {throw 'Could not launch $url';}})
             ],
           )
         )
