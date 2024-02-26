@@ -82,7 +82,7 @@ class _Banuba extends State<Banuba> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(15.0),
+              padding: const EdgeInsets.all(15.0),
               child: Linkify(
                 text: _errorMessage,
                 onOpen: (link) async {
@@ -93,7 +93,7 @@ class _Banuba extends State<Banuba> {
                   }
                 },
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 14.0,
                   fontWeight: FontWeight.bold,
                   color: Colors.redAccent,
@@ -116,7 +116,7 @@ class _Banuba extends State<Banuba> {
                 ),
               ),
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             MaterialButton(
               color: Colors.blue,
               textColor: Colors.white,
@@ -133,7 +133,7 @@ class _Banuba extends State<Banuba> {
                 ),
               ),
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             MaterialButton(
               color: Colors.blue,
               textColor: Colors.white,
@@ -150,7 +150,7 @@ class _Banuba extends State<Banuba> {
                 ),
               ),
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             MaterialButton(
               color: Colors.blue,
               textColor: Colors.white,
@@ -233,8 +233,8 @@ class _Banuba extends State<Banuba> {
       await _initVideoEditor();
 
       // Use your implementation to provide correct video file path to start Video Editor SDK in PIP mode
-      final ImagePicker _picker = ImagePicker();
-      final XFile? file = await _picker.pickVideo(source: ImageSource.gallery);
+      final ImagePicker picker = ImagePicker();
+      final XFile? file = await picker.pickVideo(source: ImageSource.gallery);
 
       if (file == null) {
         debugPrint('Cannot open video editor with PIP - video was not selected!');
@@ -254,8 +254,8 @@ class _Banuba extends State<Banuba> {
       await _initVideoEditor();
 
       // Use your implementation to provide correct video file path to start Video Editor SDK in Trimmer mode
-      final ImagePicker _picker = ImagePicker();
-      final XFile? file = await _picker.pickVideo(source: ImageSource.gallery);
+      final ImagePicker picker = ImagePicker();
+      final XFile? file = await picker.pickVideo(source: ImageSource.gallery);
 
       if (file == null) {
         debugPrint('Cannot open video editor with Trimmer - video was not selected!');
