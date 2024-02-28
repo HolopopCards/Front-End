@@ -188,7 +188,7 @@ class DateTimeField extends StatelessWidget {
         firstDate: DateTime(1900),
         lastDate: DateTime(2024),
         fieldLabelText: "Date of Birth",
-        keyboardType: TextInputType.datetime,
+        keyboardType: TextInputType.text,
         errorInvalidText: "Invalid format (MM/DD/YYYY)",
         onDateSaved: onChanged,
         acceptEmptyDate: false,

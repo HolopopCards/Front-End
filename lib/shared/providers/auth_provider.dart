@@ -86,6 +86,7 @@ AgMBAAE=
     var encryptedAndEncodedPassword = "";
     if (loginRequest.password != null) {
       encryptedAndEncodedPassword = encryptAndEncode(loginRequest.password!);
+      Logger('Auth Provider').info("Encrypted password: $encryptedAndEncodedPassword");
     }
 
     final token = await FirebaseUtility().getFcmToken();
@@ -134,6 +135,7 @@ AgMBAAE=
     final token = await FirebaseUtility().getFcmToken();
 
     try {
+      Logger('Auth Provider').info("Encrypted password: $encPass");
       Logger('Auth Provider').info("Registering...");
       final response = await post(
         Uri.parse("${AppSettings().getApiHost()}/register"),

@@ -31,7 +31,7 @@ class _SentCardPage extends State<SentCardPage> {
       Column(
         children: [
           OccasionForSent(card: widget.args.card),
-          const Video(),
+          Video(serialNumber: widget.args.card.serialNumber),
           DateAndSwitch(card: widget.args.card),
           CardDetails(card: widget.args.card)
         ],
@@ -58,7 +58,7 @@ class _ReceivedCardPage extends State<ReceivedCardPage> {
       child: Column(
         children: [
           OccasionForReceived(card: widget.args.card),
-          const Video(),
+          Video(serialNumber: widget.args.card.serialNumber),
           DateAndSwitch(card: widget.args.card),
           CardDetails(card: widget.args.card)
         ],
@@ -122,7 +122,9 @@ class OccasionForSent extends StatelessWidget {
 
 /// Shows video.
 class Video extends StatefulWidget {
-  const Video({super.key});
+  const Video({super.key, required this.serialNumber});
+
+  final String serialNumber;
 
   @override
   State<StatefulWidget> createState() => _Video();
@@ -135,7 +137,7 @@ class _Video extends State<Video> {
   @override
   void initState() {
     super.initState();
-    CardService.getOriginalVideo('fasasfgasgas')
+    CardService.getOriginalVideo(widget.serialNumber)
       .then((controller) {
         _controller = controller;
         setState(() { });

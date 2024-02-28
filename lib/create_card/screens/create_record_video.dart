@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -5,7 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:video_player/video_player.dart';
 
 class CreateRecordVideo extends StatefulWidget {
   const CreateRecordVideo({super.key});
@@ -32,7 +35,7 @@ class Banuba extends StatefulWidget {
 class _Banuba extends State<Banuba> {
   final String licenseKey = GlobalConfiguration().get("banubaLicenseKey");
 
-  static const channelName = 'startActivity/VideoEditorChannel';
+  static const channelName = 'banubaSdkChannel';
 
   static const methodInitVideoEditor = 'InitBanubaVideoEditor';
   static const methodStartVideoEditor = 'StartBanubaVideoEditor';
@@ -66,110 +69,194 @@ class _Banuba extends State<Banuba> {
     await platform.invokeMethod(methodInitVideoEditor, licenseKey);
   }
 
+  Future<dynamic> startVideoEditor() async {
+    Logger("Create Record").info("We start?");
+    await platform.invokeMethod(methodInitVideoEditor, licenseKey);
+    Logger("Create Record").info("Middle");
+    try {
+      final result = await platform.invokeMethod(methodStartVideoEditor);
+      Logger("Create Record").info("Lookie: $result");
+      return result;
+    } on Exception catch(e) {
+      Logger("Create Record").info("Uh oh: $e");
+    }
+  }
+
+  Timer? t;
+  VideoPlayerController? _controller;
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Padding(
-              padding: EdgeInsets.all(15.0),
-              child: Text(
-                'The sample demonstrates how to run Banuba Video Editor SDK with Flutter',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 17.0,
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(15.0),
-              child: Linkify(
-                text: _errorMessage,
-                onOpen: (link) async {
-                  if (await canLaunchUrlString(link.url)) {
-                    await launchUrlString(link.url);
-                  } else {
-                    throw 'Could not launch $link';
-                  }
-                },
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.redAccent,
-                ),
-              ),
-            ),
-            MaterialButton(
-              color: Colors.green,
-              textColor: Colors.white,
-              disabledColor: Colors.greenAccent,
-              disabledTextColor: Colors.black,
-              padding: const EdgeInsets.all(12.0),
-              splashColor: Colors.blueAccent,
-              minWidth: 240,
-              onPressed: () => _startPhotoEditor(),
-              child: const Text(
-                'Open Photo Editor',
-                style: TextStyle(
-                  fontSize: 14.0,
-                ),
-              ),
-            ),
-            SizedBox(height: 24),
-            MaterialButton(
-              color: Colors.blue,
-              textColor: Colors.white,
-              disabledColor: Colors.grey,
-              disabledTextColor: Colors.black,
-              padding: const EdgeInsets.all(12.0),
-              splashColor: Colors.blueAccent,
-              minWidth: 240,
-              onPressed: () => _startVideoEditorDefault(),
-              child: const Text(
-                'Open Video Editor - Default',
-                style: TextStyle(
-                  fontSize: 14.0,
-                ),
-              ),
-            ),
-            SizedBox(height: 24),
-            MaterialButton(
-              color: Colors.blue,
-              textColor: Colors.white,
-              disabledColor: Colors.grey,
-              disabledTextColor: Colors.black,
-              padding: const EdgeInsets.all(16.0),
-              splashColor: Colors.blueAccent,
-              minWidth: 240,
-              onPressed: () => _startVideoEditorPIP(),
-              child: const Text(
-                'Open Video Editor - PIP',
-                style: TextStyle(
-                  fontSize: 14.0,
-                ),
-              ),
-            ),
-            SizedBox(height: 24),
-            MaterialButton(
-              color: Colors.blue,
-              textColor: Colors.white,
-              disabledColor: Colors.grey,
-              disabledTextColor: Colors.black,
-              padding: const EdgeInsets.all(16.0),
-              splashColor: Colors.blueAccent,
-              minWidth: 240,
-              onPressed: () => _startVideoEditorTrimmer(),
-              child: const Text(
-                'Open Video Editor - Trimmer',
-                style: TextStyle(
-                  fontSize: 14.0,
-                ),
-              ),
-            ),
-          ],
-        );
+    return FutureBuilder(
+      future: startVideoEditor(),
+      builder: (context, snapshot) {
+        Logger('Create Record').info('Step one: ${snapshot.data}. Conn: ${snapshot.connectionState}');
+        if (snapshot.hasData) {
+          Logger('Create Record').info("Step two: ${snapshot.data[argExportedVideoFile]}");
+          final controller = VideoPlayerController.file(File(snapshot.data[argExportedVideoFile]));
+          _controller = controller;
+          return FutureBuilder(
+            future: _controller!.initialize(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                Logger('Create Record').info("Step three: ${_controller?.value.isInitialized}");
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: _controller?.value.isInitialized == true
+                        ? GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                t?.cancel();
+                                t = Timer(const Duration(seconds: 2), () => setState(() => t = null));
+                              });
+                            },
+                            child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  AspectRatio(
+                                    aspectRatio: 4.0/3.0,
+                                    child: VideoPlayer(_controller!),
+                                  ),
+                                  Center(
+                                    child: AnimatedOpacity(
+                                      opacity: t != null ? 1 : 0,
+                                      duration: const Duration(milliseconds: 200),
+                                      child: FloatingActionButton(
+                                        onPressed: () { setState(() { _controller!.value.isPlaying ? _controller!.pause() : _controller!.play(); }); },
+                                        child: Icon(_controller!.value.isPlaying ? Icons.pause : Icons.play_arrow)
+                                      )
+                                    )
+                                  )
+                              ],
+                            )
+                        )
+                        : SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.4,
+                          child: const FractionallySizedBox(
+                            heightFactor: 0.3,
+                            widthFactor: 0.3,
+                            child: CircularProgressIndicator()
+                          ),
+                        )
+                    ),
+                  ],
+                );
+              }
+              return Placeholder();
+            },
+          );
+        }
+        return Placeholder();
+      },
+    );
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Column(
+  //         mainAxisAlignment: MainAxisAlignment.center,
+  //         children: <Widget>[
+  //           const Padding(
+  //             padding: EdgeInsets.all(15.0),
+  //             child: Text(
+  //               'The sample demonstrates how to run Banuba Video Editor SDK with Flutter',
+  //               textAlign: TextAlign.center,
+  //               style: TextStyle(
+  //                 fontSize: 17.0,
+  //               ),
+  //             ),
+  //           ),
+  //           Padding(
+  //             padding: EdgeInsets.all(15.0),
+  //             child: Linkify(
+  //               text: _errorMessage,
+  //               onOpen: (link) async {
+  //                 if (await canLaunchUrlString(link.url)) {
+  //                   await launchUrlString(link.url);
+  //                 } else {
+  //                   throw 'Could not launch $link';
+  //                 }
+  //               },
+  //               textAlign: TextAlign.center,
+  //               style: TextStyle(
+  //                 fontSize: 14.0,
+  //                 fontWeight: FontWeight.bold,
+  //                 color: Colors.redAccent,
+  //               ),
+  //             ),
+  //           ),
+  //           MaterialButton(
+  //             color: Colors.green,
+  //             textColor: Colors.white,
+  //             disabledColor: Colors.greenAccent,
+  //             disabledTextColor: Colors.black,
+  //             padding: const EdgeInsets.all(12.0),
+  //             splashColor: Colors.blueAccent,
+  //             minWidth: 240,
+  //             onPressed: () => _startPhotoEditor(),
+  //             child: const Text(
+  //               'Open Photo Editor',
+  //               style: TextStyle(
+  //                 fontSize: 14.0,
+  //               ),
+  //             ),
+  //           ),
+  //           SizedBox(height: 24),
+  //           MaterialButton(
+  //             color: Colors.blue,
+  //             textColor: Colors.white,
+  //             disabledColor: Colors.grey,
+  //             disabledTextColor: Colors.black,
+  //             padding: const EdgeInsets.all(12.0),
+  //             splashColor: Colors.blueAccent,
+  //             minWidth: 240,
+  //             onPressed: () => _startVideoEditorDefault(),
+  //             child: const Text(
+  //               'Open Video Editor - Default',
+  //               style: TextStyle(
+  //                 fontSize: 14.0,
+  //               ),
+  //             ),
+  //           ),
+  //           SizedBox(height: 24),
+  //           MaterialButton(
+  //             color: Colors.blue,
+  //             textColor: Colors.white,
+  //             disabledColor: Colors.grey,
+  //             disabledTextColor: Colors.black,
+  //             padding: const EdgeInsets.all(16.0),
+  //             splashColor: Colors.blueAccent,
+  //             minWidth: 240,
+  //             onPressed: () => _startVideoEditorPIP(),
+  //             child: const Text(
+  //               'Open Video Editor - PIP',
+  //               style: TextStyle(
+  //                 fontSize: 14.0,
+  //               ),
+  //             ),
+  //           ),
+  //           SizedBox(height: 24),
+  //           MaterialButton(
+  //             color: Colors.blue,
+  //             textColor: Colors.white,
+  //             disabledColor: Colors.grey,
+  //             disabledTextColor: Colors.black,
+  //             padding: const EdgeInsets.all(16.0),
+  //             splashColor: Colors.blueAccent,
+  //             minWidth: 240,
+  //             onPressed: () => _startVideoEditorTrimmer(),
+  //             child: const Text(
+  //               'Open Video Editor - Trimmer',
+  //               style: TextStyle(
+  //                 fontSize: 14.0,
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       );
+  // }
 
   Future<void> _startPhotoEditor() async {
     try {
