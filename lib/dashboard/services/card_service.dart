@@ -4,17 +4,18 @@ import 'package:holopop/shared/config/appsettings.dart';
 import 'package:holopop/shared/storage/user_preferences.dart';
 import 'package:video_player/video_player.dart';
 
+class Test {
+
+}
 
 class CardService {
   static Future<List<HolopopCard>> getCards() {
     return ApiService()
-      .get(SimpleGetRequest(resource: "/user/cards"))
-      .then((response) { 
-        if (response.success == false) {
-          return List.empty();
-        }
-        return response.value!.map((y) => HolopopCard.fromJson(y));
-      });
+      .get(SimpleGetRequest(resource: "/user/cards"), 
+        (data) => List.from(data)
+                      .map((y) => HolopopCard.fromJson(y))
+                      .toList())
+      .then((cardsRes) => cardsRes.success == false ? List.empty() : cardsRes.value!);
   }
 
   static Future<VideoPlayerController?> getOriginalVideo(String serialNumber) async {

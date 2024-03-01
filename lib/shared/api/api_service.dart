@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:holopop/shared/api/api_response.dart';
 import 'package:holopop/shared/config/appsettings.dart';
 import 'package:holopop/shared/monads/result.dart';
 import 'package:holopop/shared/storage/user_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
 
 class SimplePostRequest {
   final String resource;
@@ -14,6 +16,9 @@ class SimplePostRequest {
     required this.resource,
     this.body,
     this.contentType});
+
+  @override
+  String toString() => "Simple Post Model => $resource|$contentType|$body";
 }
 
 class SimpleGetRequest {
@@ -22,12 +27,14 @@ class SimpleGetRequest {
 
   SimpleGetRequest({
     required this.resource,
-    this.contentType
-  });
+    this.contentType = "application/json"});
+
+  @override
+  String toString() => "Simple Get Model => $resource|$contentType";
 }
 
 class ApiService {
-  final String host = "${AppSettings().getApiHost()}/";
+  final String host = AppSettings().getApiHost();
 
   Future<Result<String>> getTokenAsync() async {
     final token = await UserPreferences().getAccessTokenAsync();
@@ -38,38 +45,48 @@ class ApiService {
     return Result.fromFailure("API token is not saved.");
   }
 
-  Future<Result<Map<String, dynamic>>> post(SimplePostRequest request) async {
+  Future<Result<T>> post<T>(SimplePostRequest request, T Function(dynamic) mapper) async {
+    Logger('api service').fine("Sending post request: $request");
     final tokenRes = await getTokenAsync();
     if (tokenRes.success == false) {
       return Result.fromFailure(tokenRes.error!);
     }
 
-    final headers = { 
-      'Authorization': 'Bearer ${tokenRes.value}'
-    };
-    if (request.contentType != null) {
-      headers.addAll({ 'Content-Type': request.contentType! });
-    }
-
     try {
-      final res = await http.post(
+      final headers = { 
+        'Authorization': 'Bearer ${tokenRes.value}'
+      };
+
+      if (request.contentType != null) {
+        headers.addAll({ 'Content-Type': request.contentType! });
+      }
+
+      final httpResponse = await http.post(
         Uri.parse(host + request.resource),
         body: json.encode(request.body),
         headers: headers);
 
-      final data = json.decode(res.body);
-      switch (res.statusCode) {
-        case 200:
-          return Result.fromSuccess(data);
-        default:
-          return Result.fromFailure(res.reasonPhrase ?? "API request failed: $data");
+      Logger('api service').info("Simple post response code for ${request.resource}: ${httpResponse.statusCode}");
+      Logger('api service').fine("Body from post response ${request.resource}: ${httpResponse.body}");
+
+      final data = json.decode(httpResponse.body);
+
+      ApiResponse apiResponse = data["error"] != null  // If there is an error property, it's a failed API process
+        ? APIResponseError.fromJson(data) 
+        : APIResponseData.fromJson(data);
+
+      if (apiResponse is APIResponseData) {
+        return Result.fromSuccess(mapper(apiResponse.data));
+      } else {
+        return Result.fromFailure(httpResponse.reasonPhrase ?? "API request failed: $data");
       }
     } on Exception catch (e) {
       return Result.fromFailure(e as String);
     }
   }
 
-  Future<Result<dynamic>> get(SimpleGetRequest request) async {
+  Future<Result<T>> get<T>(SimpleGetRequest request, T Function(dynamic) mapper) async {
+    Logger('api service').fine("Sending get request: $request");
     final tokenRes = await getTokenAsync();
     if (tokenRes.success == false) {
       return Result.fromFailure(tokenRes.error!);
@@ -84,16 +101,23 @@ class ApiService {
         headers.addAll({'Content-Type': request.contentType!});
       }
 
-      final res = await http.get(
+      final httpResponse = await http.get(
         Uri.parse(host + request.resource),
         headers: headers);
 
-      final data = json.decode(res.body);
-      switch (res.statusCode) {
-        case 200:
-          return Result.fromSuccess(data);
-        default:
-          return Result.fromFailure(res.reasonPhrase ?? "API request failed: $data");
+      Logger('api service').info("Simple get response code for ${request.resource}: ${httpResponse.statusCode}");
+      Logger('api service').fine("Body from get response ${request.resource}: ${httpResponse.body}");
+
+      final data = jsonDecode(httpResponse.body) as Map<String, dynamic>;
+
+      ApiResponse apiResponse = data["error"] != null  // If there is an error property, it's a failed API process
+        ? APIResponseError.fromJson(data) 
+        : APIResponseData.fromJson(data);
+
+      if (apiResponse is APIResponseData) {
+        return Result.fromSuccess(mapper(apiResponse.data));
+      } else {
+        return Result.fromFailure(httpResponse.reasonPhrase ?? "API request failed: $data");
       }
     } on Exception catch (e) {
       return Result.fromFailure(e as String);

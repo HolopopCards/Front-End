@@ -1,6 +1,6 @@
 class HolopopCard {
   final String serialNumber;
-  final String to;
+  final String? to;
   final String? toUser;
   final String from;
   final String? fromUser;
@@ -12,8 +12,8 @@ class HolopopCard {
 
   const HolopopCard({
     required this.serialNumber,
-    required this.to,
-    required this.toUser,
+    this.to,
+    this.toUser,
     required this.from,
     required this.fromUser,
     required this.subject,
@@ -23,7 +23,7 @@ class HolopopCard {
     required this.body,
   });
 
-  factory HolopopCard.fromJson(dynamic data) {
+  factory HolopopCard.fromJson(Map<String, dynamic> data) {
     return HolopopCard(
       serialNumber: data['serialNumber'],
       to: data['to'],
