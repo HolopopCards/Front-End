@@ -60,6 +60,7 @@ AgMBAAE=
 
 
   Future<Result<User>> loginWithEmail(String email, String password) async { 
+    Logger('auth provider').info("Logging in with email for user $email...");
     return login(LoginRequest(
       user: email,
       password: password,
@@ -70,6 +71,7 @@ AgMBAAE=
 
 
   Future<Result<User>> loginWithGoogle(String user, String googleToken) async {
+    Logger('auth provider').info("Logging in with Google for user $user...");
     return login(LoginRequest(
       user: user,
       password: null,
@@ -86,12 +88,14 @@ AgMBAAE=
     var encryptedAndEncodedPassword = "";
     if (loginRequest.password != null) {
       encryptedAndEncodedPassword = encryptAndEncode(loginRequest.password!);
-      Logger('Auth Provider').info("Encrypted password: $encryptedAndEncodedPassword");
+      Logger('auth provider').fine("Encrypted password: $encryptedAndEncodedPassword");
     }
 
-    final token = await FirebaseUtility().getFcmToken();
+    final fcmToken = await FirebaseUtility().getFcmToken();
+    Logger('auth provider').fine("FCM token for user: $fcmToken");
 
     try {
+
       final response = await post(
         Uri.parse("${AppSettings().getApiHost()}/login"),
         body: json.encode({
@@ -99,10 +103,12 @@ AgMBAAE=
           'password': encryptedAndEncodedPassword,
           'ssotoken': loginRequest.ssoToken,
           'type': loginRequest.loginType.name,
-          'fcmtoken': token
+          'fcmtoken': fcmToken
           }),
         headers: {'Content-Type': 'application/json' }
       );
+
+      Logger('auth provider').info("Auth login response status code ${response.statusCode}");
 
       if (response.statusCode == 408) {
         return Result.fromFailure("Timeout");
@@ -111,8 +117,11 @@ AgMBAAE=
       final data = json.decode(response.body);
       if (response.statusCode == 200) {
         final token = data['token'];
+        final refreshToken = data['refreshToken'];
         final username = data['username'];
-        final user = User(username: username, token: token);
+        final user = User(username: username, token: token, refreshToken: refreshToken);
+
+        Logger('auth provider').info("Auth login successful: $user");
 
         await UserPreferences().saveUserAsync(user);
         _loggedInStatus = LoginStatus.loggedIn;
@@ -120,11 +129,11 @@ AgMBAAE=
         return Result.fromSuccess(user);
       } else {
         final error = data['error'];
-      Logger('Auth Provider').severe("Auth login failed because: $error");
+        Logger('auth provider').severe("Auth login failed because: $error");
         return Result.fromFailure(error);
       }
     } catch (e) {
-      Logger('Auth Provider').severe("Auth login failed because: ${e.toString()}");
+      Logger('auth provider').severe("Auth login failed because: ${e.toString()}");
       return Result.fromFailure(e.toString());
     }
   }
@@ -135,8 +144,8 @@ AgMBAAE=
     final token = await FirebaseUtility().getFcmToken();
 
     try {
-      Logger('Auth Provider').info("Encrypted password: $encPass");
-      Logger('Auth Provider').info("Registering...");
+      Logger('auth provider').fine("Encrypted password: $encPass");
+      Logger('auth provider').info("Auth registering...");
       final response = await post(
         Uri.parse("${AppSettings().getApiHost()}/register"),
         body: json.encode({
@@ -150,6 +159,8 @@ AgMBAAE=
         headers: { 'Content-Type': 'application/json'},
       ).timeout(const Duration(seconds: 5), onTimeout: () { return Response('Timeout', 408); });
 
+      Logger('auth provider').info("Auth register response status code: ${response.statusCode}");
+
       if (response.statusCode == 408) {
         return Result.fromFailure("Timeout");
       }
@@ -157,7 +168,9 @@ AgMBAAE=
       final data = json.decode(response.body);
       if (response.statusCode == 200) {
         final token = data['token'];
-        final user = User(username: email, token: token);
+        final refreshToken = data['refreshToken'];
+        final user = User(username: email, token: token, refreshToken: refreshToken);
+        Logger('auth provider').info("Auth register success: $user");
 
         await UserPreferences().saveUserAsync(user);
         _loggedInStatus = LoginStatus.loggedIn;
@@ -165,9 +178,11 @@ AgMBAAE=
         return Result.fromSuccess(user);
       } else {
         final error = data['error'];
+        Logger('auth provider').severe("Auth register failed: $error");
         return Result.fromFailure(error);
       }
     } catch (e) {
+      Logger('auth provider').severe("Auth register failed: ${e.toString()}");
       return Result.fromFailure(e.toString());
     }
   }

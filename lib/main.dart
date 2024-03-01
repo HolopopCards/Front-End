@@ -17,7 +17,7 @@ import 'shared/styles/holopop_theme.dart';
 
 void main() async {
   // Logger
-  Logger.root.level = Level.INFO; // Change in prod.
+  Logger.root.level = Level.FINE; // Change in prod.
   Logger.root.onRecord.listen((record) {
     // ignore: avoid_print
     print('${record.level.name}: ${record.loggerName}: ${DateFormat('yyyy-MM-dd HH:mm:ss').format(record.time)}: ${record.message}');

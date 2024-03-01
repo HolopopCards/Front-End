@@ -1,4 +1,5 @@
 import 'package:holopop/shared/storage/user.dart';
+import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserPreferences {
@@ -6,8 +7,10 @@ class UserPreferences {
   Future<bool> saveUserAsync(User user) async {
     final prefs = await SharedPreferences.getInstance();
 
+    Logger('user preferences').fine("Saving user to storage: $user");
     await prefs.setString("email", user.username);
     await prefs.setString("token", user.token);
+    await prefs.setString("refreshtoken", user.refreshToken);
 
     return true;
   }
@@ -18,13 +21,17 @@ class UserPreferences {
     final prefs = await SharedPreferences.getInstance();
 
     final token = prefs.getString("token");
-    if (token == null) {
+    final refreshToken = prefs.getString("refreshtoken");
+    Logger('user preferences').fine("Getting tokens from storage: tk: $token | rtk: $refreshToken");
+    if (token == null || refreshToken == null) {
       return null;
     }
 
     final email = prefs.getString("email")!;
 
-    return User(username: email, token: token);
+    final user = User(username: email, token: token, refreshToken: refreshToken);
+    Logger('user preferences').fine("User retrieved from storage: $user");
+    return user;
   }
 
 
@@ -32,15 +39,18 @@ class UserPreferences {
   void removeUser() async {
     final prefs = await SharedPreferences.getInstance();
 
+    Logger('user preferences').fine("Removing user from storage...");
+
     prefs.remove("email");
     prefs.remove("token");
   }
 
 
   /// Get token from user in storage.
-  Future<String?> getTokenAsync() async {
+  Future<String?> getAccessTokenAsync() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString("token");
+    Logger('user preferences').info("Getting access token from storage: $token");
     return token;
   }
 }

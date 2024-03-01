@@ -30,7 +30,7 @@ class ApiService {
   final String host = "${AppSettings().getApiHost()}/";
 
   Future<Result<String>> getTokenAsync() async {
-    final token = await UserPreferences().getTokenAsync();
+    final token = await UserPreferences().getAccessTokenAsync();
     if (token != null) {
       return Result.fromSuccess(token);
     }
