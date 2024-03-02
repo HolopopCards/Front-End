@@ -1,7 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart';
-import 'package:flutter_sms/flutter_sms.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 
 /// Core page.
 class ContactPicker extends StatefulWidget {
@@ -13,56 +13,42 @@ class ContactPicker extends StatefulWidget {
 
 class _ContactPicker extends State<ContactPicker> {
   final FlutterContactPicker _contactPicker = FlutterContactPicker();
-  List<Contact>? _contacts;
   @override
   Widget build(BuildContext context) {
     return  Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: <Widget>[
               MaterialButton(
                 color: Colors.blue,
-                child: Text("Single"),
+                child: const Text("Single"),
                 onPressed: () async {
                   Contact? contact = await _contactPicker.selectContact();
                   setState(() {
-                    _contacts = contact == null ? null : [contact];
+                     contact == null ? null : [contact];
                   });
-                },
-              ),
-              MaterialButton(
-                color: Colors.blue,
-                child: new Text("Multiple"),
-                onPressed: () async {
-                  final contacts = await _contactPicker.selectContacts();
-                  setState(() {
-                    _contacts = contacts;
-                  });
-                },
-              ),
-              if (_contacts != null)
-              ///to do return the contacts back to the settings page
-                ..._contacts!.map(
-                  (e) => Text(e.toString())
-                ),
-                MaterialButton(
-                color: Colors.blue,
-                child: Text("Invite Friends"),
-                onPressed: () async {
-                   await _sendSMS("Check out this app", _contacts!.map((e) => e.toString()).toList());
-                },
-              )
-                
-
-            ],
+                  
+                   await _sendSMS(
+                    "Holopop lets you send personalized holographic greetings. Use promo code WELCOME2HOLO to get an extra 10% off on your first purchase! Let's create unforgettable moments together! Check it out at https://holopop.cards", 
+                    contact!.phoneNumbers.toString());  
+                }            
+          )
+        ],
       )
     );
   }
 }
 //SMS invite friends
-_sendSMS(String message, List<String> recipents) async {
- String result = await sendSMS(message: message, recipients: recipents)
-        .catchError((onError) {
-      return(onError);
-    });
-    return result;}
+_sendSMS(String message, String recipent) async {
+  var url;
+  if(Platform.isAndroid){
+        //FOR Android
+        url ='sms:${recipent}?body=$message';
+        await launchUrl(url);
+    } 
+    else if(Platform.isIOS){
+        //FOR IOS
+        url ='sms:${recipent}&body=$message';
+        await launchUrl(url);
+    }
+}
