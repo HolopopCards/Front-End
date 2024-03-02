@@ -100,7 +100,7 @@ class DisplayNoCards extends StatelessWidget {
       children: [
         const Text("No cards found"),
         TextButton(
-          onPressed: () { }, //TODO: function
+          onPressed: () => Navigator.pushNamed(context, "/create"),
           child: const Text("Add a card"),
         )
       ],
