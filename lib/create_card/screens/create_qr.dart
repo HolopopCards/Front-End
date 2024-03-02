@@ -1,10 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+
 import 'package:holopop/shared/storage/create_application.dart';
 import 'package:holopop/shared/storage/create_application_storage.dart';
-import 'package:holopop/shared/widgets/holopop_placeholder.dart';
 import 'package:logging/logging.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 
 class CreateQr extends StatefulWidget {
@@ -20,40 +19,49 @@ class _CreateQr extends State<CreateQr> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Flexible(
+        Flexible(
           child: FractionallySizedBox(
             heightFactor: 0.9,
-            child: HolopopPlaceholder(customMessage: "QR Reader here"))),
-        TextButton(
-          child: const Text("This button represents scanning the QR code"),
-          onPressed: () {
-            final serialNumber = "${Random().nextInt(500000) + 500000}",
-                  barcode = "http://sick.com/card/$serialNumber";
+            child: MobileScanner(
+              controller: MobileScannerController(
+                detectionSpeed: DetectionSpeed.noDuplicates,
+                facing: CameraFacing.back,
+              ),
+              onDetect: (capture) {
+                final barcodes = capture.barcodes;
+                Logger('create:qr').info("Detected ${barcodes.length} barcodes.");
+                for (final barcode in barcodes) {
+                  final rawValue = barcode.rawValue;
+                  Logger('create:qr').info("Bar code: $rawValue");
+                  if (rawValue != null && rawValue.startsWith("https://holopop.cards/card/")) {
+                    final serialNumber = rawValue.split("/").last;
+                    Logger('create:qr').info("Serial number found: $serialNumber");
 
-            Logger('Create QR').info('SERIAL NUMBER: $serialNumber | BARCODE: $barcode');
-            CreateApplicationStorage()
-              .updateAppAsync((app) {
-                final existingCardIndex = app.cards.indexWhere((c) => c.serialNumber == serialNumber);
-                // Update existing card if found, otherwise add it
-                if (existingCardIndex != -1) {
-                  // Rearrange order
-                  for (var c in app.cards) {
-                    c.order -= 1;
+                    CreateApplicationStorage()
+                      .updateAppAsync((app) {
+                        final existingCardIndex = app.cards.indexWhere((c) => c.serialNumber == serialNumber);
+                        // Update existing card if found, otherwise add it
+                        if (existingCardIndex != -1) {
+                          // Rearrange order
+                          for (var c in app.cards) {
+                            c.order -= 1;
+                          }
+                          app.cards[existingCardIndex].order = app.cards.length - 1;
+                          app.cards[existingCardIndex].barcode = rawValue;
+                        } else {
+                          app.cards.add(
+                            CreateApplicationCard(
+                              order: app.cards.length + 1,
+                              serialNumber: serialNumber,
+                              barcode: rawValue));
+                        }
+                      })
+                      .then((_) => CreateApplicationStorage().getAppAsync())
+                      .then((_) => Navigator.pushNamed(context, "/create/details"));
                   }
-                  app.cards[existingCardIndex].order = app.cards.length - 1;
-                  app.cards[existingCardIndex].barcode = barcode;
-                } else {
-                  app.cards.add(
-                    CreateApplicationCard(
-                      order: app.cards.length + 1,
-                      serialNumber: serialNumber,
-                      barcode: barcode));
                 }
-              })
-              .then((_) => CreateApplicationStorage().getAppAsync())
-              .then((_) => Navigator.pushNamed(context, "/create/details"));
-          },
-        )
+              },
+            ))),
       ]
     );
   }

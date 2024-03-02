@@ -44,6 +44,7 @@ dependencies:
   confetti: ^0.7.0
   qr_flutter: ^4.1.0
   linkify: ^5.0.0
+  mobile_scanner: ^4.0.1
 
 dev_dependencies:
   flutter_test:
