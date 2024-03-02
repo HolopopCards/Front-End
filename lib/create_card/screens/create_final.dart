@@ -62,7 +62,7 @@ class _CreateFinal extends State<CreateFinal> {
             height: MediaQuery.of(context).size.height * 0.065,
             child: TextButton(
               child: const Text("Done"),
-              onPressed: () => Navigator.pushNamed(context, "/create/media-type")))),
+              onPressed: () => Navigator.pushNamed(context, "/dashboard")))),
       ],
     );
   }

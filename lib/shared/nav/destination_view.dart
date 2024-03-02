@@ -56,6 +56,7 @@ class _DestinationViewState extends State<DestinationView> {
             // First check if this is a named push. TODO: make better.
             if (settings.name != "/" && settings.name != null) {
               switch (settings.name) {
+                case "/dashboard":           return const DashboardPage();
                 case "/all-received-cards":  return SeeAllCardsPage(args: settings.arguments as SeeAllCardsArgs);
                 case "/received-card":       return ReceivedCardPage(args: settings.arguments as SentAndReceivedCardArgs);
                 case "/all-sent-cards":      return SeeAllCardsPage(args: settings.arguments as SeeAllCardsArgs);
