@@ -1,19 +1,23 @@
+import 'dart:io';
 
 class CreateApplication {
   final String? type;
+  File? video;
   List<CreateApplicationCard> cards; 
 
   CreateApplication({
     this.type,
-    required this.cards
+    required this.cards,
+    this.video
   });
 
   @override
-  String toString() => "Create App => $type|{${cards.map((c) => "$c").toList()}}";
+  String toString() => "Create App => $type|{${cards.map((c) => c.toString()).toList()}}|${video?.path}";
 
   Map toJson() => {
     'type': type,
-    'cards': cards.map((c) => c.toJson()).toList()
+    'cards': cards.map((c) => c.toJson()).toList(),
+    'videoPath': video?.path
   };
 
   factory CreateApplication.fromJson(Map<String, dynamic> json) => 
@@ -21,7 +25,8 @@ class CreateApplication {
       type: json['type'],
       cards: List.from(json['cards'])
                  .map((c) => CreateApplicationCard.fromJson(c))
-                 .toList()
+                 .toList(),
+      video: json["videoPath"] == null ? null : File(json["videoPath"])
     );
 }
 

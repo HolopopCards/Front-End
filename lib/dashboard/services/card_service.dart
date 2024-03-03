@@ -1,30 +1,25 @@
-import 'dart:convert';
 import 'package:holopop/dashboard/models/card.dart';
+import 'package:holopop/shared/api/api_service.dart';
 import 'package:holopop/shared/config/appsettings.dart';
 import 'package:holopop/shared/storage/user_preferences.dart';
-import 'package:http/http.dart';
 import 'package:video_player/video_player.dart';
 
+class Test {
+
+}
 
 class CardService {
-  static Future<List<HolopopCard>> getCards() async {
-    final token = await UserPreferences().getTokenAsync();
-    final response = await get(
-      Uri.parse('${AppSettings().getApiHost()}/user/cards'),
-      headers: { 
-        'Content-Type': 'application/json', 
-        'Authorization': 'Bearer $token'
-      }
-    );
-
-    return List<HolopopCard>.from(
-      json.decode(response.body)
-          .map((y) => HolopopCard.fromJson(y))
-    );
+  static Future<List<HolopopCard>> getCards() {
+    return ApiService()
+      .get(SimpleGetRequest(resource: "/user/cards"), 
+        (data) => List.from(data)
+                      .map((y) => HolopopCard.fromJson(y))
+                      .toList())
+      .then((cardsRes) => cardsRes.success == false ? List.empty() : cardsRes.value!);
   }
 
-  static Future<VideoPlayerController> getOriginalVideo(String serialNumber) async {
-    final token = await UserPreferences().getTokenAsync();
+  static Future<VideoPlayerController?> getOriginalVideo(String serialNumber) async {
+    final token = await UserPreferences().getAccessTokenAsync();
     final controller = VideoPlayerController.networkUrl(
       Uri.parse('${AppSettings().getApiHost()}/user/video/original?serialNumber=$serialNumber'),
       httpHeaders: {

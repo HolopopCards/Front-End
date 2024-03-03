@@ -7,10 +7,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class CreateApplicationStorage {
   /// Start the application process.
   Future<Result<CreateApplication>> startApplicationAsync(String type) async {
-    Logger('Create Application Storage').info("Creating application...");
+    Logger('create application storage').info("Creating application...");
     final prevApp = await getAppAsync();
     if (prevApp.success == true) {
-      Logger('Create Application Storage').info("Deleting previous application...");
+      Logger('create application storage').info("Deleting previous application...");
       await deleteAppAsync();
     }
 
@@ -22,7 +22,8 @@ class CreateApplicationStorage {
   Future<Result<CreateApplication>> saveAppAsync(CreateApplication application) async {
     final prefs = await SharedPreferences.getInstance();
 
-    Logger('Create Application Storage').info("Saving application: $application");
+    Logger('create application storage').info("Saving application: $application");
+    
     await prefs.setString('create_application', jsonEncode(application));
     return Result.fromSuccess(application);
   }
@@ -46,7 +47,7 @@ class CreateApplicationStorage {
       return Result.fromFailure(app.error!);
     }
     func(app.value!);
-    Logger('Create Application Storage').info("Updated application: $app");
+    Logger('create application storage').info("Updated application: $app");
     return saveAppAsync(app.value!);
   }
 
@@ -63,7 +64,7 @@ class CreateApplicationStorage {
     }
 
     app.value!.cards[cardIndex] = func(app.value!.cards[cardIndex]);
-    Logger('Create Application Storage').info("Updated card in application: ${app.value!.cards[cardIndex]}");
+    Logger('create application storage').info("Updated card in application: ${app.value!.cards[cardIndex]}");
     return saveAppAsync(app.value!);
   }
 

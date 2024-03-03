@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:holopop/create_card/screens/create_details.dart';
+import 'package:holopop/create_card/screens/create_final.dart';
 import 'package:holopop/create_card/screens/create_qr.dart';
 import 'package:holopop/create_card/screens/create_record_video.dart';
 import 'package:holopop/create_card/screens/create_success.dart';
@@ -55,6 +56,7 @@ class _DestinationViewState extends State<DestinationView> {
             // First check if this is a named push. TODO: make better.
             if (settings.name != "/" && settings.name != null) {
               switch (settings.name) {
+                case "/dashboard":           return const DashboardPage();
                 case "/all-received-cards":  return SeeAllCardsPage(args: settings.arguments as SeeAllCardsArgs);
                 case "/received-card":       return ReceivedCardPage(args: settings.arguments as SentAndReceivedCardArgs);
                 case "/all-sent-cards":      return SeeAllCardsPage(args: settings.arguments as SeeAllCardsArgs);
@@ -67,6 +69,7 @@ class _DestinationViewState extends State<DestinationView> {
                 case "/create/unlink":       return CreateUnlink(card: settings.arguments as CreateApplicationCard);
                 case "/create/media-type":   return const CreateMediaType();
                 case "/create/record-video": return const CreateRecordVideo();
+                case "/create/final":        return const CreateFinal();
               }
             }
 
@@ -77,7 +80,7 @@ class _DestinationViewState extends State<DestinationView> {
               case "Dashboard":
                 return const DashboardPage();
               case "Create Card":
-                return const CreateRecordVideo(); //TODO: DEVEVEVEVEVE
+                return const CreateType(); //TODO: DEVEVEVEVEVE
               default:
                 return const HolopopPlaceholder();
             }
