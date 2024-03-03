@@ -18,10 +18,12 @@ class CreateService {
       .postFile(
         FilePostRequest(
           resource: "/user/video",
-          files: files),
+          files: files,
+          contentType: 'video/mp4'),
         (data) => data["id"]);
 
     if (vidUploadResult.success == false) {
+      Logger('create service').severe("Vid upload failed: ${vidUploadResult.error}");
       return Result.fromFailure(vidUploadResult.error!);
     }
 

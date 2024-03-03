@@ -1,3 +1,4 @@
+import 'package:holopop/shared/monads/result.dart';
 import 'package:holopop/shared/storage/user.dart';
 import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,6 +14,15 @@ class UserPreferences {
     await prefs.setString("refreshtoken", user.refreshToken);
 
     return true;
+  }
+
+
+  /// Update access token in storage.
+  Future<Result> updateToken(String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    Logger('user preferences').fine("Updating access token: $token");
+    await prefs.setString("token", token);
+    return Result.fromSuccess(null);
   }
 
 
@@ -43,6 +53,7 @@ class UserPreferences {
 
     prefs.remove("email");
     prefs.remove("token");
+    prefs.remove("refreshtoken");
   }
 
 
@@ -52,5 +63,13 @@ class UserPreferences {
     final token = prefs.getString("token");
     Logger('user preferences').info("Getting access token from storage: $token");
     return token;
+  }
+
+  /// Get refresh token from user in storage.
+  Future<String?> getRefreshToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final refreshToken = prefs.getString("refreshtoken");
+    Logger('user preferences').info("Getting refresh token from storage: $refreshToken");
+    return refreshToken;
   }
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:holopop/shared/api/api_response.dart';
 import 'package:holopop/shared/config/appsettings.dart';
 import 'package:holopop/shared/monads/result.dart';
+import 'package:holopop/shared/providers/auth_provider.dart';
 import 'package:holopop/shared/storage/user_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
@@ -25,13 +26,15 @@ class SimplePostRequest {
 class FilePostRequest {
   final String resource;
   final List<http.MultipartFile> files;
+  final String contentType;
 
   FilePostRequest({
     required this.resource,
-    required this.files});
+    required this.files,
+    required this.contentType});
 
     @override
-    String toString() => "File Post Model => $resource|${files.length}";
+    String toString() => "File Post Model => $resource|${files.length}|$contentType";
 }
 
 class SimpleGetRequest {
@@ -58,7 +61,7 @@ class ApiService {
     return Result.fromFailure("API token is not saved.");
   }
 
-  Future<Result<T>> post<T>(SimplePostRequest request, T Function(dynamic) mapper) async {
+  Future<Result<T>> post<T>(SimplePostRequest request, T Function(dynamic) mapper, { bool retry = false }) async {
     Logger('api service').fine("Sending post request: $request");
     final tokenRes = await getTokenAsync();
     if (tokenRes.success == false) {
@@ -98,7 +101,7 @@ class ApiService {
     }
   }
   
-  Future<Result<T>> postFile<T>(FilePostRequest request, T Function(dynamic) mapper) async {
+  Future<Result<T>> postFile<T>(FilePostRequest request, T Function(dynamic) mapper, { bool retry = false }) async {
     Logger('api service').fine("Sending file post request: $request");
     final tokenRes = await getTokenAsync();
     if (tokenRes.success == false) {
@@ -109,7 +112,8 @@ class ApiService {
       final httpRequest = http.MultipartRequest('POST', Uri.parse(host + request.resource));
       httpRequest.files.addAll(request.files);
       httpRequest.headers.addAll({ 
-        'Authorization': 'Bearer ${tokenRes.value}'});
+        'Authorization': 'Bearer ${tokenRes.value}',
+        'Content-Type': request.contentType});
       final httpResponse = await httpRequest.send();
 
       Logger('api service').info("File post response code for ${request.resource}: ${httpResponse.statusCode}");
@@ -131,7 +135,7 @@ class ApiService {
     }
   }
 
-  Future<Result<T>> get<T>(SimpleGetRequest request, T Function(dynamic) mapper) async {
+  Future<Result<T>> get<T>(SimpleGetRequest request, T Function(dynamic) mapper, { bool retry = false }) async {
     Logger('api service').fine("Sending get request: $request");
     final tokenRes = await getTokenAsync();
     if (tokenRes.success == false) {
@@ -153,6 +157,11 @@ class ApiService {
 
       Logger('api service').info("Simple get response code for ${request.resource}: ${httpResponse.statusCode}");
       Logger('api service').fine("Body from get response ${request.resource}: ${httpResponse.body}");
+
+      if (httpResponse.statusCode == 401 && retry == false) {
+        await AuthProvider().refresh();
+        return get(request, mapper, retry: true);
+      }
 
       final data = jsonDecode(httpResponse.body) as Map<String, dynamic>;
 
