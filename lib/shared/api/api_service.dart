@@ -7,6 +7,7 @@ import 'package:holopop/shared/storage/user_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 
+// TODO: Move these to better place.
 class SimplePostRequest {
   final String resource;
   final dynamic body;
@@ -19,6 +20,18 @@ class SimplePostRequest {
 
   @override
   String toString() => "Simple Post Model => $resource|$contentType|$body";
+}
+
+class FilePostRequest {
+  final String resource;
+  final List<http.MultipartFile> files;
+
+  FilePostRequest({
+    required this.resource,
+    required this.files});
+
+    @override
+    String toString() => "File Post Model => $resource|${files.length}";
 }
 
 class SimpleGetRequest {
@@ -80,6 +93,39 @@ class ApiService {
       } else {
         return Result.fromFailure(httpResponse.reasonPhrase ?? "API request failed: $data");
       }
+    } on Exception catch (e) {
+      return Result.fromFailure(e as String);
+    }
+  }
+  
+  Future<Result<T>> postFile<T>(FilePostRequest request, T Function(dynamic) mapper) async {
+    Logger('api service').fine("Sending file post request: $request");
+    final tokenRes = await getTokenAsync();
+    if (tokenRes.success == false) {
+      return Result.fromFailure(tokenRes.error!);
+    }
+
+    try {
+      final httpRequest = http.MultipartRequest('POST', Uri.parse(host + request.resource));
+      httpRequest.files.addAll(request.files);
+      httpRequest.headers.addAll({ 
+        'Authorization': 'Bearer ${tokenRes.value}'});
+      final httpResponse = await httpRequest.send();
+
+      Logger('api service').info("File post response code for ${request.resource}: ${httpResponse.statusCode}");
+
+      return Result.fromFailure("X");
+      // final data = json.decode(httpResponse.);
+
+      // ApiResponse apiResponse = data["error"] != null  // If there is an error property, it's a failed API process
+      //   ? APIResponseError.fromJson(data) 
+      //   : APIResponseData.fromJson(data);
+
+      // if (apiResponse is APIResponseData) {
+      //   return Result.fromSuccess(mapper(apiResponse.data));
+      // } else {
+      //   return Result.fromFailure(httpResponse.reasonPhrase ?? "API request failed: $data");
+      // }
     } on Exception catch (e) {
       return Result.fromFailure(e as String);
     }

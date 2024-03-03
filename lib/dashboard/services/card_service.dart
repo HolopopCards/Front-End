@@ -4,10 +4,6 @@ import 'package:holopop/shared/config/appsettings.dart';
 import 'package:holopop/shared/storage/user_preferences.dart';
 import 'package:video_player/video_player.dart';
 
-class Test {
-
-}
-
 class CardService {
   static Future<List<HolopopCard>> getCards() {
     return ApiService()
