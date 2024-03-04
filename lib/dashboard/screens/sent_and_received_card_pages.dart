@@ -252,6 +252,12 @@ class _CardDetails extends State<CardDetails> {
   bool favorited = false;
 
   @override
+  void initState() {
+    super.initState();
+    favorited = widget.card.liked;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -278,7 +284,14 @@ class _CardDetails extends State<CardDetails> {
                     children: [
                       IconButton(
                         icon: favorited ? const Icon(Icons.favorite) : const Icon(Icons.favorite_outline),
-                        onPressed: () { setState(() { favorited = !favorited; }); }
+                        onPressed: () { 
+                          CardService.likeCard(widget.card.serialNumber)
+                            .then((res) {
+                              if (res.success == true) {
+                                setState(() { favorited = !favorited; }); 
+                              }
+                            });
+                        }
                       )
                     ],
                   )

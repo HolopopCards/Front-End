@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:holopop/create_card/screens/create_how_to_record.dart';
-import 'package:holopop/shared/widgets/holopop_placeholder.dart';
 import 'package:holopop/shared/widgets/standard_header.dart';
 import 'package:lottie/lottie.dart';
 
