@@ -27,7 +27,6 @@ class CardService {
     final controller = VideoPlayerController.networkUrl(
       Uri.parse('${AppSettings().getApiHost()}/user/video?serialNumber=$serialNumber'),
       httpHeaders: { 'Authorization': 'Bearer $token' });
-    await controller.initialize();
     return controller;
   }
 

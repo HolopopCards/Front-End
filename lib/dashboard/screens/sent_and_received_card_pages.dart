@@ -135,68 +135,71 @@ class _Video extends State<Video> {
   Timer? t;
   VideoPlayerController? _controller;
 
+  @override
+  void initState() {
+    super.initState();
+    CardService.getVideo(widget.serialNumber)
+      .then((cont) {
+        _controller = cont;
+        return _controller!.initialize();
+      })
+      .then((_) => setState(() { }));
+  }
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: CardService.getVideo(widget.serialNumber),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final controller = snapshot.data;
-          _controller = controller;
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: _controller?.value.isInitialized == true
-                  ? GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          t?.cancel();
-                          t = Timer(const Duration(seconds: 2), () => setState(() => t = null));
-                        });
-                      },
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          AspectRatio(
-                            aspectRatio: 4.0/3.0,
-                            child: Chewie(
-                              controller: ChewieController(
-                                videoPlayerController: _controller!,
-                                allowFullScreen: true))),
-                          Center(
-                            child: AnimatedOpacity(
-                              opacity: t != null ? 1 : 0,
-                              duration: const Duration(milliseconds: 200),
-                              child: FloatingActionButton(
-                                onPressed: pressedPlay,
-                                child: Icon(_controller!.value.isPlaying ? Icons.pause : Icons.play_arrow))))
-                        ],
-                      )
-                  )
-                  : SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    child: const FractionallySizedBox(
-                      heightFactor: 0.3,
-                      widthFactor: 0.3,
-                      child: CircularProgressIndicator()
-                    ),
-                  )
-              ),
-            ],
-          );
-        }
-        return const CircularProgressIndicator();
-      }
-    );
+  void dispose() {
+    super.dispose();
+    _controller?.dispose();
   }
 
-  void pressedPlay() {
-    setState(() {
-      _controller!.value.isPlaying ? _controller!.pause() : _controller!.play(); 
-    });
-  }
+  @override
+  Widget build(BuildContext context) => 
+    Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          child: _controller?.value.isInitialized == true
+            ? GestureDetector(
+                onTap: () {
+                  setState(() {
+                    t?.cancel();
+                    t = Timer(const Duration(seconds: 2), () => setState(() => t = null));
+                  });
+                },
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    AspectRatio(
+                      aspectRatio: 4.0/3.0,
+                      child: Chewie(
+                        controller: ChewieController(
+                          videoPlayerController: _controller!,
+                          allowFullScreen: true))),
+                    Center(
+                      child: AnimatedOpacity(
+                        opacity: t != null ? 1 : 0,
+                        duration: const Duration(milliseconds: 200),
+                        child: FloatingActionButton(
+                          onPressed: () {
+                            setState(() {
+                              _controller!.value.isPlaying ? _controller!.pause() : _controller!.play(); 
+                            });
+                          },
+                          child: Icon(_controller!.value.isPlaying ? Icons.pause : Icons.play_arrow))))
+                  ],
+                )
+            )
+            : SizedBox(
+              height: MediaQuery.of(context).size.height * 0.4,
+              child: const FractionallySizedBox(
+                heightFactor: 0.3,
+                widthFactor: 0.3,
+                child: CircularProgressIndicator()
+              ),
+            )
+        ),
+      ],
+    );
 }
 
 
