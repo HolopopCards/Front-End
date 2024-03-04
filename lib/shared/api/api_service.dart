@@ -12,12 +12,12 @@ import 'package:logging/logging.dart';
 class SimplePostRequest {
   final String resource;
   final dynamic body;
-  final String? contentType;
+  final String contentType;
 
   SimplePostRequest({
     required this.resource,
     this.body,
-    this.contentType});
+    this.contentType = "application/json"});
 
   @override
   String toString() => "Simple Post Model => $resource|$contentType|$body";
@@ -39,7 +39,7 @@ class FilePostRequest {
 
 class SimpleGetRequest {
   final String resource;
-  final String? contentType;
+  final String contentType;
 
   SimpleGetRequest({
     required this.resource,
@@ -61,7 +61,7 @@ class ApiService {
     return Result.fromFailure("API token is not saved.");
   }
 
-  Future<Result<T>> post<T>(SimplePostRequest request, T Function(dynamic) mapper, { bool retry = false }) async {
+  Future<Result<T>> post<T>(SimplePostRequest request, T Function(dynamic) mapper, { bool isARetry = false }) async {
     Logger('api service').fine("Sending post request: $request");
     final tokenRes = await getTokenAsync();
     if (tokenRes.success == false) {
@@ -73,9 +73,7 @@ class ApiService {
         'Authorization': 'Bearer ${tokenRes.value}'
       };
 
-      if (request.contentType != null) {
-        headers.addAll({ 'Content-Type': request.contentType! });
-      }
+      headers.addAll({ 'Content-Type': request.contentType });
 
       final httpResponse = await http.post(
         Uri.parse(host + request.resource),
@@ -84,6 +82,11 @@ class ApiService {
 
       Logger('api service').info("Simple post response code for ${request.resource}: ${httpResponse.statusCode}");
       Logger('api service').fine("Body from post response ${request.resource}: ${httpResponse.body}");
+
+      if (httpResponse.statusCode == 401 && isARetry == false) {
+        await AuthProvider().refresh();
+        return post(request, mapper, isARetry: true);
+      }
 
       final data = json.decode(httpResponse.body);
 
@@ -101,7 +104,7 @@ class ApiService {
     }
   }
   
-  Future<Result<T>> postFile<T>(FilePostRequest request, T Function(dynamic) mapper, { bool retry = false }) async {
+  Future<Result<T>> postFile<T>(FilePostRequest request, T Function(dynamic) mapper, { bool isARetry = false }) async {
     Logger('api service').fine("Sending file post request: $request");
     final tokenRes = await getTokenAsync();
     if (tokenRes.success == false) {
@@ -118,24 +121,28 @@ class ApiService {
 
       Logger('api service').info("File post response code for ${request.resource}: ${httpResponse.statusCode}");
 
-      return Result.fromFailure("X");
-      // final data = json.decode(httpResponse.);
+      if (httpResponse.statusCode == 401 && isARetry == false) {
+        await AuthProvider().refresh();
+        return postFile(request, mapper, isARetry: true);
+      }
 
-      // ApiResponse apiResponse = data["error"] != null  // If there is an error property, it's a failed API process
-      //   ? APIResponseError.fromJson(data) 
-      //   : APIResponseData.fromJson(data);
+      final data = json.decode(await httpResponse.stream.bytesToString());
 
-      // if (apiResponse is APIResponseData) {
-      //   return Result.fromSuccess(mapper(apiResponse.data));
-      // } else {
-      //   return Result.fromFailure(httpResponse.reasonPhrase ?? "API request failed: $data");
-      // }
+      ApiResponse apiResponse = data["error"] != null  // If there is an error property, it's a failed API process
+        ? APIResponseError.fromJson(data) 
+        : APIResponseData.fromJson(data);
+
+      if (apiResponse is APIResponseData) {
+        return Result.fromSuccess(mapper(apiResponse.data));
+      } else {
+        return Result.fromFailure(httpResponse.reasonPhrase ?? "API request failed: $data");
+      }
     } on Exception catch (e) {
       return Result.fromFailure(e as String);
     }
   }
 
-  Future<Result<T>> get<T>(SimpleGetRequest request, T Function(dynamic) mapper, { bool retry = false }) async {
+  Future<Result<T>> get<T>(SimpleGetRequest request, T Function(dynamic) mapper, { bool isARetry = false }) async {
     Logger('api service').fine("Sending get request: $request");
     final tokenRes = await getTokenAsync();
     if (tokenRes.success == false) {
@@ -147,9 +154,7 @@ class ApiService {
         'Authorization': 'Bearer ${tokenRes.value}'
       };
 
-      if (request.contentType != null) {
-        headers.addAll({'Content-Type': request.contentType!});
-      }
+      headers.addAll({'Content-Type': request.contentType});
 
       final httpResponse = await http.get(
         Uri.parse(host + request.resource),
@@ -158,9 +163,9 @@ class ApiService {
       Logger('api service').info("Simple get response code for ${request.resource}: ${httpResponse.statusCode}");
       Logger('api service').fine("Body from get response ${request.resource}: ${httpResponse.body}");
 
-      if (httpResponse.statusCode == 401 && retry == false) {
+      if (httpResponse.statusCode == 401 && isARetry == false) {
         await AuthProvider().refresh();
-        return get(request, mapper, retry: true);
+        return get(request, mapper, isARetry: true);
       }
 
       final data = jsonDecode(httpResponse.body) as Map<String, dynamic>;

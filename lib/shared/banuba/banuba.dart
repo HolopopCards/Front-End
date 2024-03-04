@@ -50,8 +50,7 @@ class _Banuba extends State<Banuba> {
             .updateAppAsync((a) => a.video = video)
             .then((_) => CreateApplicationStorage().getAppAsync())
             .then((app) => CreateService.finishApplication(app.value!))
-            .then((_) => Navigator.pushNamed(context, "/create/record"));
-            // .then((_) => Navigator.pushNamed(context, "/create/final"));
+            .then((_) => Navigator.pushNamed(context, "/create/final"));
         }
         return const CircularProgressIndicator();
       },

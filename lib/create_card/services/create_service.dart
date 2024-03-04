@@ -20,13 +20,33 @@ class CreateService {
           resource: "/user/video",
           files: files,
           contentType: 'video/mp4'),
-        (data) => data["id"]);
+        (data) => data["id"] as int);
 
     if (vidUploadResult.success == false) {
       Logger('create service').severe("Vid upload failed: ${vidUploadResult.error}");
       return Result.fromFailure(vidUploadResult.error!);
     }
+    final videoId = vidUploadResult.value!;
 
-    return Result.fromFailure("X");
+    final postCardsResult = await ApiService()  
+      .post(
+        SimplePostRequest(
+          resource: "/user/cards",
+          body: {
+            "videoid": videoId,
+            "cards": app.cards
+                        .map((c) => {
+                          "serialNumber": c.serialNumber,
+                          "to": c.recipient,
+                          "occasion": c.occasion,
+                          "body": c.message,
+                          "subject": c.subject})
+                        .toList()}),
+        (_) => null);
+
+    if (postCardsResult.success == false) {
+      return Result.fromFailure(postCardsResult.error!);
+    }
+    return Result.fromSuccess(null);
   }
 }
