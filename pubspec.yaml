@@ -45,6 +45,7 @@ dependencies:
   qr_flutter: ^4.1.0
   linkify: ^5.0.0
   mobile_scanner: ^4.0.1
+  chewie: ^1.7.5
 
 dev_dependencies:
   flutter_test:

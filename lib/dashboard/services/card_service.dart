@@ -13,6 +13,18 @@ class CardService {
                       .toList())
       .then((cardsRes) => cardsRes.success == false ? List.empty() : cardsRes.value!);
   }
+  
+  static Future<VideoPlayerController?> getVideo(String serialNumber) async {
+    final token = await UserPreferences().getAccessTokenAsync();
+    final controller = VideoPlayerController.networkUrl(
+      Uri.parse('${AppSettings().getApiHost()}/user/video?serialNumber=$serialNumber'),
+      httpHeaders: {
+        'Authorization': 'Bearer $token'
+      }
+    );
+    await controller.initialize();
+    return controller;
+  }
 
   static Future<VideoPlayerController?> getOriginalVideo(String serialNumber) async {
     final token = await UserPreferences().getAccessTokenAsync();
@@ -22,7 +34,6 @@ class CardService {
         'Authorization': 'Bearer $token'
       }
     );
-
     await controller.initialize();
     return controller;
   }

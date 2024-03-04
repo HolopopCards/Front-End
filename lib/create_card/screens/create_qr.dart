@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:holopop/shared/storage/create_application.dart';
 import 'package:holopop/shared/storage/create_application_storage.dart';
+import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:logging/logging.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
@@ -15,18 +16,30 @@ class CreateQr extends StatefulWidget {
 
 
 class _CreateQr extends State<CreateQr> {
+  final mobileScannerController = MobileScannerController(
+    detectionSpeed: DetectionSpeed.noDuplicates,
+    facing: CameraFacing.back);
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Padding(
+          padding: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 9, 0, 0),
+          child: const Text("Scan QR Code",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 28))),
+        const Padding(
+          padding: EdgeInsets.fromLTRB(0, 5, 0, 30),
+          child: Text("Find the QR code located on the back of the card.",
+            style: TextStyle(
+              color: HolopopColors.lightGrey))),
         Flexible(
           child: FractionallySizedBox(
-            heightFactor: 0.9,
+            heightFactor: 0.60,
             child: MobileScanner(
-              controller: MobileScannerController(
-                detectionSpeed: DetectionSpeed.noDuplicates,
-                facing: CameraFacing.back,
-              ),
+              controller: mobileScannerController,
               onDetect: (capture) {
                 final barcodes = capture.barcodes;
                 Logger('create:qr').info("Detected ${barcodes.length} barcodes.");
@@ -57,6 +70,7 @@ class _CreateQr extends State<CreateQr> {
                         }
                       })
                       .then((_) => CreateApplicationStorage().getAppAsync())
+                      .then((_) => mobileScannerController.dispose())
                       .then((_) => Navigator.pushNamed(context, "/create/details"));
                   }
                 }
