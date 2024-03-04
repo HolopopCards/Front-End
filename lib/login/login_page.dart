@@ -88,8 +88,8 @@ class _LoginPage extends State<LoginPage> {
                         );
                       }
                     }),
-                  SsoButton(iconPath: "assets/icons/login - facebook.svg", onPressed: () async { }),
-                  SsoButton(iconPath: "assets/icons/login - apple.svg", onPressed: () async { }),
+                  // SsoButton(iconPath: "assets/icons/login - facebook.svg", onPressed: () async { }),
+                  // SsoButton(iconPath: "assets/icons/login - apple.svg", onPressed: () async { }),
                 ],
               ),
               Expanded(

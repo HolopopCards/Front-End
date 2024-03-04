@@ -44,7 +44,7 @@ class _Banuba extends State<Banuba> {
       future: startVideoEditor(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          Logger('Banuba').info("Video editor done.");
+          Logger('banuba').info("Video editor done.");
           final video = File(snapshot.data[argExportedVideoFilePath]);
           CreateApplicationStorage()
             .updateAppAsync((a) => a.video = video)
