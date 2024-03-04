@@ -1,6 +1,7 @@
 import 'package:holopop/dashboard/models/card.dart';
 import 'package:holopop/shared/api/api_service.dart';
 import 'package:holopop/shared/config/appsettings.dart';
+import 'package:holopop/shared/monads/result.dart';
 import 'package:holopop/shared/storage/user_preferences.dart';
 import 'package:video_player/video_player.dart';
 
@@ -13,15 +14,19 @@ class CardService {
                       .toList())
       .then((cardsRes) => cardsRes.success == false ? List.empty() : cardsRes.value!);
   }
+
+  static Future<Result<HolopopCard>> getCard(String serialNumber) =>
+    ApiService()
+      .get(
+        SimpleGetRequest(
+          resource: "/user/card?serialNumber=$serialNumber"),
+        (data) => HolopopCard.fromJson(data));
   
   static Future<VideoPlayerController?> getVideo(String serialNumber) async {
     final token = await UserPreferences().getAccessTokenAsync();
     final controller = VideoPlayerController.networkUrl(
       Uri.parse('${AppSettings().getApiHost()}/user/video?serialNumber=$serialNumber'),
-      httpHeaders: {
-        'Authorization': 'Bearer $token'
-      }
-    );
+      httpHeaders: { 'Authorization': 'Bearer $token' });
     await controller.initialize();
     return controller;
   }
