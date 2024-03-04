@@ -142,7 +142,9 @@ class DisplayWithCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final receivedCards = cards.where((c) => c.fromMe == false).toList();
+    receivedCards.sort((a,b) => b.sent.compareTo(a.sent));
     final sentCards = cards.where((c) => c.fromMe == true).toList();
+    sentCards.sort((a,b) => b.sent.compareTo(a.sent));
     return Column(
       children: [
         CarouselHeader(

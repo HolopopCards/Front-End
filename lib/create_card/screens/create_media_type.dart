@@ -21,8 +21,8 @@ class CreateMediaType extends StatelessWidget {
             child: ListView(
               children: const [
                 MediaTypeLottie(lottieUrl: "assets/lotties/Record Video.json", widget: CreateHowToRecord()),
-                MediaTypeLottie(lottieUrl: "assets/lotties/Upload Video.json", widget: HolopopPlaceholder()),
-                MediaTypeLottie(lottieUrl: "assets/lotties/Browse Marketplace.json", widget: HolopopPlaceholder()),
+                // MediaTypeLottie(lottieUrl: "assets/lotties/Upload Video.json", widget: HolopopPlaceholder()),
+                // MediaTypeLottie(lottieUrl: "assets/lotties/Browse Marketplace.json", widget: HolopopPlaceholder()),
               ]
             )
           )
