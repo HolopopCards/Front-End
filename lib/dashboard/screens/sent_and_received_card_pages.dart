@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:holopop/dashboard/models/card.dart';
 import 'package:holopop/dashboard/services/card_service.dart';
@@ -137,16 +138,23 @@ class _Video extends State<Video> {
   @override
   void initState() {
     super.initState();
-    CardService.getOriginalVideo(widget.serialNumber)
-      .then((controller) {
-        _controller = controller;
-        setState(() { });
-      });
+    CardService.getVideo(widget.serialNumber)
+      .then((cont) {
+        _controller = cont;
+        return _controller!.initialize();
+      })
+      .then((_) => setState(() { }));
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
+  void dispose() {
+    super.dispose();
+    _controller?.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => 
+    Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(
@@ -159,22 +167,25 @@ class _Video extends State<Video> {
                   });
                 },
                 child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      AspectRatio(
-                        aspectRatio: 4.0/3.0,
-                        child: VideoPlayer(_controller!),
-                      ),
-                      Center(
-                        child: AnimatedOpacity(
-                          opacity: t != null ? 1 : 0,
-                          duration: const Duration(milliseconds: 200),
-                          child: FloatingActionButton(
-                            onPressed: () { setState(() { _controller!.value.isPlaying ? _controller!.pause() : _controller!.play(); }); },
-                            child: Icon(_controller!.value.isPlaying ? Icons.pause : Icons.play_arrow)
-                          )
-                        )
-                      )
+                  alignment: Alignment.center,
+                  children: [
+                    AspectRatio(
+                      aspectRatio: 4.0/3.0,
+                      child: Chewie(
+                        controller: ChewieController(
+                          videoPlayerController: _controller!,
+                          allowFullScreen: true))),
+                    Center(
+                      child: AnimatedOpacity(
+                        opacity: t != null ? 1 : 0,
+                        duration: const Duration(milliseconds: 200),
+                        child: FloatingActionButton(
+                          onPressed: () {
+                            setState(() {
+                              _controller!.value.isPlaying ? _controller!.pause() : _controller!.play(); 
+                            });
+                          },
+                          child: Icon(_controller!.value.isPlaying ? Icons.pause : Icons.play_arrow))))
                   ],
                 )
             )
@@ -189,7 +200,6 @@ class _Video extends State<Video> {
         ),
       ],
     );
-  }
 }
 
 
@@ -242,6 +252,12 @@ class _CardDetails extends State<CardDetails> {
   bool favorited = false;
 
   @override
+  void initState() {
+    super.initState();
+    favorited = widget.card.liked;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -268,7 +284,14 @@ class _CardDetails extends State<CardDetails> {
                     children: [
                       IconButton(
                         icon: favorited ? const Icon(Icons.favorite) : const Icon(Icons.favorite_outline),
-                        onPressed: () { setState(() { favorited = !favorited; }); }
+                        onPressed: () { 
+                          CardService.likeCard(widget.card.serialNumber)
+                            .then((res) {
+                              if (res.success == true) {
+                                setState(() { favorited = !favorited; }); 
+                              }
+                            });
+                        }
                       )
                     ],
                   )

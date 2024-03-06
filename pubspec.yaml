@@ -47,6 +47,8 @@ dependencies:
   mailto: ^2.0.0
   mobile_scanner: ^4.0.1
   flutter_native_contact_picker: ^0.0.6
+  chewie: ^1.7.5
+  file_picker: ^6.1.1
 
 dev_dependencies:
   flutter_test:

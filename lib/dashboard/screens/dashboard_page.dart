@@ -1,12 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:holopop/dashboard/models/card.dart';
 import 'package:holopop/dashboard/screens/see_all_page.dart';
+import 'package:holopop/dashboard/services/card_service.dart';
 import 'package:holopop/dashboard/widgets/display_card.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:holopop/dashboard/widgets/title_and_settings.dart';
-
-import '../models/card.dart';
-import '../services/card_service.dart';
 
 
 class DashboardPage extends StatefulWidget {
@@ -17,7 +16,6 @@ class DashboardPage extends StatefulWidget {
 }
 
 
-/// Core page.
 class _DashboardPage extends State<DashboardPage> {
   final Future<List<HolopopCard>> cards = CardService.getCards();
 
@@ -144,7 +142,9 @@ class DisplayWithCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final receivedCards = cards.where((c) => c.fromMe == false).toList();
+    receivedCards.sort((a,b) => b.sent.compareTo(a.sent));
     final sentCards = cards.where((c) => c.fromMe == true).toList();
+    sentCards.sort((a,b) => b.sent.compareTo(a.sent));
     return Column(
       children: [
         CarouselHeader(

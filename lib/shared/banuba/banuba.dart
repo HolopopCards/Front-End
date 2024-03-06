@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:global_configuration/global_configuration.dart';
+import 'package:holopop/create_card/services/create_service.dart';
 import 'package:holopop/shared/storage/create_application_storage.dart';
 import 'package:logging/logging.dart';
 
@@ -43,10 +44,12 @@ class _Banuba extends State<Banuba> {
       future: startVideoEditor(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          Logger('Banuba').info("Video editor done.");
+          Logger('banuba').info("Video editor done.");
           final video = File(snapshot.data[argExportedVideoFilePath]);
           CreateApplicationStorage()
             .updateAppAsync((a) => a.video = video)
+            .then((_) => CreateApplicationStorage().getAppAsync())
+            .then((app) => CreateService.finishApplication(app.value!))
             .then((_) => Navigator.pushNamed(context, "/create/final"));
         }
         return const CircularProgressIndicator();

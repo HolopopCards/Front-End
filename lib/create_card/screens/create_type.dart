@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:holopop/create_card/screens/how_it_works.dart';
 import 'package:holopop/shared/storage/create_application_storage.dart';
 import 'package:lottie/lottie.dart';
 
@@ -59,19 +58,19 @@ class _CreateType extends State<CreateType> {
               Text("How will you color your moment?"),
             ]
           )),
-          Flexible(
-            child: FractionallySizedBox(
-              widthFactor: 0.5,
-              child: TextButton(
-                onPressed: () => Navigator.push(context, 
-                  MaterialPageRoute(builder: (ctx) => const HowItWorks())),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.play_circle_outline),
-                    Text("  See how it works"),
-                  ]
-          ))))
+          // Flexible(
+          //   child: FractionallySizedBox(
+          //     widthFactor: 0.5,
+          //     child: TextButton(
+          //       onPressed: () => Navigator.push(context, 
+          //         MaterialPageRoute(builder: (ctx) => const HowItWorks())),
+          //       child: const Row(
+          //         mainAxisAlignment: MainAxisAlignment.center,
+          //         children: [
+          //           Icon(Icons.play_circle_outline),
+          //           Text("  See how it works"),
+          //         ]
+          // ))))
       ],
     );
   }

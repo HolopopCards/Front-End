@@ -14,6 +14,7 @@ import 'package:holopop/dashboard/screens/edit_sent_card_page.dart';
 import 'package:holopop/dashboard/screens/see_all_page.dart';
 import 'package:holopop/dashboard/screens/sent_and_received_card_pages.dart';
 import 'package:holopop/main.dart';
+import 'package:holopop/scan/scan.dart';
 import 'package:holopop/shared/storage/create_application.dart';
 import 'package:holopop/shared/widgets/holopop_placeholder.dart';
 
@@ -62,6 +63,7 @@ class _DestinationViewState extends State<DestinationView> {
                 case "/all-sent-cards":      return SeeAllCardsPage(args: settings.arguments as SeeAllCardsArgs);
                 case "/sent-card":           return SentCardPage(args: settings.arguments as SentAndReceivedCardArgs);
                 case "/edit-sent-card":      return const EditSentCardPage();
+                case "/scan":                return const Scan();
                 case "/create":              return const CreateType();
                 case "/create/qr":           return const CreateQr();
                 case "/create/details":      return const CreateDetails();
@@ -79,8 +81,10 @@ class _DestinationViewState extends State<DestinationView> {
             switch(title) {
               case "Dashboard":
                 return const DashboardPage();
+              case "Holopop":
+                return const Scan();
               case "Create Card":
-                return const CreateType(); //TODO: DEVEVEVEVEVE
+                return const CreateType();
               default:
                 return const HolopopPlaceholder();
             }

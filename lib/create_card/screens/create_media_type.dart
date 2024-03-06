@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:holopop/create_card/screens/create_how_to_record.dart';
-import 'package:holopop/shared/widgets/holopop_placeholder.dart';
+import 'package:holopop/create_card/screens/create_upload.dart';
 import 'package:holopop/shared/widgets/standard_header.dart';
 import 'package:lottie/lottie.dart';
 
@@ -21,8 +21,8 @@ class CreateMediaType extends StatelessWidget {
             child: ListView(
               children: const [
                 MediaTypeLottie(lottieUrl: "assets/lotties/Record Video.json", widget: CreateHowToRecord()),
-                MediaTypeLottie(lottieUrl: "assets/lotties/Upload Video.json", widget: HolopopPlaceholder()),
-                MediaTypeLottie(lottieUrl: "assets/lotties/Browse Marketplace.json", widget: HolopopPlaceholder()),
+                MediaTypeLottie(lottieUrl: "assets/lotties/Upload Video.json", widget: CreateUpload()),
+                // MediaTypeLottie(lottieUrl: "assets/lotties/Browse Marketplace.json", widget: HolopopPlaceholder()),
               ]
             )
           )

@@ -9,6 +9,7 @@ class HolopopCard {
   final bool fromMe;
   final String occasion;
   final String body;
+  final bool liked;
 
   const HolopopCard({
     required this.serialNumber,
@@ -21,6 +22,7 @@ class HolopopCard {
     required this.fromMe,
     required this.occasion,
     required this.body,
+    required this.liked
   });
 
   factory HolopopCard.fromJson(Map<String, dynamic> data) {
@@ -35,6 +37,7 @@ class HolopopCard {
       fromMe: data['fromMe'],
       occasion: data['occasion'],
       body: data['body'],
+      liked: data['liked']
     );
   }
 }

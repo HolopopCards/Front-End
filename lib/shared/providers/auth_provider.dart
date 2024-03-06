@@ -139,6 +139,48 @@ AgMBAAE=
   }
 
 
+  Future<Result> refresh() async {
+    final token = await UserPreferences().getAccessTokenAsync();
+    if (token == null) {
+      return Result.fromFailure("No access token in storage.");
+    }
+
+    final refreshToken = await UserPreferences().getRefreshToken();
+    if (refreshToken == null) {
+      return Result.fromFailure("No refresh token in storage.");
+    }
+
+    Logger('auth provider').info("Sending register request...");
+
+    try {
+      final httpResponse = await post(
+        Uri.parse("${AppSettings().getApiHost()}/refresh"),
+        body: json.encode({
+          'accesstoken': token,
+          'refreshtoken': refreshToken }),
+        headers: { 'Content-Type': 'application/json' });
+
+      Logger('auth provider').info("Auth refresh response status code ${httpResponse.statusCode}");
+
+      final data = json.decode(httpResponse.body);
+      if (httpResponse.statusCode == 200) {
+        final token = data['token'];
+        Logger('auth provivder').info("Auth refresh successful: $token");
+        await UserPreferences().updateToken(token);
+        notifyListeners();
+        return Result.fromSuccess(null);
+      } else {
+        final error = data['error'];
+        Logger('auth provider').severe("Auth refresh failed: $error");
+        return Result.fromFailure(error);
+      }
+    } catch (e) {
+      Logger('auth provider').severe("Auth refresh failed because: $e");
+      return Result.fromFailure(e.toString());
+    }
+  }
+
+
   Future<Result<User>> register(String name, String phone, DateTime dob, String email, String password) async {
     final encPass = encryptAndEncode(password);
     final token = await FirebaseUtility().getFcmToken();
