@@ -65,7 +65,8 @@ class SettingsBody extends StatelessWidget {
         SettingsGroup(
           title: "Support",
           settings: [
-            Setting("Contact Support", () { launchMailto('Support Request');})
+            Setting("Contact Support", () { launchMailto('Support Request');}),
+            Setting("Help Center", () { }),
           ],
         ),
         SettingsGroup(
@@ -75,6 +76,7 @@ class SettingsBody extends StatelessWidget {
             Setting("Terms of Use", () {Navigator.push(context, MaterialPageRoute(builder: (ctx) => const TermsOfUse())); }),
             Setting("Privacy Policy", () { Navigator.push(context, MaterialPageRoute(builder: (ctx) => const PrivacyPolicy())); }),
             Setting("Share with Friends", () {Navigator.push(context, MaterialPageRoute(builder:(ctx)=> const ContactPicker())); }),
+            Setting("App Version     Beta 0.0.1", () { })
           ],
         )
       ]
@@ -183,6 +185,14 @@ launchMailto( String subject) async {
         body: '',
     );
     await launchUrl('$mailtoLink' as Uri);
+}
+launchHelpCenter() async {
+    Uri url = Uri.https('holopop.cards','help-center');
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
 }
 
 class SocialButton extends StatelessWidget {
