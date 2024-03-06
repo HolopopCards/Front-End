@@ -17,9 +17,7 @@ class SentAndReceivedCardArgs {
 
 /// Core sent pages.
 class SentCardPage extends StatefulWidget {
-  const SentCardPage({super.key, required this.args});
-
-  final SentAndReceivedCardArgs args;
+  const SentCardPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _SentCardPage();
@@ -28,13 +26,14 @@ class SentCardPage extends StatefulWidget {
 class _SentCardPage extends State<SentCardPage> {
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as SentAndReceivedCardArgs;
     return SingleChildScrollView(child: 
       Column(
         children: [
-          OccasionForSent(card: widget.args.card),
-          Video(serialNumber: widget.args.card.serialNumber),
-          DateAndSwitch(card: widget.args.card),
-          CardDetails(card: widget.args.card)
+          OccasionForSent(card: args.card),
+          Video(serialNumber: args.card.serialNumber),
+          DateAndSwitch(card: args.card),
+          CardDetails(card: args.card)
         ],
       )
     );
@@ -44,9 +43,7 @@ class _SentCardPage extends State<SentCardPage> {
 
 /// Core received pages.
 class ReceivedCardPage extends StatefulWidget {
-  const ReceivedCardPage({super.key, required this.args});
-
-  final SentAndReceivedCardArgs args;
+  const ReceivedCardPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _ReceivedCardPage();
@@ -55,13 +52,14 @@ class ReceivedCardPage extends StatefulWidget {
 class _ReceivedCardPage extends State<ReceivedCardPage> {
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as SentAndReceivedCardArgs;
     return SingleChildScrollView(
       child: Column(
         children: [
-          OccasionForReceived(card: widget.args.card),
-          Video(serialNumber: widget.args.card.serialNumber),
-          DateAndSwitch(card: widget.args.card),
-          CardDetails(card: widget.args.card)
+          OccasionForReceived(card: args.card),
+          Video(serialNumber: args.card.serialNumber),
+          DateAndSwitch(card: args.card),
+          CardDetails(card: args.card)
         ],
       )
     );

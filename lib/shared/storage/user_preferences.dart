@@ -28,6 +28,7 @@ class UserPreferences {
 
   /// Get user from storage.
   Future<User?> getUserAsync() async {
+    Logger('user preferences').fine("Getting user for login or not...");
     final prefs = await SharedPreferences.getInstance();
 
     final token = prefs.getString("token");

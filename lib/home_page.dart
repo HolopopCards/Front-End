@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:holopop/login/login_page.dart';
 import 'package:holopop/shared/firebase/firebase_utlity.dart';
-import 'package:holopop/shared/nav/destination_view.dart';
-import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:holopop/shared/storage/user_preferences.dart';
-
+import 'package:logging/logging.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,7 +11,6 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePage();
 }
 
-
 class _HomePage extends State<HomePage> {
   @override
   void initState() {
@@ -21,56 +18,35 @@ class _HomePage extends State<HomePage> {
     FirebaseUtility().startFirebaseListening();
   }
 
-  var _currentIndex = 0;
-  var _showNavBar   = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         top: true,
-        child: 
-          FutureBuilder(
-           future: UserPreferences().getUserAsync(),
-           builder: (context, snapshot) {
+        child: FutureBuilder(
+          future: UserPreferences().getUserAsync(),
+          builder: (context, snapshot) {
             switch (snapshot.connectionState) {
-              case ConnectionState.none:
-              case ConnectionState.waiting:
-                return const CircularProgressIndicator();
-              default:
+              case ConnectionState.done:
                 if (snapshot.hasError) {
+                  Logger('home').severe("Error getting user during login page: ${snapshot.error}");
                   return Text('Error: ${snapshot.error}');
                 } else if (snapshot.data?.token == null) {
-                  return const LoginPage();
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Logger('home').fine("No user in storage. Take them to login page.");
+                    Navigator.pushNamed(context, "/login");
+                  });
                 } else {
-                  //TODO: THIS IS A HACK
-                  if (_showNavBar == false) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() => _showNavBar = true));
-                  }
-                  return IndexedStack(
-                    index: _currentIndex,
-                    children: allDestinations.map((dest) => DestinationView(destination: dest))
-                                             .toList());
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Logger('home').fine("User in storage, take them to dashboard.");
+                    Navigator.pushNamed(context, "/dashboard");
+                  });
                 }
+              default: break;
             }
-          },
-        ),
-      ),
-      bottomNavigationBar: 
-        _showNavBar 
-          ? BottomNavigationBar(
-            currentIndex: _currentIndex,
-            onTap: (i) { setState(() { _currentIndex = i; }); },
-            selectedItemColor: HolopopColors.blue,
-            unselectedItemColor: HolopopColors.lightGrey,
-            showUnselectedLabels: true,
-            items: allDestinations.map((dest) =>
-              BottomNavigationBarItem(
-                label: dest.title,
-                icon: Icon(dest.icon)
-              )).toList()
-            )
-          : const SizedBox()
-    );
+
+            return const CircularProgressIndicator();
+        })));
   }
 }
+

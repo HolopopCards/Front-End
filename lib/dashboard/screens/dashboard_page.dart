@@ -4,35 +4,37 @@ import 'package:holopop/dashboard/models/card.dart';
 import 'package:holopop/dashboard/screens/see_all_page.dart';
 import 'package:holopop/dashboard/services/card_service.dart';
 import 'package:holopop/dashboard/widgets/display_card.dart';
+import 'package:holopop/shared/nav/holopop_navigation_bar.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:holopop/dashboard/widgets/title_and_settings.dart';
-
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _DashboardPage();
-}
 
+  static String route() => "/dashboard";
+}
 
 class _DashboardPage extends State<DashboardPage> {
   final Future<List<HolopopCard>> cards = CardService.getCards();
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        children: [
-          const TitleAndSettings(),
-          const Search(),
-          Expanded(
-            child: DashboardBody(cards: cards,)
-          )
-        ]
-      )
-    );
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          children: [
+            const TitleAndSettings(),
+            const Search(),
+            Expanded(
+              child: DashboardBody(cards: cards,)
+            )
+          ]
+        )),
+      bottomNavigationBar: HolopopNavigationBar.getNavBar(context, NavBarItem.dashboard));
   }
 }
 

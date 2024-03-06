@@ -4,8 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
-import 'package:holopop/home_page.dart';
 import 'package:holopop/shared/firebase/firebase_options.dart';
+import 'package:holopop/shared/nav/routes.dart';
 import 'package:holopop/shared/providers/auth_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:holopop/shared/providers/user_provider.dart';
@@ -73,9 +73,11 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserProvider())
       ],
       child: MaterialApp(
+        initialRoute: "/",
+        routes: routes,
         title: 'HoloPop',
         theme: HolopopTheme().getTheme(),
-        home: const HomePage(),
+        // home: const HomePage(),
         debugShowCheckedModeBanner: false,
       )
     );

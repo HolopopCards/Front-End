@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:holopop/home_page.dart';
 import 'package:holopop/shared/storage/create_application_storage.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../shared/nav/holopop_navigation_bar.dart';
 
-class CreateType extends StatefulWidget {
-  const CreateType({super.key});
+
+class CreateStart extends StatefulWidget {
+  const CreateStart({super.key});
 
   @override
-  State<StatefulWidget> createState() => _CreateType();
+  State<StatefulWidget> createState() => _CreateStart();
 }
 
 
-class _CreateType extends State<CreateType> {
+class _CreateStart extends State<CreateStart> {
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Scaffold(body: Column(
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 15),
@@ -72,6 +75,6 @@ class _CreateType extends State<CreateType> {
           //         ]
           // ))))
       ],
-    );
+    ), bottomNavigationBar: HolopopNavigationBar.getNavBar(context, NavBarItem.create));
   }
 }

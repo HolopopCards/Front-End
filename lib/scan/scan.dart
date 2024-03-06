@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:holopop/dashboard/screens/sent_and_received_card_pages.dart';
 import 'package:holopop/dashboard/services/card_service.dart';
 import 'package:holopop/scan/scan_service.dart';
+import 'package:holopop/shared/nav/holopop_navigation_bar.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:logging/logging.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -14,15 +15,29 @@ class Scan extends StatefulWidget {
   State<StatefulWidget> createState() => _Scan();
 }
 
-
 class _Scan extends State<Scan> {
-  final mobileScannerController = MobileScannerController(
+  final _mobileScannerController = MobileScannerController(
     detectionSpeed: DetectionSpeed.noDuplicates,
     facing: CameraFacing.back);
 
   @override
+  void initState() {
+    super.initState();
+    Logger('scan').fine("SCAN INIT");
+    _mobileScannerController.stop() // Don't even ask why this works.
+      .then((_) => _mobileScannerController.start());
+  }
+
+  @override
+  void dispose() {
+    Logger('scan').fine("SCAN DISPOSE");
+    _mobileScannerController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Column(
+    return Scaffold(body: Column(
       children: [
         Padding(
           padding: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 9, 0, 0),
@@ -39,7 +54,7 @@ class _Scan extends State<Scan> {
           child: FractionallySizedBox(
             heightFactor: 0.60,
             child: MobileScanner(
-              controller: mobileScannerController,
+              controller: _mobileScannerController,
               onDetect: (capture) {
                 final barcodes = capture.barcodes;
                 Logger('scan').info("Detected ${barcodes.length} barcodes.");
@@ -66,7 +81,7 @@ class _Scan extends State<Scan> {
                 }
               },
             ))),
-      ]
-    );
+      ]),
+    bottomNavigationBar: HolopopNavigationBar.getNavBar(context, NavBarItem.holopop));
   }
 }

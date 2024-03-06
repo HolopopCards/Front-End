@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:holopop/shared/widgets/holopop_placeholder.dart';
 
-class HowItWorks extends StatelessWidget {
-  const HowItWorks({super.key});
+class CreateHowItWorks extends StatelessWidget {
+  const CreateHowItWorks({super.key});
 
   @override
   Widget build(BuildContext context) {
