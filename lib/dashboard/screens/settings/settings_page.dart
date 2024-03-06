@@ -140,25 +140,25 @@ class SocialMediaIcons extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SocialButton(iconPath: "assets/icons/facebook.png", 
+              SocialButton(iconPath: "assets/icons/social - facebook.png", 
                            onPressed: () async {
                                                 const url = 'https://www.facebook.com/holopopcards'; 
                                                 if (await canLaunchUrl(url as Uri)) {
                                                   await launchUrl(url as Uri);} 
                                                 else {throw 'Could not launch $url';}}),
-              SocialButton(iconPath: "assets/icons/instagram.png", 
+              SocialButton(iconPath: "assets/icons/social - instagram.png", 
                            onPressed: () async {
                                                 const url = 'https://www.instagram.com/holopop.cards/'; 
                                                 if (await canLaunchUrl(url as Uri)) {
                                                   await launchUrl(url as Uri);} 
                                                 else {throw 'Could not launch $url';}}),
-              SocialButton(iconPath: "assets/icons/tiktok.png", 
+              SocialButton(iconPath: "assets/icons/social - tiktok.png", 
                            onPressed: () async {
                                                 const url = 'https://www.tiktok.com/@holopopcards?lang=en'; 
                                                 if (await canLaunchUrl(url as Uri)) {
                                                   await launchUrl(url as Uri);} 
                                                 else {throw 'Could not launch $url';}}),
-              SocialButton(iconPath: "assets/icons/youtube.png", 
+              SocialButton(iconPath: "assets/icons/social - youtube.png", 
                            onPressed: () async {
                                                 const url = 'https://www.youtube.com/channel/UC9z'; 
                                                 if (await canLaunchUrl(url as Uri)) {
