@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:holopop/dashboard/screens/notification_page.dart';
 import 'package:holopop/dashboard/screens/settings/contact_picker.dart';
 import 'package:holopop/dashboard/screens/settings/edit_profile_page.dart';
 import 'package:holopop/dashboard/screens/settings/privacy_policy.dart';
@@ -58,6 +59,7 @@ class SettingsBody extends StatelessWidget {
           title: "Account",
           settings: [
             Setting("Edit Profile",  () { Navigator.push(context, MaterialPageRoute(builder: (ctx) => const EditProfilePage())); }),
+            Setting("Notifications", () { Navigator.push(context, MaterialPageRoute(builder: (ctx) => const NotificationPage())); }),
           ],
         ),
         SettingsGroup(
@@ -140,30 +142,31 @@ class SocialMediaIcons extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SocialButton(iconPath: "assets/icons/social - facebook.png", 
+              SocialButton(iconPath: "assets/icons/social - facebook.svg", 
                            onPressed: () async {
-                                                const url = 'https://www.facebook.com/holopopcards'; 
-                                                if (await canLaunchUrl(url as Uri)) {
-                                                  await launchUrl(url as Uri);} 
-                                                else {throw 'Could not launch $url';}}),
-              SocialButton(iconPath: "assets/icons/social - instagram.png", 
-                           onPressed: () async {
-                                                const url = 'https://www.instagram.com/holopop.cards/'; 
-                                                if (await canLaunchUrl(url as Uri)) {
-                                                  await launchUrl(url as Uri);} 
-                                                else {throw 'Could not launch $url';}}),
-              SocialButton(iconPath: "assets/icons/social - tiktok.png", 
-                           onPressed: () async {
-                                                const url = 'https://www.tiktok.com/@holopopcards?lang=en'; 
-                                                if (await canLaunchUrl(url as Uri)) {
-                                                  await launchUrl(url as Uri);} 
-                                                else {throw 'Could not launch $url';}}),
-              SocialButton(iconPath: "assets/icons/social - youtube.png", 
-                           onPressed: () async {
-                                                const url = 'https://www.youtube.com/channel/UC9z'; 
-                                                if (await canLaunchUrl(url as Uri)) {
-                                                  await launchUrl(url as Uri);} 
+                                                Uri url = Uri.https('www.facebook.com','/holopopcards');
+                                                if (await canLaunchUrl(url)) {
+                                                  await launchUrl(url);} 
                                                 else {throw 'Could not launch $url';}})
+              // SocialButton(iconPath: "assets/icons/social - instagram.svg", 
+              //              onPressed: () async {
+              //                                   Uri url = Uri.https('https://www.instagram.com','/holopop.cards/'); 
+              //                                   if (await canLaunchUrl(url)) {
+              //                                     await launchUrl(url);} 
+              //                                   else {throw 'Could not launch $url';}})
+
+              // SocialButton(iconPath: "assets/icons/social - tiktok.svg", 
+              //              onPressed: () async {
+              //                                   const url = 'https://www.tiktok.com/@holopopcards?lang=en'; 
+              //                                   if (await canLaunchUrl(url as Uri)) {
+              //                                     await launchUrl(url as Uri);} 
+              //                                   else {throw 'Could not launch $url';}}),
+              // SocialButton(iconPath: "assets/icons/social - youtube.svg", 
+              //              onPressed: () async {
+              //                                   const url = 'https://www.youtube.com/channel/UC9z'; 
+              //                                   if (await canLaunchUrl(url as Uri)) {
+              //                                     await launchUrl(url as Uri);} 
+              //                                   else {throw 'Could not launch $url';}})
             ],
           )
         )
@@ -179,7 +182,7 @@ launchMailto( String subject) async {
         subject: subject,
         body: '',
     );
-    await launch('$mailtoLink');
+    await launchUrl('$mailtoLink' as Uri);
 }
 
 class SocialButton extends StatelessWidget {
@@ -191,12 +194,11 @@ class SocialButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10),
-      
-      child: IconButton(
+      padding: const EdgeInsets.symmetric(horizontal: 2.5),
+      child: IconButton( 
         // icon: Icon(iconData), 
         icon: SvgPicture.asset(iconPath), 
-        onPressed: onPressed),
-    );
+        onPressed: onPressed,
+    ));
   }
 }

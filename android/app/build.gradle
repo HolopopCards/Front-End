@@ -119,4 +119,5 @@ dependencies {
     // Photo Editor
     def banubaPESdkVersion = '1.1.0'
     implementation "com.banuba.sdk:pe-sdk:${banubaPESdkVersion}"
+    implementation "androidx.activity:activity:1.6.0-alpha05"
 }
