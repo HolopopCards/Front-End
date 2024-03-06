@@ -149,26 +149,26 @@ class SocialMediaIcons extends StatelessWidget {
                                                 Uri url = Uri.https('www.facebook.com','/holopopcards');
                                                 if (await canLaunchUrl(url)) {
                                                   await launchUrl(url);} 
-                                                else {throw 'Could not launch $url';}})
-              // SocialButton(iconPath: "assets/icons/social - instagram.svg", 
-              //              onPressed: () async {
-              //                                   Uri url = Uri.https('https://www.instagram.com','/holopop.cards/'); 
-              //                                   if (await canLaunchUrl(url)) {
-              //                                     await launchUrl(url);} 
-              //                                   else {throw 'Could not launch $url';}})
+                                                else {throw 'Could not launch $url';}}),
+              SocialButton(iconPath: "assets/icons/social - instagram.svg", 
+                           onPressed: () async {
+                                                Uri url = Uri.https('www.instagram.com','/holopop.cards/'); 
+                                                if (await canLaunchUrl(url)) {
+                                                  await launchUrl(url);} 
+                                                else {throw 'Could not launch $url';}}),
 
-              // SocialButton(iconPath: "assets/icons/social - tiktok.svg", 
-              //              onPressed: () async {
-              //                                   const url = 'https://www.tiktok.com/@holopopcards?lang=en'; 
-              //                                   if (await canLaunchUrl(url as Uri)) {
-              //                                     await launchUrl(url as Uri);} 
-              //                                   else {throw 'Could not launch $url';}}),
-              // SocialButton(iconPath: "assets/icons/social - youtube.svg", 
-              //              onPressed: () async {
-              //                                   const url = 'https://www.youtube.com/channel/UC9z'; 
-              //                                   if (await canLaunchUrl(url as Uri)) {
-              //                                     await launchUrl(url as Uri);} 
-              //                                   else {throw 'Could not launch $url';}})
+              SocialButton(iconPath: "assets/icons/social - tiktok.svg", 
+                           onPressed: () async {
+                                                Uri url = Uri.https('tiktok.com','@holopopcards?lang=en'); 
+                                                if (await canLaunchUrl(url)) {
+                                                  await launchUrl(url);} 
+                                                else {throw 'Could not launch $url';}}),
+              SocialButton(iconPath: "assets/icons/social - youtube.svg", 
+                           onPressed: () async {
+                                                Uri url = Uri.https('www.youtube.com','/channel/UC9z'); 
+                                                if (await canLaunchUrl(url)) {
+                                                  await launchUrl(url);} 
+                                                else {throw 'Could not launch $url';}})
             ],
           )
         )
@@ -207,7 +207,7 @@ class SocialButton extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 2.5),
       child: IconButton( 
         // icon: Icon(iconData), 
-        icon: SvgPicture.asset(iconPath), 
+        icon: SvgPicture.asset(iconPath, height: 35), 
         onPressed: onPressed,
     ));
   }
