@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:holopop/shared/nav/holopop_navigation_bar.dart';
 
 import 'package:holopop/shared/storage/create_application.dart';
 import 'package:holopop/shared/storage/create_application_storage.dart';
@@ -94,6 +95,7 @@ class _CreateQr extends State<CreateQr> {
                 },
               ))),
         ]
-    ));
+    ),
+    bottomNavigationBar: HolopopNavigationBar.getNavBar(context, NavBarItem.create));
   }
 }

@@ -4,6 +4,7 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:holopop/dashboard/models/card.dart';
 import 'package:holopop/dashboard/services/card_service.dart';
+import 'package:holopop/shared/nav/holopop_navigation_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
 
@@ -27,16 +28,18 @@ class _SentCardPage extends State<SentCardPage> {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as SentAndReceivedCardArgs;
-    return SingleChildScrollView(child: 
-      Column(
-        children: [
-          OccasionForSent(card: args.card),
-          Video(serialNumber: args.card.serialNumber),
-          DateAndSwitch(card: args.card),
-          CardDetails(card: args.card)
-        ],
-      )
-    );
+    return Scaffold(
+      body: SingleChildScrollView(child: 
+        Column(
+          children: [
+            OccasionForSent(card: args.card),
+            Video(serialNumber: args.card.serialNumber),
+            DateAndSwitch(card: args.card),
+            CardDetails(card: args.card)
+          ],
+        )
+      ),
+    bottomNavigationBar: HolopopNavigationBar.getNavBar(context, NavBarItem.dashboard));
   }
 }
 
@@ -53,16 +56,18 @@ class _ReceivedCardPage extends State<ReceivedCardPage> {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as SentAndReceivedCardArgs;
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          OccasionForReceived(card: args.card),
-          Video(serialNumber: args.card.serialNumber),
-          DateAndSwitch(card: args.card),
-          CardDetails(card: args.card)
-        ],
-      )
-    );
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            OccasionForReceived(card: args.card),
+            Video(serialNumber: args.card.serialNumber),
+            DateAndSwitch(card: args.card),
+            CardDetails(card: args.card)
+          ],
+        )
+      ),
+    bottomNavigationBar: HolopopNavigationBar.getNavBar(context, NavBarItem.dashboard));
   }
 }
 

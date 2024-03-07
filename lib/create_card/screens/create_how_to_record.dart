@@ -1,5 +1,6 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:holopop/shared/nav/holopop_navigation_bar.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:lottie/lottie.dart';
 
@@ -17,43 +18,45 @@ class _CreateHowToRecord extends State<CreateHowToRecord> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const SizedBox(),
-            const Text("Quick Guide"),
-            IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () => Navigator.pushNamed(context, "/create/record-video"),
-            )
-          ],
-        ),
-        Expanded(
-          child: PageView(
-            controller: _pageController,
-            onPageChanged: (x) { setState(() { position = x; });},
-            children: const [
-              RecordVideoPageLottieDisplay(asset: "assets/lotties/Instructions 1.json", text: "Distance yourself between 2 and 3 feet away from the camera"),
-              RecordVideoPageLottieDisplay(asset: "assets/lotties/Instructions 2.json", text: "Ensure there is plenty of space around you within the camera frame"),
-              RecordVideoPageLottieDisplay(asset: "assets/lotties/Instructions 3.json", text: "Ensure there is enough contrast between you and the background behind you"),
-              RecordVideoPageLottieDisplay(asset: "assets/lotties/Instructions 4.json", text: "Ensure your setting is well-illuminated before recording"),
-              RecordVideoPageLottieDisplay(asset: "assets/lotties/Instructions 5.json", text: "Any objects that are black in color will appear as transparent in the hologram"),
+    return Scaffold(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const SizedBox(),
+              const Text("Quick Guide"),
+              IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () => Navigator.pushNamed(context, "/create/record-video"),
+              )
             ],
-          )
-        ),
-        DotsIndicator(
-          dotsCount: 5,
-          position: position,
-          decorator: const DotsDecorator(
-            activeColor: HolopopColors.blue,
-            color: Colors.white
           ),
-        )
-      ],
-    );
+          Expanded(
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: (x) { setState(() { position = x; });},
+              children: const [
+                RecordVideoPageLottieDisplay(asset: "assets/lotties/Instructions 1.json", text: "Distance yourself between 2 and 3 feet away from the camera"),
+                RecordVideoPageLottieDisplay(asset: "assets/lotties/Instructions 2.json", text: "Ensure there is plenty of space around you within the camera frame"),
+                RecordVideoPageLottieDisplay(asset: "assets/lotties/Instructions 3.json", text: "Ensure there is enough contrast between you and the background behind you"),
+                RecordVideoPageLottieDisplay(asset: "assets/lotties/Instructions 4.json", text: "Ensure your setting is well-illuminated before recording"),
+                RecordVideoPageLottieDisplay(asset: "assets/lotties/Instructions 5.json", text: "Any objects that are black in color will appear as transparent in the hologram"),
+              ],
+            )
+          ),
+          DotsIndicator(
+            dotsCount: 5,
+            position: position,
+            decorator: const DotsDecorator(
+              activeColor: HolopopColors.blue,
+              color: Colors.white
+            ),
+          )
+        ],
+      ),
+    bottomNavigationBar: HolopopNavigationBar.getNavBar(context, NavBarItem.create));
   }
 
   @override

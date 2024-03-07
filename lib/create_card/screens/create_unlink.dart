@@ -5,9 +5,7 @@ import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class CreateUnlink extends StatefulWidget {
-  const CreateUnlink({super.key, required this.card});
-
-  final CreateApplicationCard card;
+  const CreateUnlink({super.key});
 
   @override
   State<StatefulWidget> createState() => _CreateUnlink();
@@ -16,6 +14,7 @@ class CreateUnlink extends StatefulWidget {
 class _CreateUnlink extends State<CreateUnlink> {
   @override
   Widget build(BuildContext context) {
+    final card = ModalRoute.of(context)!.settings.arguments as CreateApplicationCard;
     return Scaffold(
       backgroundColor: Colors.black,
       body: Column(
@@ -34,16 +33,16 @@ class _CreateUnlink extends State<CreateUnlink> {
             child: Column(
               children: [
                 QrImageView(
-                  data: widget.card.barcode,
+                  data: card.barcode,
                   backgroundColor: Colors.white,
                   size: 175,
                   padding: const EdgeInsets.all(4)),
                 Padding(
                   padding: const EdgeInsets.only(top: 5),
-                  child: Text(widget.card.serialNumber,
+                  child: Text(card.serialNumber,
                     style: const TextStyle(
                       fontSize: 12))),
-                Text(widget.card.recipient ?? "",
+                Text(card.recipient ?? "",
                   style: const TextStyle(
                     fontSize: 10)),
                 const Padding(
@@ -59,7 +58,7 @@ class _CreateUnlink extends State<CreateUnlink> {
                     child: const Text("Unlink"),
                     onPressed: () {
                       CreateApplicationStorage()
-                        .unlinkCardAsync(widget.card.serialNumber)
+                        .unlinkCardAsync(card.serialNumber)
                         .then((res) {
                           Navigator.pushNamed(context, "/create/success");
                         }); 
@@ -69,5 +68,4 @@ class _CreateUnlink extends State<CreateUnlink> {
       ),
     );
   }
-
 }

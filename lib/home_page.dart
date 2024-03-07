@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:holopop/login/login_page.dart';
 import 'package:holopop/shared/firebase/firebase_utlity.dart';
 import 'package:holopop/shared/storage/user_preferences.dart';
 import 'package:logging/logging.dart';
@@ -44,7 +43,6 @@ class _HomePage extends State<HomePage> {
                 }
               default: break;
             }
-
             return const CircularProgressIndicator();
         })));
   }

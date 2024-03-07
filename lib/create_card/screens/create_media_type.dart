@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:holopop/create_card/screens/create_how_to_record.dart';
 import 'package:holopop/create_card/screens/create_upload.dart';
+import 'package:holopop/shared/nav/holopop_navigation_bar.dart';
 import 'package:holopop/shared/widgets/standard_header.dart';
 import 'package:lottie/lottie.dart';
 
@@ -9,7 +10,8 @@ class CreateMediaType extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Scaffold(
+      body: Column(
       children: [
         StandardHeader(
           headerTitle: "Media Type",
@@ -28,7 +30,8 @@ class CreateMediaType extends StatelessWidget {
           )
         )
       ]
-    );
+    ),
+    bottomNavigationBar: HolopopNavigationBar.getNavBar(context, NavBarItem.create));
   }
 }
 

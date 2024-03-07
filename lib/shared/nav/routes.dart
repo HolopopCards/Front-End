@@ -14,8 +14,6 @@ import 'package:holopop/dashboard/screens/sent_and_received_card_pages.dart';
 import 'package:holopop/home_page.dart';
 import 'package:holopop/login/login_page.dart';
 import 'package:holopop/scan/scan.dart';
-import 'package:holopop/shared/storage/create_application.dart';
-import 'package:holopop/shared/widgets/holopop_placeholder.dart';
 
 
 final Map<String, Widget Function(BuildContext)> routes = {
@@ -33,7 +31,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
   "/create/qr":            (context) => const CreateQr(),
   "/create/details":       (context) => const CreateDetails(),
   "/create/success":       (context) => const CreateSuccess(),
-  // "/create/unlink":        (context) => CreateUnlink(card: settings.arguments as CreateApplicationCard),
+  "/create/unlink":        (context) => const CreateUnlink(),
   "/create/media-type":    (context) => const CreateMediaType(),
   "/create/record-video":  (context) => const CreateRecordVideo(),
   "/create/final":         (context) => const CreateFinal(),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:holopop/shared/nav/holopop_navigation_bar.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
 
 
@@ -13,12 +14,14 @@ class EditSentCardPage extends StatefulWidget {
 class _EditSentCardPage extends State<EditSentCardPage> {
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      children: [
-        Header(),
-        Body()
-      ],
-    );
+    return Scaffold(
+      body: const Column(
+        children: [
+          Header(),
+          Body()
+        ],
+      ),
+    bottomNavigationBar: HolopopNavigationBar.getNavBar(context, NavBarItem.dashboard));
   }
 }
 

@@ -29,6 +29,7 @@ class CreateUpload extends StatelessWidget {
           Navigator.pushNamed(context, "/create/media-type");
         }
       });
-    return const CircularProgressIndicator();
+    return const Scaffold(
+      body: CircularProgressIndicator());
   }
 }

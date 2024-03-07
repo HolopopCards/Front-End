@@ -35,7 +35,7 @@ class APIResponseError extends ApiResponse {
   factory APIResponseError.fromJson(Map<String, dynamic> data) {
     return APIResponseError(
       id: data["id"],
-      timestamp: data["timestamp"],
+      timestamp: DateTime.parse(data["timestamp"]),
       error: data["error"]
     );
   }

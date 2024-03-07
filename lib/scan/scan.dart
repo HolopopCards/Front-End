@@ -37,51 +37,52 @@ class _Scan extends State<Scan> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 9, 0, 0),
-          child: const Text("Scan QR Code",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 28))),
-        const Padding(
-          padding: EdgeInsets.fromLTRB(0, 5, 0, 30),
-          child: Text("Find the QR code on the pull tab of the card.",
-            style: TextStyle(
-              color: HolopopColors.lightGrey))),
-        Flexible(
-          child: FractionallySizedBox(
-            heightFactor: 0.60,
-            child: MobileScanner(
-              controller: _mobileScannerController,
-              onDetect: (capture) {
-                final barcodes = capture.barcodes;
-                Logger('scan').info("Detected ${barcodes.length} barcodes.");
-                for (final barcode in barcodes) {
-                  final rawValue = barcode.rawValue;
-                  Logger('scan').info("Bar code: $rawValue");
-                  if (rawValue != null && rawValue.startsWith("https://holopop.cards/card/")) {
-                    final serialNumber = rawValue.split("/").last;
-                    Logger('scan').info("Serial number found: $serialNumber");
+    return Scaffold(
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 9, 0, 0),
+            child: const Text("Scan QR Code",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 28))),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(0, 5, 0, 30),
+            child: Text("Find the QR code on the pull tab of the card.",
+              style: TextStyle(
+                color: HolopopColors.lightGrey))),
+          Flexible(
+            child: FractionallySizedBox(
+              heightFactor: 0.60,
+              child: MobileScanner(
+                controller: _mobileScannerController,
+                onDetect: (capture) {
+                  final barcodes = capture.barcodes;
+                  Logger('scan').info("Detected ${barcodes.length} barcodes.");
+                  for (final barcode in barcodes) {
+                    final rawValue = barcode.rawValue;
+                    Logger('scan').info("Bar code: $rawValue");
+                    if (rawValue != null && rawValue.startsWith("https://holopop.cards/card/")) {
+                      final serialNumber = rawValue.split("/").last;
+                      Logger('scan').info("Serial number found: $serialNumber");
 
-                    ScanService.scanCard(serialNumber)
-                      .then((serialNumberRes) {
-                        Logger('scan').info("Scanned card: ${serialNumberRes.success}");
-                        if (serialNumberRes.success == true) {
-                          CardService.getCard(serialNumberRes.value!)
-                            .then((cardRes) {
-                              if (cardRes.success == true) {
-                                Navigator.pushNamed(context, "/received-card", arguments: SentAndReceivedCardArgs(card: cardRes.value!));
-                              }
-                            });
-                        }
-                      });
+                      ScanService.scanCard(serialNumber)
+                        .then((serialNumberRes) {
+                          Logger('scan').info("Scanned card: ${serialNumberRes.success}");
+                          if (serialNumberRes.success == true) {
+                            CardService.getCard(serialNumberRes.value!)
+                              .then((cardRes) {
+                                if (cardRes.success == true) {
+                                  Navigator.pushNamed(context, "/received-card", arguments: SentAndReceivedCardArgs(card: cardRes.value!));
+                                }
+                              });
+                          }
+                        });
+                    }
                   }
-                }
-              },
-            ))),
-      ]),
+                },
+              ))),
+        ]),
     bottomNavigationBar: HolopopNavigationBar.getNavBar(context, NavBarItem.holopop));
   }
 }
