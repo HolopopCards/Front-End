@@ -137,3 +137,6 @@ app.*.symbols
 !/dev/ci/**/Gemfile.lock
 !.vscode/settings.json
 /.vs
+macos/Flutter/GeneratedPluginRegistrant.swift
+pubspec.lock
+.flutter-plugins-dependencies

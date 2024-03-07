@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:holopop/dashboard/screens/notification_page.dart';
+import 'package:holopop/dashboard/screens/settings/contact_picker.dart';
 import 'package:holopop/dashboard/screens/settings/edit_profile_page.dart';
 import 'package:holopop/dashboard/screens/settings/privacy_policy.dart';
 import 'package:holopop/dashboard/screens/settings/terms_of_use.dart';
 import 'package:holopop/shared/widgets/standard_header.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
+import 'package:mailto/mailto.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 
 /// Core page.
@@ -53,14 +59,14 @@ class SettingsBody extends StatelessWidget {
           title: "Account",
           settings: [
             Setting("Edit Profile",  () { Navigator.push(context, MaterialPageRoute(builder: (ctx) => const EditProfilePage())); }),
-            Setting("Notifications", () { })
+            Setting("Notifications", () { Navigator.push(context, MaterialPageRoute(builder: (ctx) => const NotificationPage())); }),
           ],
         ),
         SettingsGroup(
           title: "Support",
           settings: [
-            Setting("Contact Support", () { }),
-            Setting("Help Center", () { })
+            Setting("Contact Support", () { launchMailto('Support Request');}),
+            Setting("Help Center", () { }),
           ],
         ),
         SettingsGroup(
@@ -69,7 +75,8 @@ class SettingsBody extends StatelessWidget {
             Setting("About Holopop", () { }),
             Setting("Terms of Use", () {Navigator.push(context, MaterialPageRoute(builder: (ctx) => const TermsOfUse())); }),
             Setting("Privacy Policy", () { Navigator.push(context, MaterialPageRoute(builder: (ctx) => const PrivacyPolicy())); }),
-            Setting("Share with Friends", () { }),
+            Setting("Share with Friends", () {Navigator.push(context, MaterialPageRoute(builder:(ctx)=> const ContactPicker())); }),
+            Setting("App Version     Beta 0.0.1", () { })
           ],
         )
       ]
@@ -129,22 +136,79 @@ class SocialMediaIcons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return  Column(
       children: [
-        Text("Join The Community"),
+        const Text("Join The Community"),
         SizedBox(
           height: 70,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(padding: EdgeInsets.all(10), child: Image(image: AssetImage("assets/icons/instagram.png"), fit: BoxFit.fill)),
-              Padding(padding: EdgeInsets.all(10), child: Image(image: AssetImage("assets/icons/facebook.png"),  fit: BoxFit.fill)),
-              Padding(padding: EdgeInsets.all(10), child: Image(image: AssetImage("assets/icons/youtube.png"),   fit: BoxFit.fill)),
-              Padding(padding: EdgeInsets.all(10), child: Image(image: AssetImage("assets/icons/tiktok.png"),    fit: BoxFit.fill)),
+              SocialButton(iconPath: "assets/icons/social - facebook.svg", 
+                           onPressed: () async {
+                                                Uri url = Uri.https('www.facebook.com','/holopopcards');
+                                                if (await canLaunchUrl(url)) {
+                                                  await launchUrl(url);} 
+                                                else {throw 'Could not launch $url';}}),
+              SocialButton(iconPath: "assets/icons/social - instagram.svg", 
+                           onPressed: () async {
+                                                Uri url = Uri.https('www.instagram.com','/holopop.cards/'); 
+                                                if (await canLaunchUrl(url)) {
+                                                  await launchUrl(url);} 
+                                                else {throw 'Could not launch $url';}}),
+
+              SocialButton(iconPath: "assets/icons/social - tiktok.svg", 
+                           onPressed: () async {
+                                                Uri url = Uri.https('tiktok.com','@holopopcards?lang=en'); 
+                                                if (await canLaunchUrl(url)) {
+                                                  await launchUrl(url);} 
+                                                else {throw 'Could not launch $url';}}),
+              SocialButton(iconPath: "assets/icons/social - youtube.svg", 
+                           onPressed: () async {
+                                                Uri url = Uri.https('www.youtube.com','/channel/UC9z'); 
+                                                if (await canLaunchUrl(url)) {
+                                                  await launchUrl(url);} 
+                                                else {throw 'Could not launch $url';}})
             ],
           )
         )
       ],
     );
+  }
+}
+///Mail to support 
+launchMailto( String subject) async {
+    final mailtoLink = Mailto(
+        to: ['support@holopop.cards'],
+        cc: [''],
+        subject: subject,
+        body: '',
+    );
+    await launchUrl('$mailtoLink' as Uri);
+}
+launchHelpCenter() async {
+    Uri url = Uri.https('holopop.cards','help-center');
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+}
+
+class SocialButton extends StatelessWidget {
+  const SocialButton({super.key, required this.onPressed, required this.iconPath});
+
+  final String iconPath;
+  final Function() onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 2.5),
+      child: IconButton( 
+        // icon: Icon(iconData), 
+        icon: SvgPicture.asset(iconPath, height: 35), 
+        onPressed: onPressed,
+    ));
   }
 }
