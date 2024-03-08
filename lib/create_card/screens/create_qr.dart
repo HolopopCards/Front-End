@@ -17,24 +17,23 @@ class CreateQr extends StatefulWidget {
 
 
 class _CreateQr extends State<CreateQr> {
-  MobileScannerController? _mobileScannerController;
+  final _mobileScannerController = MobileScannerController(
+    detectionSpeed: DetectionSpeed.noDuplicates,
+    facing: CameraFacing.back,
+    autoStart: false);
 
   @override
   void initState() {
     Logger('create:qr').info("QR READER INIT");
     super.initState();
-    _mobileScannerController = MobileScannerController(
-      detectionSpeed: DetectionSpeed.noDuplicates,
-      facing: CameraFacing.back,
-      autoStart: true);
+    _mobileScannerController.start();
   }
 
   @override
   void dispose() {
     Logger('create:qr').info("QR READER DISPOSE");
+    _mobileScannerController.stop();
     super.dispose();
-    _mobileScannerController?.stop();
-    _mobileScannerController?.dispose();
   }
 
   @override
@@ -88,7 +87,7 @@ class _CreateQr extends State<CreateQr> {
                           }
                         })
                         .then((_) => CreateApplicationStorage().getAppAsync())
-                        .then((_) => _mobileScannerController?.dispose())
+                        .then((_) => _mobileScannerController.dispose())
                         .then((_) => Navigator.pushNamed(context, "/create/details"));
                     }
                   }

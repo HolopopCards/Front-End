@@ -18,21 +18,28 @@ class Scan extends StatefulWidget {
 class _Scan extends State<Scan> {
   final _mobileScannerController = MobileScannerController(
     detectionSpeed: DetectionSpeed.noDuplicates,
-    facing: CameraFacing.back);
+    facing: CameraFacing.back,
+    autoStart: false);
 
   @override
   void initState() {
-    super.initState();
     Logger('scan').fine("SCAN INIT");
-    _mobileScannerController.stop() // Don't even ask why this works.
-      .then((_) => _mobileScannerController.start());
+    super.initState();
+    try {
+      _mobileScannerController.stop() 
+        .then((_) => _mobileScannerController.start());
+    } catch(_) {
+      Future.delayed(const Duration(seconds: 2))
+        .then((_) => _mobileScannerController.stop())
+        .then((_) => _mobileScannerController.start());
+    }
   }
 
   @override
   void dispose() {
     Logger('scan').fine("SCAN DISPOSE");
-    _mobileScannerController.dispose();
     super.dispose();
+    _mobileScannerController.stop();
   }
 
   @override

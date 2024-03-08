@@ -78,8 +78,7 @@ class App extends StatelessWidget {
         title: 'HoloPop',
         theme: HolopopTheme().getTheme(),
         debugShowCheckedModeBanner: false,
-        builder: (context, child) =>
-          SafeArea(child: child ?? const CircularProgressIndicator()), // SafeArea everywhere
+        builder: (context, child) => SafeArea(child: child ?? const CircularProgressIndicator()), // SafeArea everywhere
       )
     );
   }
