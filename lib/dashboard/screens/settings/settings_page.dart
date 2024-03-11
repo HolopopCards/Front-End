@@ -5,6 +5,7 @@ import 'package:holopop/dashboard/screens/settings/contact_picker.dart';
 import 'package:holopop/dashboard/screens/settings/edit_profile_page.dart';
 import 'package:holopop/dashboard/screens/settings/privacy_policy.dart';
 import 'package:holopop/dashboard/screens/settings/terms_of_use.dart';
+import 'package:holopop/shared/nav/holopop_navigation_bar.dart';
 import 'package:holopop/shared/widgets/standard_header.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:mailto/mailto.dart';
@@ -23,16 +24,18 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPage extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        children: [
-          StandardHeader(headerTitle: "Settings",),
-          SettingsBody(),
-          SocialMediaIcons()
-        ]
-      )
-    );
+    return Scaffold(
+      body: const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          children: [
+            StandardHeader(headerTitle: "Settings",),
+            SettingsBody(),
+            SocialMediaIcons()
+          ]
+        )
+      ),
+    bottomNavigationBar: HolopopNavigationBar.getNavBar(context, NavBarItem.create));
   }
 }
 
