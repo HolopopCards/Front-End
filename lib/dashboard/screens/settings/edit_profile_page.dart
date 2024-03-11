@@ -35,7 +35,10 @@ class _EditProfilePage extends State<EditProfilePage> {
   final formModel = EditProfileModel();
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return Scaffold(
+      body:
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10), 
       child:Column(
         children: [
           Row(
@@ -126,7 +129,9 @@ class _EditProfilePage extends State<EditProfilePage> {
                 onChanged: (value) => formModel.emailAddress = value,
             )))
         ],
-      ));
+      )),
+      );
+
   }  
 }
  void save(EditProfileModel profileForm, BuildContext context) {
