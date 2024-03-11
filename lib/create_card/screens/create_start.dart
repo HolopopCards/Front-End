@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:holopop/create_card/services/create_service.dart';
 import 'package:holopop/shared/nav/holopop_navigation_bar.dart';
 import 'package:holopop/shared/storage/create_application_storage.dart';
-import 'package:logging/logging.dart';
 import 'package:lottie/lottie.dart';
 
 class CreateStart extends StatefulWidget {

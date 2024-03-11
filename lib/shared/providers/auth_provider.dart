@@ -179,7 +179,53 @@ AgMBAAE=
       return Result.fromFailure(e.toString());
     }
   }
+  Future<Result<User>> editProfile(String name, String userName, String phone, String email, DateTime dob,  String password) async {
+    final encPass = encryptAndEncode(password);
+    final token = await FirebaseUtility().getFcmToken();
 
+    try {
+      Logger('auth provider').fine("Encrypted password: $encPass");
+      Logger('auth provider').info("Auth registering...");
+      final response = await post(
+        Uri.parse("${AppSettings().getApiHost()}/update-profile"),
+        body: json.encode({
+          'name': name,
+          'email': email,
+          'phone': phone,
+          'dob': dob.toIso8601String(),
+          'password': encPass,
+          'fcmtoken': token
+        }),
+        headers: { 'Content-Type': 'application/json'},
+      ).timeout(const Duration(seconds: 5), onTimeout: () { return Response('Timeout', 408); });
+
+      Logger('auth provider').info("Auth register response status code: ${response.statusCode}");
+
+      if (response.statusCode == 408) {
+        return Result.fromFailure("Timeout");
+      }
+
+      final data = json.decode(response.body);
+      if (response.statusCode == 200) {
+        final token = data['token'];
+        final refreshToken = data['refreshToken'];
+        final user = User(username: email, token: token, refreshToken: refreshToken);
+        Logger('auth provider').info("Auth register success: $user");
+
+        await UserPreferences().saveUserAsync(user);
+        _loggedInStatus = LoginStatus.loggedIn;
+        notifyListeners();
+        return Result.fromSuccess(user);
+      } else {
+        final error = data['error'];
+        Logger('auth provider').severe("Auth register failed: $error");
+        return Result.fromFailure(error);
+      }
+    } catch (e) {
+      Logger('auth provider').severe("Auth register failed: ${e.toString()}");
+      return Result.fromFailure(e.toString());
+    }
+  }
 
   Future<Result<User>> register(String name, String phone, DateTime dob, String email, String password) async {
     final encPass = encryptAndEncode(password);

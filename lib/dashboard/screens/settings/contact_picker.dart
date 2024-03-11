@@ -43,15 +43,15 @@ class _ContactPicker extends State<ContactPicker> {
 }
 //SMS invite friends
 _sendSMS(String message, String recipent) async {
-  var url;
+  Uri url;
   if(Platform.isAndroid){
         //FOR Android
-        url ='sms:${recipent}?body=$message';
+        url = Uri.parse('sms:$recipent?body=$message');
         await launchUrl(url);
     } 
     else if(Platform.isIOS){
         //FOR IOS
-        url ='sms:${recipent}&body=$message';
+        url = Uri.parse('sms:$recipent&body=$message');
         await launchUrl(url);
     }
 }
