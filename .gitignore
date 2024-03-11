@@ -139,4 +139,6 @@ app.*.symbols
 /.vs
 macos/Flutter/GeneratedPluginRegistrant.swift
 pubspec.lock
+
+.flutter-plugins
 .flutter-plugins-dependencies
