@@ -169,6 +169,9 @@ AgMBAAE=
         await UserPreferences().updateToken(token);
         notifyListeners();
         return Result.fromSuccess(null);
+      } else if (httpResponse.statusCode == 401) {
+        await UserPreferences().removeUser();
+        return Result.fromFailure("login");
       } else {
         final error = data['error'];
         Logger('auth provider').severe("Auth refresh failed: $error");

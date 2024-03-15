@@ -11,13 +11,13 @@ import 'package:holopop/dashboard/screens/dashboard_page.dart';
 import 'package:holopop/dashboard/screens/edit_sent_card_page.dart';
 import 'package:holopop/dashboard/screens/see_all_page.dart';
 import 'package:holopop/dashboard/screens/sent_and_received_card_pages.dart';
-import 'package:holopop/home_page.dart';
 import 'package:holopop/login/login_page.dart';
+import 'package:holopop/main.dart';
 import 'package:holopop/scan/scan.dart';
 
 
 final Map<String, Widget Function(BuildContext)> routes = {
-  "/":                     (context) => const HomePage(),
+  "/":                     (context) => const MainPage(),
   "/login":                (context) => const LoginPage(),
   "/register":             (context) => const Register(),
   DashboardPage.route():   (context) => const DashboardPage(),

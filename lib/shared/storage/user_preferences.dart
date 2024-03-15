@@ -47,7 +47,7 @@ class UserPreferences {
 
 
   /// Remove user from storage.
-  void removeUser() async {
+  Future removeUser() async {
     final prefs = await SharedPreferences.getInstance();
 
     Logger('user preferences').fine("Removing user from storage...");

@@ -5,10 +5,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:holopop/shared/firebase/firebase_options.dart';
+import 'package:holopop/shared/firebase/firebase_utlity.dart';
 import 'package:holopop/shared/nav/routes.dart';
 import 'package:holopop/shared/providers/auth_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:holopop/shared/providers/user_provider.dart';
+import 'package:holopop/shared/storage/user_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +18,11 @@ import 'shared/styles/holopop_theme.dart';
 
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Global Configuration
+  await GlobalConfiguration().loadFromPath("configs/appsettings.json");
+
   // Logger
   Logger.root.level = Level.FINE; // Change in prod.
   Logger.root.onRecord.listen((record) {
@@ -24,11 +31,6 @@ void main() async {
   });
 
   Logger('Main').info("Starting up Holopop...");
-
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // Global Configuration
-  await GlobalConfiguration().loadFromPath("configs/appsettings.json");
   
   // Firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -82,4 +84,49 @@ class App extends StatelessWidget {
       )
     );
   }
+}
+
+
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
+
+  @override
+  State<MainPage> createState() => _MainPage();
+}
+
+class _MainPage extends State<MainPage> {
+  @override
+  void initState() {
+    super.initState();
+    FirebaseUtility().startFirebaseListening();
+  }
+
+  @override
+  Widget build(BuildContext context) => 
+    Scaffold(
+      body: SafeArea(
+        top: true,
+        child: FutureBuilder(
+          future: UserPreferences().getUserAsync(),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.done:
+                if (snapshot.hasError) {
+                  Logger('home').severe("Error getting user during login page: ${snapshot.error}");
+                  return Text('Error: ${snapshot.error}');
+                } else if (snapshot.data?.token == null) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Logger('home').fine("No user in storage. Take them to login page.");
+                    Navigator.pushNamed(context, "/login");
+                  });
+                } else {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Logger('home').fine("User in storage, take them to dashboard.");
+                    Navigator.pushNamed(context, "/dashboard");
+                  });
+                }
+              default: break;
+            }
+            return const CircularProgressIndicator();
+        })));
 }
