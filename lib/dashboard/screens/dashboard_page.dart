@@ -41,20 +41,17 @@ class _DashboardPage extends State<DashboardPage> {
 
 /// Search bar for cards.
 class Search extends StatelessWidget {
-  const Search({
-    super.key,
-  });
+  const Search({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SearchBar(
+  Widget build(BuildContext context) => 
+    SearchBar(
       padding: const MaterialStatePropertyAll(EdgeInsets.symmetric(horizontal: 10)),
       onTap: () { },
       onChanged: (_) { },
       leading: const Icon(Icons.search),
       hintText: 'Search cards',
     );
-  }
 }
 
 

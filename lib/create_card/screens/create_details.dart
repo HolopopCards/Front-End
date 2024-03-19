@@ -35,8 +35,8 @@ class _CreateDetails extends State<CreateDetails> {
   final formModel = CreateDetailModel();
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => 
+    Scaffold(
       body: SingleChildScrollView(
         child:Column(
           children: [
@@ -138,7 +138,6 @@ class _CreateDetails extends State<CreateDetails> {
           ],
         )),
     bottomNavigationBar: HolopopNavigationBar.getNavBar(context, NavBarItem.create));
-  }
 
   void handleDialogResult(GiftDialogResult? result) {
     if (result?.value == "success") {

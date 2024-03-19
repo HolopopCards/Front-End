@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:holopop/create_card/screens/create_how_to_record.dart';
+import 'package:holopop/create_card/screens/create_marketplace.dart';
 import 'package:holopop/create_card/screens/create_upload.dart';
 import 'package:holopop/shared/nav/holopop_navigation_bar.dart';
 import 'package:holopop/shared/widgets/standard_header.dart';
@@ -9,8 +10,8 @@ class CreateMediaType extends StatelessWidget {
   const CreateMediaType({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => 
+    Scaffold(
       body: Column(
       children: [
         StandardHeader(
@@ -24,7 +25,7 @@ class CreateMediaType extends StatelessWidget {
               children: const [
                 MediaTypeLottie(lottieUrl: "assets/lotties/Record Video.json", widget: CreateHowToRecord()),
                 MediaTypeLottie(lottieUrl: "assets/lotties/Upload Video.json", widget: CreateUpload()),
-                // MediaTypeLottie(lottieUrl: "assets/lotties/Browse Marketplace.json", widget: HolopopPlaceholder()),
+                MediaTypeLottie(lottieUrl: "assets/lotties/Browse Marketplace.json", widget: CreateMarketplace()),
               ]
             )
           )
@@ -32,7 +33,6 @@ class CreateMediaType extends StatelessWidget {
       ]
     ),
     bottomNavigationBar: HolopopNavigationBar.getNavBar(context, NavBarItem.create));
-  }
 }
 
 
@@ -47,14 +47,13 @@ class MediaTypeLottie extends StatelessWidget {
   final Widget widget;
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
+  Widget build(BuildContext context) => 
+    Padding(
       padding: const EdgeInsets.all(10),
       child: InkWell(
         onTap: () { Navigator.push(context, MaterialPageRoute(builder: (context) => widget)); },
         child: Lottie.asset(lottieUrl),
       )
     );
-  }
 
 }

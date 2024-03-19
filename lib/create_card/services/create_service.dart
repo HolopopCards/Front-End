@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 
 class CreateService {
+  
   static Future<Result> finishApplication(CreateApplication app) async {
     Logger('create service').fine("Finishing application...");
     final video = app.video;

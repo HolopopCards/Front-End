@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:holopop/create_card/screens/create_media_type.dart';
 import 'package:holopop/create_card/screens/create_start.dart';
 import 'package:holopop/dashboard/screens/dashboard_page.dart';
 import 'package:holopop/scan/scan.dart';
@@ -18,7 +19,7 @@ class HolopopNavigationBar {
   static final List<NavBarMap> itemList = [
     NavBarMap(NavBarItem.dashboard, 0, const DashboardPage()),
     NavBarMap(NavBarItem.holopop, 1, const Scan()),
-    NavBarMap(NavBarItem.create, 2, const CreateStart()),
+    NavBarMap(NavBarItem.create, 2, const CreateStart()), // DEV
     NavBarMap(NavBarItem.shop, 3, const HolopopPlaceholder()),
   ];
 

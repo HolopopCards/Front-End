@@ -122,7 +122,7 @@ class _MainPage extends State<MainPage> {
                 } else {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     Logger('home').fine("User in storage, take them to dashboard.");
-                    Navigator.pushNamed(context, "/dashboard");
+                    Navigator.pushNamed(context, "/dashboard"); //DEV
                   });
                 }
               default: break;

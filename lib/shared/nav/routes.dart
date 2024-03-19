@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:holopop/create_card/screens/create_details.dart';
 import 'package:holopop/create_card/screens/create_final.dart';
+import 'package:holopop/create_card/screens/create_marketplace.dart';
 import 'package:holopop/create_card/screens/create_qr.dart';
 import 'package:holopop/create_card/screens/create_record_video.dart';
 import 'package:holopop/create_card/screens/create_start.dart';
@@ -34,5 +35,6 @@ final Map<String, Widget Function(BuildContext)> routes = {
   "/create/unlink":        (context) => const CreateUnlink(),
   "/create/media-type":    (context) => const CreateMediaType(),
   "/create/record-video":  (context) => const CreateRecordVideo(),
+  "/create/marketplace":   (context) => const CreateMarketplace(),
   "/create/final":         (context) => const CreateFinal(),
 };
