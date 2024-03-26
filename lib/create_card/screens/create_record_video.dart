@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:holopop/shared/banuba/banuba.dart';
 import 'package:holopop/shared/nav/holopop_navigation_bar.dart';
 
-class CreateRecordVideo extends StatefulWidget {
+class CreateRecordVideo extends StatelessWidget {
   const CreateRecordVideo({super.key});
 
-  @override
-  State<StatefulWidget> createState() => _CreateRecordVideo();
-}
+  static String route() => "/create/record";
 
-class _CreateRecordVideo extends State<CreateRecordVideo> {
   @override
   Widget build(BuildContext context) => 
     Scaffold(

@@ -19,7 +19,7 @@ class HolopopNavigationBar {
   static final List<NavBarMap> itemList = [
     NavBarMap(NavBarItem.dashboard, 0, const DashboardPage()),
     NavBarMap(NavBarItem.holopop, 1, const Scan()),
-    NavBarMap(NavBarItem.create, 2, const CreateStart()), // DEV
+    NavBarMap(NavBarItem.create, 2, const CreateMediaType()),
     NavBarMap(NavBarItem.shop, 3, const HolopopPlaceholder()),
   ];
 
@@ -34,7 +34,7 @@ class HolopopNavigationBar {
         BottomNavigationBarItem(label: 'Dashboard', icon: Icon(Icons.wallet)),
         BottomNavigationBarItem(label: 'Holopop', icon: Icon(Icons.qr_code_scanner)),
         BottomNavigationBarItem(label: 'Create Card', icon: Icon(Icons.add_circle_outlined)),
-        BottomNavigationBarItem(label: 'Shop', icon: Icon(Icons.shop)),
+        // BottomNavigationBarItem(label: 'Shop', icon: Icon(Icons.shop)),
       ]
   );
 }

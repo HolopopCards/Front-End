@@ -9,6 +9,8 @@ import 'package:logging/logging.dart';
 class CreateUpload extends StatelessWidget {
   const CreateUpload({super.key});
 
+  static String route() => "/create/upload";
+
   @override
   Widget build(BuildContext context) {
     Logger('create:upload').info("Uploading file for card...");
