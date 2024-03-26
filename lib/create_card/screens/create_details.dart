@@ -10,10 +10,17 @@ import 'package:logging/logging.dart';
 
 
 class CreateDetailModel {
-  String? name;
-  String? recipient;
-  String? occasion;
-  String? message;
+  CreateDetailModel({
+    required this.name,
+    required this.recipient,
+    required this.occasion,
+    required this.message
+  });
+
+  String name;
+  String recipient;
+  String occasion;
+  String message;
 
   @override
   String toString() => 
@@ -32,7 +39,7 @@ class CreateDetails extends StatefulWidget {
 class _CreateDetails extends State<CreateDetails> {
   final formKey = GlobalKey<FormState>();
 
-  final formModel = CreateDetailModel();
+  final formModel = CreateDetailModel(name: "", recipient:"", occasion: "any", message: "");
 
   @override
   Widget build(BuildContext context) => 
@@ -114,7 +121,7 @@ class _CreateDetails extends State<CreateDetails> {
                     contentPadding: EdgeInsets.all(10)
                   ),
                   value: "any",
-                  onChanged: (value) => formModel.occasion = value,
+                  onChanged: (value) => formModel.occasion = value ?? "any",
                   items: const [
                     DropdownMenuItem(value: "any", child: Text("Any occasion")),
                     DropdownMenuItem(value: "birthday", child: Text("Birthday")),
