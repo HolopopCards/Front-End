@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
-import 'package:holopop/shared/nav/holopop_navigation_bar.dart';
-import 'package:holopop/shared/providers/auth_provider.dart';
-import 'package:holopop/shared/providers/user_provider.dart';
+import 'package:holopop/shared/api/api_service.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:logging/logging.dart';
-import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
 
 class EditProfileModel {
@@ -134,22 +131,29 @@ class _EditProfilePage extends State<EditProfilePage> {
 
   }  
 }
- void save(EditProfileModel profileForm, BuildContext context) {
-    final auth = Provider.of<AuthProvider>(context, listen: false);
-    auth.editProfile(
-      profileForm.name!,
-      profileForm.emailAddress!,
-      profileForm.userName!,
-      profileForm.mobilePhone!,
-      profileForm.dob! as DateTime,
-      profileForm.password!)
+ void save(EditProfileModel profileForm, BuildContext context) async {
+    await ApiService()
+      .post(
+        SimplePostRequest(
+          resource: "/user/update-profile",
+          body: {
+            'name': profileForm.name,
+            'username': profileForm.userName,
+            'phone': profileForm.mobilePhone,
+            'email': profileForm.emailAddress,
+            'dob': profileForm.dob,
+            'password': profileForm.password
+          }),
+        (_) => null)
       .then((res) {
         if (res.success) {
-          final user = res.value!;
-          Provider.of<UserProvider>(context, listen: false).setUser(user);
-          Navigator.pushNamed(context, "/");
+          Logger('Edit Profile').info("Profile saved");
+          toastification.show(
+            context: context,
+            title: const Text("Profile saved"),
+            type: ToastificationType.success);
         } else {
-          Logger('Edit Profile').severe("Failed to save: ${res.error}}");
+          Logger('Edit Profile').severe("Failed to save: ${res.error}");
           toastification.show(
             context: context,
             title: Text("Failed to save: ${res.error}"),
