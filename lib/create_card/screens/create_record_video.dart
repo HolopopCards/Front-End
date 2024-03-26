@@ -10,6 +10,6 @@ class CreateRecordVideo extends StatelessWidget {
   @override
   Widget build(BuildContext context) => 
     Scaffold(
-      body: const Banuba(),
+      body: const Banuba(mode: VideoEditorMode.record),
       bottomNavigationBar: HolopopNavigationBar.getNavBar(context, NavBarItem.create));
 }

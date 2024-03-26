@@ -11,6 +11,7 @@
 -keep class com.banuba.sdk.effects.ve.speed.** { *; }
 
 -keep class kotlinx.android.extensions.** { *; }
+-keep class androidx.lifecycle.DefaultLifecycleObserver
 
 # The following rules are taken from generated "missing_rules.txt" file provided by R8
 # Please add these rules to your existing keep rules in order to suppress warnings.

@@ -19,7 +19,7 @@ class HolopopNavigationBar {
   static final List<NavBarMap> itemList = [
     NavBarMap(NavBarItem.dashboard, 0, const DashboardPage()),
     NavBarMap(NavBarItem.holopop, 1, const Scan()),
-    NavBarMap(NavBarItem.create, 2, const CreateMediaType()),
+    NavBarMap(NavBarItem.create, 2, const CreateStart()), // DEV
     NavBarMap(NavBarItem.shop, 3, const HolopopPlaceholder()),
   ];
 

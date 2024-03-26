@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
-import 'package:holopop/create_card/services/create_service.dart';
+import 'package:holopop/create_card/screens/create_marketplace_final.dart';
 import 'package:holopop/create_card/services/marketplace_service.dart';
-import 'package:holopop/shared/storage/create_application_storage.dart';
 import 'package:video_player/video_player.dart';
 
 class CreateMarketplaceVideoPreview extends StatefulWidget {
@@ -50,14 +48,8 @@ class _CreateMarketplaceVideoPreview extends State<CreateMarketplaceVideoPreview
             ),
             TextButton(
               onPressed: () {
-                final video = File(_controller!.dataSource);
-                CreateApplicationStorage()
-                  .updateAppAsync((app) => app.video = video)
-                  .then((_) => CreateApplicationStorage().getAppAsync())
-                  .then((app) => CreateService.finishApplication(app.value!))
-                  .then((res) => res.success 
-                    ? Navigator.pushNamed(context, "/create/final") 
-                    : Navigator.pushNamed(context, "/create/error"));
+                return;
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CreateMarketplaceFinal(path: _controller!.dataSource)));
               },
               child: const Text("Continue"),
             )
