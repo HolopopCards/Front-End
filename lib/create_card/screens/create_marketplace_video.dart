@@ -3,16 +3,16 @@ import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:holopop/create_card/screens/create_marketplace_preview.dart';
+import 'package:holopop/create_card/screens/create_marketplace_video_preview.dart';
 import 'package:holopop/create_card/services/marketplace_service.dart';
 import 'package:holopop/shared/nav/holopop_navigation_bar.dart';
 import 'package:holopop/shared/styles/holopop_colors.dart';
 import 'package:logging/logging.dart';
 
-class CreateMarketplace extends StatelessWidget {
-  const CreateMarketplace({super.key});
+class CreateMarketplaceVideo extends StatelessWidget {
+  const CreateMarketplaceVideo({super.key});
 
-  static String route() => "/create/marketplace";
+  static String route() => "/create/marketplace/video";
 
   @override
   Widget build(BuildContext context) =>
@@ -87,7 +87,7 @@ class CreateMarketplace extends StatelessWidget {
                                   items: groupedVideo.value.map((video) =>
                                         Builder(builder: (context) => 
                                           InkWell(
-                                            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CreateMarketplacePreview(videoId: video.id))),
+                                            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CreateMarketplaceVideoPreview(videoId: video.id))),
                                             child: Container(
                                               width: MediaQuery.of(context).size.width * 0.4,
                                               height: MediaQuery.of(context).size.height * 0.5,
@@ -105,7 +105,7 @@ class CreateMarketplace extends StatelessWidget {
                     ]);
                 }
                 
-                Logger('create:marketplace').severe("Error getting marketplace videos: ${snapshot.error}");
+                Logger('create:marketplace:video').severe("Error getting marketplace videos: ${snapshot.error}");
                 return Text('Error: ${snapshot.error}');
               },
             )

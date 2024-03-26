@@ -7,19 +7,16 @@ import 'package:holopop/create_card/services/marketplace_service.dart';
 import 'package:holopop/shared/storage/create_application_storage.dart';
 import 'package:video_player/video_player.dart';
 
-class CreateMarketplacePreview extends StatefulWidget {
-  const CreateMarketplacePreview({
-    super.key, 
-    required this.videoId
-  });
+class CreateMarketplaceVideoPreview extends StatefulWidget {
+  const CreateMarketplaceVideoPreview({super.key, required this.videoId});
 
   final int videoId;
 
   @override
-  State<StatefulWidget> createState() => _CreateMarketplacePreview();
+  State<StatefulWidget> createState() => _CreateMarketplaceVideoPreview();
 }
 
-class _CreateMarketplacePreview extends State<CreateMarketplacePreview> {
+class _CreateMarketplaceVideoPreview extends State<CreateMarketplaceVideoPreview> {
   Timer? t;
   VideoPlayerController? _controller;
 

@@ -1,3 +1,4 @@
+import 'package:holopop/create_card/models/marketplace_audio.dart';
 import 'package:holopop/create_card/models/marketplace_video.dart';
 import 'package:holopop/create_card/models/marketplace_video_thumbnail.dart';
 import 'package:holopop/shared/api/api_service.dart';
@@ -30,4 +31,12 @@ class MarketplaceService {
       httpHeaders: {'Authorization': "Bearer $token" });
     return controller;
   }
+
+  static Future<List<MarketplaceAudioCategory>> getAudios() =>
+    ApiService()
+      .get(SimpleGetRequest(resource: "/marketplace/audios"),
+        (data) => List.from(data)
+                      .map((y) => MarketplaceAudioCategory.fromJson(y))
+                      .toList())
+      .then((res) => res.success ? res.value! : List.empty());
 }

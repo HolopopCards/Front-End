@@ -123,7 +123,7 @@ class _MainPage extends State<MainPage> {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     Logger('home').fine("User in storage, take them to dashboard.");
                     // Navigator.pushNamed(context, "/dashboard"); //DEV
-                    Navigator.pushNamed(context, "/create/marketplace"); //DEV
+                    Navigator.pushNamed(context, "/create/marketplace/audio"); //DEV
                   });
                 }
               default: break;
